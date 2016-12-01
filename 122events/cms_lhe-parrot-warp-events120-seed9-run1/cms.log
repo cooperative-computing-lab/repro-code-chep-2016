@@ -1,0 +1,771 @@
+==> using COND/Services/RelationalAuthenticationService for auth, sys 1
+==> using COND/Services/RelationalAuthenticationService for auth, sys 1
+   ______________________________________     
+         Running Generic Tarball/Gridpack     
+   ______________________________________     
+gridpack tarball path = /cvmfs/cms.cern.ch/phys_generator/gridpacks/slc6_amd64_gcc481/13TeV/powheg/V2/ttH_inclusive_NNPDF30_13TeV_M125/v1/ttH_inclusive_NNPDF30_13TeV_M125_tarball.tar.gz
+%MSG-MG5 number of events requested = 1649
+%MSG-MG5 random seed used for the run = 9
+tar: powheg.input: time stamp 2015-04-20 12:31:24 is 451240046 s in the future
+tar: pwg-stat.dat: time stamp 2015-04-20 14:30:30 is 451247191.99 s in the future
+tar: pwgboundviolations.dat: time stamp 2015-04-20 14:35:49 is 451247510.98 s in the future
+tar: pwgcounters.dat: time stamp 2015-04-20 14:35:58 is 451247519.97 s in the future
+tar: pwggrid.dat: time stamp 2015-04-20 14:30:30 is 451247191.96 s in the future
+tar: pwgubound.dat: time stamp 2015-04-20 14:35:20 is 451247481.95 s in the future
+tar: pwgxgrid.dat: time stamp 2015-04-20 14:10:27 is 451245988.94 s in the future
+tar: pwhg_main: time stamp 2015-04-20 13:30:27 is 451243588.93 s in the future
+tar: runcmsgrid.sh: time stamp 2015-04-20 14:36:00 is 451247521.92 s in the future
+   ______________________________________     
+         Running Powheg                       
+   ______________________________________     
+%MSG-POWHEG number of events requested = 1649
+%MSG-POWHEG random seed used for the run = 9
+%MSG-POWHEG number of cputs for the run = 1
+numevts 1649    ! number of events to be generated
+
+! Production parameters for ttH production 
+hmass 125.d0      ! mass of the Higgs boson [GeV]
+hwidth 0.00498d0  ! width of the Higgs boson [GeV]
+
+! Higgs decay:
+hdecaymode -1   ! -1 no decay                
+                ! 0 all decay channels open
+                ! 1-6 d dbar, u ubar,..., t tbar 
+                ! 7-9 e+ e-, mu+ mu-, tau+ tau-
+                ! 10  W+W-
+                ! 11  ZZ
+                ! 12  gamma gamma     
+
+#pythiatune 320	! PYTHIA tune
+
+ih1   1           ! hadron 1 (1 for protons, -1 for antiprotons)
+ih2   1           ! hadron 2 (1 for protons, -1 for antiprotons)
+ebeam1 6500d0     ! energy of beam 1
+ebeam2 6500d0     ! energy of beam 2
+
+# https://lhapdf.hepforge.org/pdfsets.html
+lhans1  260000      ! pdf set for hadron 1 (LHA numbering)
+lhans2  260000      ! pdf set for hadron 2 (LHA numbering)
+
+#bornsuppfact 1d0 ! (default 0d0) mass param for Born suppression factor. 
+delta_mttmin 0d0 ! (default 0d0) if not zero, use generation cut on mtt
+
+use-old-grid    1 ! if 1 use old grid if file pwggrids.dat is present (<> 1 regenerate)
+use-old-ubound  1 ! if 1 use norm of upper bounding function stored in pwgubound.dat, if present; <> 1 regenerate
+
+ncall1  500000  ! number of calls for initializing the integration grid
+itmx1    2     ! number of iterations for initializing the integration grid
+ncall2  500000  ! number of calls for computing the integral and finding upper bound
+#ncall2   0  ! number of calls for computing the integral and finding upper bound
+itmx2    1     ! number of iterations for computing the integral and finding upper bound
+foldcsi   1    ! number of folds on csi integration
+foldy      1    ! number of folds on  y  integration
+foldphi   1    ! number of folds on phi integration
+nubound 10000  ! number of bbarra calls to setup norm of upper bounding function
+icsimax  1     ! <= 100, number of csi subdivision when computing the upper bounds
+iymax    1     ! <= 100, number of y subdivision when computing the upper bounds
+xupbound 2d0   ! increase upper bound for radiation generation
+
+runningscales 1	   ! default 0 (no running scales); 1: use running scales
+renscfact 1d0   ! (default 1d0) ren scale factor: muren  = muref * renscfact 
+facscfact 1d0   ! (default 1d0) fac scale factor: mufact = muref * facscfact 
+testplots  1       ! (default 0, do not) do NLO and PWHG distributions
+
+#bornonly   1      ! (default 0) if 1 do Born only
+fakevirt   1      ! (default 0) if 1 use Born for virtuals
+
+iseed    9
+
+# parameters for top decays:
+topdecaymode 22222      ! 0 stable tops
+                        ! 20000 both tops decay into b l v
+zerowidth 0    	    ! if 1, use zero width approximation during decay
+
+! Parameters for the generation of spin correlations in t tbar decays
+tdec/wmass 80.4  ! W mass for top decay
+tdec/wwidth 2.141
+tdec/bmass 4.75
+tdec/twidth  1.31
+tdec/elbranching 0.108
+tdec/emass 0.00051
+tdec/mumass 0.1057
+tdec/taumass 1.777
+tdec/dmass   0.100
+tdec/umass   0.100
+tdec/smass   0.200
+tdec/cmass   1.5
+tdec/sin2cabibbo 0.051
+    
+# parameters for parallel runs (remove '#' below for parallel runs):
+#manyseeds  1       ! Used to perform multiple runs with different random
+                   ! seeds in the same directory.
+                   ! If set to 1, the program asks for an integer j;
+                   ! The file pwgseeds.dat at line j is read, and the
+                   ! integer at line j is used to initialize the random
+                   ! sequence for the generation of the event.
+                   ! The event file is called pwgevents-'j'.lhe
+
+pdfreweight 1       ! PDF reweighting
+dampreweight 1      ! h_damp reweighting (mt/2, mt, mt*2)
+storeinfo_rwgt 1    ! store weight information
+withnegweights 0    ! default 0, 
+#xgriditeration 1   ! identifier for grid generation
+#parallelstage  1   ! identifier for parallel running stages
+
+lhrwgt_id 'c'
+lhrwgt_descr 'muR=0.10000E+01 muF=0.10000E+01'
+lhrwgt_group_name 'scale_variation'
+lhrwgt_group_combine 'envelope'
+
+computing weights for 9 scale variations
+
+
+ doing scale 1, 1
+
+
+ doing scale 1, 2
+
+
+ doing scale 1, 0.5
+
+
+ doing scale 2, 1
+
+
+ doing scale 2, 2
+
+
+ doing scale 2, 0.5
+
+
+ doing scale 0.5, 1
+
+
+ doing scale 0.5, 2
+
+
+ doing scale 0.5, 0.5
+
+
+computing weights for 100 NNPDF3.0 variations
+
+
+ PDF set 260001
+
+ PDF set 260002
+
+ PDF set 260003
+
+ PDF set 260004
+
+ PDF set 260005
+
+ PDF set 260006
+
+ PDF set 260007
+
+ PDF set 260008
+
+ PDF set 260009
+
+ PDF set 260010
+
+ PDF set 260011
+
+ PDF set 260012
+
+ PDF set 260013
+
+ PDF set 260014
+
+ PDF set 260015
+
+ PDF set 260016
+
+ PDF set 260017
+
+ PDF set 260018
+
+ PDF set 260019
+
+ PDF set 260020
+
+ PDF set 260021
+
+ PDF set 260022
+
+ PDF set 260023
+
+ PDF set 260024
+
+ PDF set 260025
+
+ PDF set 260026
+
+ PDF set 260027
+
+ PDF set 260028
+
+ PDF set 260029
+
+ PDF set 260030
+
+ PDF set 260031
+
+ PDF set 260032
+
+ PDF set 260033
+
+ PDF set 260034
+
+ PDF set 260035
+
+ PDF set 260036
+
+ PDF set 260037
+
+ PDF set 260038
+
+ PDF set 260039
+
+ PDF set 260040
+
+ PDF set 260041
+
+ PDF set 260042
+
+ PDF set 260043
+
+ PDF set 260044
+
+ PDF set 260045
+
+ PDF set 260046
+
+ PDF set 260047
+
+ PDF set 260048
+
+ PDF set 260049
+
+ PDF set 260050
+
+ PDF set 260051
+
+ PDF set 260052
+
+ PDF set 260053
+
+ PDF set 260054
+
+ PDF set 260055
+
+ PDF set 260056
+
+ PDF set 260057
+
+ PDF set 260058
+
+ PDF set 260059
+
+ PDF set 260060
+
+ PDF set 260061
+
+ PDF set 260062
+
+ PDF set 260063
+
+ PDF set 260064
+
+ PDF set 260065
+
+ PDF set 260066
+
+ PDF set 260067
+
+ PDF set 260068
+
+ PDF set 260069
+
+ PDF set 260070
+
+ PDF set 260071
+
+ PDF set 260072
+
+ PDF set 260073
+
+ PDF set 260074
+
+ PDF set 260075
+
+ PDF set 260076
+
+ PDF set 260077
+
+ PDF set 260078
+
+ PDF set 260079
+
+ PDF set 260080
+
+ PDF set 260081
+
+ PDF set 260082
+
+ PDF set 260083
+
+ PDF set 260084
+
+ PDF set 260085
+
+ PDF set 260086
+
+ PDF set 260087
+
+ PDF set 260088
+
+ PDF set 260089
+
+ PDF set 260090
+
+ PDF set 260091
+
+ PDF set 260092
+
+ PDF set 260093
+
+ PDF set 260094
+
+ PDF set 260095
+
+ PDF set 260096
+
+ PDF set 260097
+
+ PDF set 260098
+
+ PDF set 260099
+
+ PDF set 260100
+
+computing weights for NNPDF 3.0 alphas=0.117 variation
+
+
+ PDF set 265000
+
+computing weights for NNPDF 3.0 alphas=0.119 variation
+
+
+ PDF set 266000
+
+computing weights for 52+1 CT10 PDF variations
+
+
+ PDF set 11000
+
+ PDF set 11001
+
+ PDF set 11002
+
+ PDF set 11003
+
+ PDF set 11004
+
+ PDF set 11005
+
+ PDF set 11006
+
+ PDF set 11007
+
+ PDF set 11008
+
+ PDF set 11009
+
+ PDF set 11010
+
+ PDF set 11011
+
+ PDF set 11012
+
+ PDF set 11013
+
+ PDF set 11014
+
+ PDF set 11015
+
+ PDF set 11016
+
+ PDF set 11017
+
+ PDF set 11018
+
+ PDF set 11019
+
+ PDF set 11020
+
+ PDF set 11021
+
+ PDF set 11022
+
+ PDF set 11023
+
+ PDF set 11024
+
+ PDF set 11025
+
+ PDF set 11026
+
+ PDF set 11027
+
+ PDF set 11028
+
+ PDF set 11029
+
+ PDF set 11030
+
+ PDF set 11031
+
+ PDF set 11032
+
+ PDF set 11033
+
+ PDF set 11034
+
+ PDF set 11035
+
+ PDF set 11036
+
+ PDF set 11037
+
+ PDF set 11038
+
+ PDF set 11039
+
+ PDF set 11040
+
+ PDF set 11041
+
+ PDF set 11042
+
+ PDF set 11043
+
+ PDF set 11044
+
+ PDF set 11045
+
+ PDF set 11046
+
+ PDF set 11047
+
+ PDF set 11048
+
+ PDF set 11049
+
+ PDF set 11050
+
+ PDF set 11051
+
+ PDF set 11052
+
+computing weights for CT10 alphas=0.117 variation
+
+
+ PDF set 11067
+
+computing weights for CT10 alphas=0.119 variation
+
+
+ PDF set 11069
+
+computing weights for 50+1 MMHT2014nlo68clas118 PDF variations
+
+
+ PDF set 25200
+
+ PDF set 25201
+
+ PDF set 25202
+
+ PDF set 25203
+
+ PDF set 25204
+
+ PDF set 25205
+
+ PDF set 25206
+
+ PDF set 25207
+
+ PDF set 25208
+
+ PDF set 25209
+
+ PDF set 25210
+
+ PDF set 25211
+
+ PDF set 25212
+
+ PDF set 25213
+
+ PDF set 25214
+
+ PDF set 25215
+
+ PDF set 25216
+
+ PDF set 25217
+
+ PDF set 25218
+
+ PDF set 25219
+
+ PDF set 25220
+
+ PDF set 25221
+
+ PDF set 25222
+
+ PDF set 25223
+
+ PDF set 25224
+
+ PDF set 25225
+
+ PDF set 25226
+
+ PDF set 25227
+
+ PDF set 25228
+
+ PDF set 25229
+
+ PDF set 25230
+
+ PDF set 25231
+
+ PDF set 25232
+
+ PDF set 25233
+
+ PDF set 25234
+
+ PDF set 25235
+
+ PDF set 25236
+
+ PDF set 25237
+
+ PDF set 25238
+
+ PDF set 25239
+
+ PDF set 25240
+
+ PDF set 25241
+
+ PDF set 25242
+
+ PDF set 25243
+
+ PDF set 25244
+
+ PDF set 25245
+
+ PDF set 25246
+
+ PDF set 25247
+
+ PDF set 25248
+
+ PDF set 25249
+
+ PDF set 25250
+
+computing weights for 5 MMHT2014nlo68cl 5 alphas variations
+
+
+ PDF set 25260
+
+ PDF set 25261
+
+ PDF set 25262
+
+ PDF set 25263
+
+ PDF set 25264
+
+ finished computing weights ..
+
+-rw-r--r-- 1 pivie campus 18534418 Dec  1  2016 cmsgrid_final.lhe
+/afs/crc.nd.edu/user/p/pivie/cms/step1/cms_lhe-parrot-warp-events120-seed9-run1/lheevent/powhegbox_ttH
+Output ready with cmsgrid_final.lhe at /afs/crc.nd.edu/user/p/pivie/cms/step1/cms_lhe-parrot-warp-events120-seed9-run1/lheevent
+End of job on  Sun Dec 31 23:16:24 EST 2000
+31-Dec-2000 23:16:24 EST  Initiating request to open LHE file cmsgrid_final.lhe
+31-Dec-2000 23:16:25 EST  Successfully opened LHE file cmsgrid_final.lhe
+Begin processing the 1st record. Run 1, Event 1, LumiSection 1 at 31-Dec-2000 23:16:25.520 EST
+Begin processing the 2nd record. Run 1, Event 2, LumiSection 1 at 31-Dec-2000 23:16:25.590 EST
+Begin processing the 3rd record. Run 1, Event 3, LumiSection 1 at 31-Dec-2000 23:16:25.640 EST
+Begin processing the 4th record. Run 1, Event 4, LumiSection 1 at 31-Dec-2000 23:16:25.810 EST
+Begin processing the 5th record. Run 1, Event 5, LumiSection 1 at 31-Dec-2000 23:16:25.880 EST
+Begin processing the 6th record. Run 1, Event 6, LumiSection 1 at 31-Dec-2000 23:16:25.930 EST
+Begin processing the 7th record. Run 1, Event 7, LumiSection 1 at 31-Dec-2000 23:16:26.100 EST
+Begin processing the 8th record. Run 1, Event 8, LumiSection 1 at 31-Dec-2000 23:16:26.150 EST
+Begin processing the 9th record. Run 1, Event 9, LumiSection 1 at 31-Dec-2000 23:16:26.220 EST
+Begin processing the 10th record. Run 1, Event 10, LumiSection 1 at 31-Dec-2000 23:16:26.390 EST
+Begin processing the 11th record. Run 1, Event 11, LumiSection 1 at 31-Dec-2000 23:16:26.440 EST
+Begin processing the 12th record. Run 1, Event 12, LumiSection 1 at 31-Dec-2000 23:16:26.490 EST
+Begin processing the 13th record. Run 1, Event 13, LumiSection 1 at 31-Dec-2000 23:16:26.680 EST
+Begin processing the 14th record. Run 1, Event 14, LumiSection 1 at 31-Dec-2000 23:16:26.730 EST
+Begin processing the 15th record. Run 1, Event 15, LumiSection 1 at 31-Dec-2000 23:16:26.780 EST
+Begin processing the 16th record. Run 1, Event 16, LumiSection 1 at 31-Dec-2000 23:16:26.950 EST
+Begin processing the 17th record. Run 1, Event 17, LumiSection 1 at 31-Dec-2000 23:16:27.000 EST
+Begin processing the 18th record. Run 1, Event 18, LumiSection 1 at 31-Dec-2000 23:16:27.070 EST
+Begin processing the 19th record. Run 1, Event 19, LumiSection 1 at 31-Dec-2000 23:16:27.240 EST
+Begin processing the 20th record. Run 1, Event 20, LumiSection 1 at 31-Dec-2000 23:16:27.290 EST
+Begin processing the 21st record. Run 1, Event 21, LumiSection 1 at 31-Dec-2000 23:16:27.340 EST
+Begin processing the 22nd record. Run 1, Event 22, LumiSection 1 at 31-Dec-2000 23:16:27.530 EST
+Begin processing the 23rd record. Run 1, Event 23, LumiSection 1 at 31-Dec-2000 23:16:27.580 EST
+Begin processing the 24th record. Run 1, Event 24, LumiSection 1 at 31-Dec-2000 23:16:27.630 EST
+Begin processing the 25th record. Run 1, Event 25, LumiSection 1 at 31-Dec-2000 23:16:27.800 EST
+Begin processing the 26th record. Run 1, Event 26, LumiSection 1 at 31-Dec-2000 23:16:27.870 EST
+Begin processing the 27th record. Run 1, Event 27, LumiSection 1 at 31-Dec-2000 23:16:27.920 EST
+Begin processing the 28th record. Run 1, Event 28, LumiSection 1 at 31-Dec-2000 23:16:28.090 EST
+Begin processing the 29th record. Run 1, Event 29, LumiSection 1 at 31-Dec-2000 23:16:28.140 EST
+Begin processing the 30th record. Run 1, Event 30, LumiSection 1 at 31-Dec-2000 23:16:28.190 EST
+Begin processing the 31st record. Run 1, Event 31, LumiSection 1 at 31-Dec-2000 23:16:28.380 EST
+Begin processing the 32nd record. Run 1, Event 32, LumiSection 1 at 31-Dec-2000 23:16:28.430 EST
+Begin processing the 33rd record. Run 1, Event 33, LumiSection 1 at 31-Dec-2000 23:16:28.480 EST
+Begin processing the 34th record. Run 1, Event 34, LumiSection 1 at 31-Dec-2000 23:16:28.650 EST
+Begin processing the 35th record. Run 1, Event 35, LumiSection 1 at 31-Dec-2000 23:16:28.720 EST
+Begin processing the 36th record. Run 1, Event 36, LumiSection 1 at 31-Dec-2000 23:16:28.770 EST
+Begin processing the 37th record. Run 1, Event 37, LumiSection 1 at 31-Dec-2000 23:16:28.940 EST
+Begin processing the 38th record. Run 1, Event 38, LumiSection 1 at 31-Dec-2000 23:16:28.990 EST
+Begin processing the 39th record. Run 1, Event 39, LumiSection 1 at 31-Dec-2000 23:16:29.040 EST
+Begin processing the 40th record. Run 1, Event 40, LumiSection 1 at 31-Dec-2000 23:16:29.230 EST
+Begin processing the 41st record. Run 1, Event 41, LumiSection 1 at 31-Dec-2000 23:16:29.280 EST
+Begin processing the 42nd record. Run 1, Event 42, LumiSection 1 at 31-Dec-2000 23:16:29.330 EST
+Begin processing the 43rd record. Run 1, Event 43, LumiSection 1 at 31-Dec-2000 23:16:29.500 EST
+Begin processing the 44th record. Run 1, Event 44, LumiSection 1 at 31-Dec-2000 23:16:29.570 EST
+Begin processing the 45th record. Run 1, Event 45, LumiSection 1 at 31-Dec-2000 23:16:29.620 EST
+Begin processing the 46th record. Run 1, Event 46, LumiSection 1 at 31-Dec-2000 23:16:29.790 EST
+Begin processing the 47th record. Run 1, Event 47, LumiSection 1 at 31-Dec-2000 23:16:29.840 EST
+Begin processing the 48th record. Run 1, Event 48, LumiSection 1 at 31-Dec-2000 23:16:29.910 EST
+Begin processing the 49th record. Run 1, Event 49, LumiSection 1 at 31-Dec-2000 23:16:30.080 EST
+Begin processing the 50th record. Run 1, Event 50, LumiSection 1 at 31-Dec-2000 23:16:30.130 EST
+Begin processing the 51st record. Run 1, Event 51, LumiSection 1 at 31-Dec-2000 23:16:30.180 EST
+Begin processing the 52nd record. Run 1, Event 52, LumiSection 1 at 31-Dec-2000 23:16:30.350 EST
+Begin processing the 53rd record. Run 1, Event 53, LumiSection 1 at 31-Dec-2000 23:16:30.420 EST
+Begin processing the 54th record. Run 1, Event 54, LumiSection 1 at 31-Dec-2000 23:16:30.470 EST
+Begin processing the 55th record. Run 1, Event 55, LumiSection 1 at 31-Dec-2000 23:16:30.640 EST
+Begin processing the 56th record. Run 1, Event 56, LumiSection 1 at 31-Dec-2000 23:16:30.690 EST
+Begin processing the 57th record. Run 1, Event 57, LumiSection 1 at 31-Dec-2000 23:16:30.760 EST
+Begin processing the 58th record. Run 1, Event 58, LumiSection 1 at 31-Dec-2000 23:16:30.930 EST
+Begin processing the 59th record. Run 1, Event 59, LumiSection 1 at 31-Dec-2000 23:16:30.980 EST
+Begin processing the 60th record. Run 1, Event 60, LumiSection 1 at 31-Dec-2000 23:16:31.030 EST
+Begin processing the 61st record. Run 1, Event 61, LumiSection 1 at 31-Dec-2000 23:16:31.220 EST
+Begin processing the 62nd record. Run 1, Event 62, LumiSection 1 at 31-Dec-2000 23:16:31.270 EST
+Begin processing the 63rd record. Run 1, Event 63, LumiSection 1 at 31-Dec-2000 23:16:31.320 EST
+Begin processing the 64th record. Run 1, Event 64, LumiSection 1 at 31-Dec-2000 23:16:31.490 EST
+Begin processing the 65th record. Run 1, Event 65, LumiSection 1 at 31-Dec-2000 23:16:31.540 EST
+Begin processing the 66th record. Run 1, Event 66, LumiSection 1 at 31-Dec-2000 23:16:31.610 EST
+Begin processing the 67th record. Run 1, Event 67, LumiSection 1 at 31-Dec-2000 23:16:31.780 EST
+Begin processing the 68th record. Run 1, Event 68, LumiSection 1 at 31-Dec-2000 23:16:31.830 EST
+Begin processing the 69th record. Run 1, Event 69, LumiSection 1 at 31-Dec-2000 23:16:31.880 EST
+Begin processing the 70th record. Run 1, Event 70, LumiSection 1 at 31-Dec-2000 23:16:32.070 EST
+Begin processing the 71st record. Run 1, Event 71, LumiSection 1 at 31-Dec-2000 23:16:32.120 EST
+Begin processing the 72nd record. Run 1, Event 72, LumiSection 1 at 31-Dec-2000 23:16:32.170 EST
+Begin processing the 73rd record. Run 1, Event 73, LumiSection 1 at 31-Dec-2000 23:16:32.340 EST
+Begin processing the 74th record. Run 1, Event 74, LumiSection 1 at 31-Dec-2000 23:16:32.390 EST
+Begin processing the 75th record. Run 1, Event 75, LumiSection 1 at 31-Dec-2000 23:16:32.460 EST
+Begin processing the 76th record. Run 1, Event 76, LumiSection 1 at 31-Dec-2000 23:16:32.630 EST
+Begin processing the 77th record. Run 1, Event 77, LumiSection 1 at 31-Dec-2000 23:16:32.680 EST
+Begin processing the 78th record. Run 1, Event 78, LumiSection 1 at 31-Dec-2000 23:16:32.730 EST
+Begin processing the 79th record. Run 1, Event 79, LumiSection 1 at 31-Dec-2000 23:16:32.920 EST
+Begin processing the 80th record. Run 1, Event 80, LumiSection 1 at 31-Dec-2000 23:16:32.970 EST
+Begin processing the 81st record. Run 1, Event 81, LumiSection 1 at 31-Dec-2000 23:16:33.020 EST
+Begin processing the 82nd record. Run 1, Event 82, LumiSection 1 at 31-Dec-2000 23:16:33.190 EST
+Begin processing the 83rd record. Run 1, Event 83, LumiSection 1 at 31-Dec-2000 23:16:33.260 EST
+Begin processing the 84th record. Run 1, Event 84, LumiSection 1 at 31-Dec-2000 23:16:33.310 EST
+Begin processing the 85th record. Run 1, Event 85, LumiSection 1 at 31-Dec-2000 23:16:33.480 EST
+Begin processing the 86th record. Run 1, Event 86, LumiSection 1 at 31-Dec-2000 23:16:33.530 EST
+Begin processing the 87th record. Run 1, Event 87, LumiSection 1 at 31-Dec-2000 23:16:33.580 EST
+Begin processing the 88th record. Run 1, Event 88, LumiSection 1 at 31-Dec-2000 23:16:33.770 EST
+Begin processing the 89th record. Run 1, Event 89, LumiSection 1 at 31-Dec-2000 23:16:33.820 EST
+Begin processing the 90th record. Run 1, Event 90, LumiSection 1 at 31-Dec-2000 23:16:33.870 EST
+Begin processing the 91st record. Run 1, Event 91, LumiSection 1 at 31-Dec-2000 23:16:34.040 EST
+Begin processing the 92nd record. Run 1, Event 92, LumiSection 1 at 31-Dec-2000 23:16:34.110 EST
+Begin processing the 93rd record. Run 1, Event 93, LumiSection 1 at 31-Dec-2000 23:16:34.160 EST
+Begin processing the 94th record. Run 1, Event 94, LumiSection 1 at 31-Dec-2000 23:16:34.330 EST
+Begin processing the 95th record. Run 1, Event 95, LumiSection 1 at 31-Dec-2000 23:16:34.380 EST
+Begin processing the 96th record. Run 1, Event 96, LumiSection 1 at 31-Dec-2000 23:16:34.450 EST
+Begin processing the 97th record. Run 1, Event 97, LumiSection 1 at 31-Dec-2000 23:16:34.620 EST
+Begin processing the 98th record. Run 1, Event 98, LumiSection 1 at 31-Dec-2000 23:16:34.670 EST
+Begin processing the 99th record. Run 1, Event 99, LumiSection 1 at 31-Dec-2000 23:16:34.720 EST
+Begin processing the 100th record. Run 1, Event 100, LumiSection 1 at 31-Dec-2000 23:16:34.890 EST
+Begin processing the 101st record. Run 1, Event 101, LumiSection 1 at 31-Dec-2000 23:16:34.960 EST
+Begin processing the 102nd record. Run 1, Event 102, LumiSection 1 at 31-Dec-2000 23:16:35.010 EST
+Begin processing the 103rd record. Run 1, Event 103, LumiSection 1 at 31-Dec-2000 23:16:35.180 EST
+Begin processing the 104th record. Run 1, Event 104, LumiSection 1 at 31-Dec-2000 23:16:35.230 EST
+Begin processing the 105th record. Run 1, Event 105, LumiSection 1 at 31-Dec-2000 23:16:35.300 EST
+Begin processing the 106th record. Run 1, Event 106, LumiSection 1 at 31-Dec-2000 23:16:35.470 EST
+Begin processing the 107th record. Run 1, Event 107, LumiSection 1 at 31-Dec-2000 23:16:35.520 EST
+Begin processing the 108th record. Run 1, Event 108, LumiSection 1 at 31-Dec-2000 23:16:35.570 EST
+Begin processing the 109th record. Run 1, Event 109, LumiSection 1 at 31-Dec-2000 23:16:35.740 EST
+Begin processing the 110th record. Run 1, Event 110, LumiSection 1 at 31-Dec-2000 23:16:35.810 EST
+Begin processing the 111th record. Run 1, Event 111, LumiSection 1 at 31-Dec-2000 23:16:35.860 EST
+Begin processing the 112th record. Run 1, Event 112, LumiSection 1 at 31-Dec-2000 23:16:36.030 EST
+Begin processing the 113th record. Run 1, Event 113, LumiSection 1 at 31-Dec-2000 23:16:36.080 EST
+Begin processing the 114th record. Run 1, Event 114, LumiSection 1 at 31-Dec-2000 23:16:36.150 EST
+Begin processing the 115th record. Run 1, Event 115, LumiSection 1 at 31-Dec-2000 23:16:36.320 EST
+Begin processing the 116th record. Run 1, Event 116, LumiSection 1 at 31-Dec-2000 23:16:36.370 EST
+Begin processing the 117th record. Run 1, Event 117, LumiSection 1 at 31-Dec-2000 23:16:36.420 EST
+Begin processing the 118th record. Run 1, Event 118, LumiSection 1 at 31-Dec-2000 23:16:36.610 EST
+Begin processing the 119th record. Run 1, Event 119, LumiSection 1 at 31-Dec-2000 23:16:36.660 EST
+Begin processing the 120th record. Run 1, Event 120, LumiSection 1 at 31-Dec-2000 23:16:36.710 EST
+----- Begin Fatal Exception 31-Dec-2000 23:16:37 EST-----------------------
+An exception of category 'ExternalLHEProducer' occurred while
+   [0] Processing run: 1
+   [1] Calling endRun for unscheduled module ExternalLHEProducer/'externalLHEProducer'
+Exception Message:
+Error in ExternalLHEProducer::endRunProduce().  Event loop is over, but there are still lhe events to process.This could happen if lhe file contains more events than requested.  This is never expected to happen.
+----- End Fatal Exception -------------------------------------------------
+Another exception was caught while trying to clean up files after the primary fatal exception.
+TimeReport> Time report complete in 15276.9 seconds
+ Time Summary: 
+ - Min event:   0.00999999
+ - Max event:   0.15
+ - Avg event:   127.308
+ - Total job:   15276.9
+ CPU Summary: 
+ - Min event:   0.000999
+ - Max event:   0.002
+ - Avg event:   0.00149977
+ - Total job:   14.8717
+ - Total event: 0.179972
+
+
+=============================================
+
+MessageLogger Summary
+
+ type     category        sev    module        subroutine        count    total
+ ---- -------------------- -- ---------------- ----------------  -----    -----
+    1 TimeReport           -e AfterModEndJob                         1        1
+    2 Additional Exception -s PostEndRun                             1        1
+    3 Fatal Exception      -s AfterModGlobalEn                       1        1
+    4 fileAction           -s ExternalLHEProdu                       2        2
+
+ type    category    Examples: run/evt        run/evt          run/evt
+ ---- -------------------- ---------------- ---------------- ----------------
+    1 TimeReport           PostEndRun                        
+    2 Additional Exceptions PostEndRun                        
+    3 Fatal Exception      End Run: 1                        
+    4 fileAction           Run: 1           Run: 1           
+
+Severity    # Occurrences   Total Occurrences
+--------    -------------   -----------------
+Error                   1                   1
+System                  4                   4

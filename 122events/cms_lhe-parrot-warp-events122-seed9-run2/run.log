@@ -1,0 +1,7 @@
+Thu Dec  1 12:22:30 EST 2016
+2016/12/01 12:22:30.88 parrot_run[156266] <child:156299> notice: ERROR: using multiple CVMFS repositories in a single parrot session is not allowed.  Define PARROT_ALLOW_SWITCHING_CVMFS_REPOSITORIES to enable experimental support, which could result in parrot crashing or performing poorly.
+2016/12/01 12:22:30.88 parrot_run[156266] <child:156299> notice: ERROR: using multiple CVMFS repositories in a single parrot session is not allowed.  Define PARROT_ALLOW_SWITCHING_CVMFS_REPOSITORIES to enable experimental support, which could result in parrot crashing or performing poorly.
+2016/12/01 12:22:30.88 parrot_run[156266] <child:156299> notice: ERROR: using multiple CVMFS repositories in a single parrot session is not allowed.  Define PARROT_ALLOW_SWITCHING_CVMFS_REPOSITORIES to enable experimental support, which could result in parrot crashing or performing poorly.
+2016/12/01 12:22:30.88 parrot_run[156266] <child:156299> notice: ERROR: using multiple CVMFS repositories in a single parrot session is not allowed.  Define PARROT_ALLOW_SWITCHING_CVMFS_REPOSITORIES to enable experimental support, which could result in parrot crashing or performing poorly.
+WARNING: In non-interactive mode release checks e.g. deprecated releases, production architectures are disabled.
+Thu Dec  1 12:42:02 EST 2016
