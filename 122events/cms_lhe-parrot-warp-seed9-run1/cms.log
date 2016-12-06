@@ -1,0 +1,2291 @@
+==> using COND/Services/RelationalAuthenticationService for auth, sys 1
+==> using COND/Services/RelationalAuthenticationService for auth, sys 1
+   ______________________________________     
+         Running Generic Tarball/Gridpack     
+   ______________________________________     
+gridpack tarball path = /cvmfs/cms.cern.ch/phys_generator/gridpacks/slc6_amd64_gcc481/13TeV/powheg/V2/ttH_inclusive_NNPDF30_13TeV_M125/v1/ttH_inclusive_NNPDF30_13TeV_M125_tarball.tar.gz
+%MSG-MG5 number of events requested = 1649
+%MSG-MG5 random seed used for the run = 9
+tar: powheg.input: time stamp 2015-04-20 12:31:24 is 451240046 s in the future
+tar: pwg-stat.dat: time stamp 2015-04-20 14:30:30 is 451247191.99 s in the future
+tar: pwgboundviolations.dat: time stamp 2015-04-20 14:35:49 is 451247510.98 s in the future
+tar: pwgcounters.dat: time stamp 2015-04-20 14:35:58 is 451247519.97 s in the future
+tar: pwggrid.dat: time stamp 2015-04-20 14:30:30 is 451247191.96 s in the future
+tar: pwgubound.dat: time stamp 2015-04-20 14:35:20 is 451247481.95 s in the future
+tar: pwgxgrid.dat: time stamp 2015-04-20 14:10:27 is 451245988.94 s in the future
+tar: pwhg_main: time stamp 2015-04-20 13:30:27 is 451243588.93 s in the future
+tar: runcmsgrid.sh: time stamp 2015-04-20 14:36:00 is 451247521.92 s in the future
+   ______________________________________     
+         Running Powheg                       
+   ______________________________________     
+%MSG-POWHEG number of events requested = 1649
+%MSG-POWHEG random seed used for the run = 9
+%MSG-POWHEG number of cputs for the run = 1
+numevts 1649    ! number of events to be generated
+
+! Production parameters for ttH production 
+hmass 125.d0      ! mass of the Higgs boson [GeV]
+hwidth 0.00498d0  ! width of the Higgs boson [GeV]
+
+! Higgs decay:
+hdecaymode -1   ! -1 no decay                
+                ! 0 all decay channels open
+                ! 1-6 d dbar, u ubar,..., t tbar 
+                ! 7-9 e+ e-, mu+ mu-, tau+ tau-
+                ! 10  W+W-
+                ! 11  ZZ
+                ! 12  gamma gamma     
+
+#pythiatune 320	! PYTHIA tune
+
+ih1   1           ! hadron 1 (1 for protons, -1 for antiprotons)
+ih2   1           ! hadron 2 (1 for protons, -1 for antiprotons)
+ebeam1 6500d0     ! energy of beam 1
+ebeam2 6500d0     ! energy of beam 2
+
+# https://lhapdf.hepforge.org/pdfsets.html
+lhans1  260000      ! pdf set for hadron 1 (LHA numbering)
+lhans2  260000      ! pdf set for hadron 2 (LHA numbering)
+
+#bornsuppfact 1d0 ! (default 0d0) mass param for Born suppression factor. 
+delta_mttmin 0d0 ! (default 0d0) if not zero, use generation cut on mtt
+
+use-old-grid    1 ! if 1 use old grid if file pwggrids.dat is present (<> 1 regenerate)
+use-old-ubound  1 ! if 1 use norm of upper bounding function stored in pwgubound.dat, if present; <> 1 regenerate
+
+ncall1  500000  ! number of calls for initializing the integration grid
+itmx1    2     ! number of iterations for initializing the integration grid
+ncall2  500000  ! number of calls for computing the integral and finding upper bound
+#ncall2   0  ! number of calls for computing the integral and finding upper bound
+itmx2    1     ! number of iterations for computing the integral and finding upper bound
+foldcsi   1    ! number of folds on csi integration
+foldy      1    ! number of folds on  y  integration
+foldphi   1    ! number of folds on phi integration
+nubound 10000  ! number of bbarra calls to setup norm of upper bounding function
+icsimax  1     ! <= 100, number of csi subdivision when computing the upper bounds
+iymax    1     ! <= 100, number of y subdivision when computing the upper bounds
+xupbound 2d0   ! increase upper bound for radiation generation
+
+runningscales 1	   ! default 0 (no running scales); 1: use running scales
+renscfact 1d0   ! (default 1d0) ren scale factor: muren  = muref * renscfact 
+facscfact 1d0   ! (default 1d0) fac scale factor: mufact = muref * facscfact 
+testplots  1       ! (default 0, do not) do NLO and PWHG distributions
+
+#bornonly   1      ! (default 0) if 1 do Born only
+fakevirt   1      ! (default 0) if 1 use Born for virtuals
+
+iseed    9
+
+# parameters for top decays:
+topdecaymode 22222      ! 0 stable tops
+                        ! 20000 both tops decay into b l v
+zerowidth 0    	    ! if 1, use zero width approximation during decay
+
+! Parameters for the generation of spin correlations in t tbar decays
+tdec/wmass 80.4  ! W mass for top decay
+tdec/wwidth 2.141
+tdec/bmass 4.75
+tdec/twidth  1.31
+tdec/elbranching 0.108
+tdec/emass 0.00051
+tdec/mumass 0.1057
+tdec/taumass 1.777
+tdec/dmass   0.100
+tdec/umass   0.100
+tdec/smass   0.200
+tdec/cmass   1.5
+tdec/sin2cabibbo 0.051
+    
+# parameters for parallel runs (remove '#' below for parallel runs):
+#manyseeds  1       ! Used to perform multiple runs with different random
+                   ! seeds in the same directory.
+                   ! If set to 1, the program asks for an integer j;
+                   ! The file pwgseeds.dat at line j is read, and the
+                   ! integer at line j is used to initialize the random
+                   ! sequence for the generation of the event.
+                   ! The event file is called pwgevents-'j'.lhe
+
+pdfreweight 1       ! PDF reweighting
+dampreweight 1      ! h_damp reweighting (mt/2, mt, mt*2)
+storeinfo_rwgt 1    ! store weight information
+withnegweights 0    ! default 0, 
+#xgriditeration 1   ! identifier for grid generation
+#parallelstage  1   ! identifier for parallel running stages
+
+lhrwgt_id 'c'
+lhrwgt_descr 'muR=0.10000E+01 muF=0.10000E+01'
+lhrwgt_group_name 'scale_variation'
+lhrwgt_group_combine 'envelope'
+
+computing weights for 9 scale variations
+
+
+ doing scale 1, 1
+
+
+ doing scale 1, 2
+
+
+ doing scale 1, 0.5
+
+
+ doing scale 2, 1
+
+
+ doing scale 2, 2
+
+
+ doing scale 2, 0.5
+
+
+ doing scale 0.5, 1
+
+
+ doing scale 0.5, 2
+
+
+ doing scale 0.5, 0.5
+
+
+computing weights for 100 NNPDF3.0 variations
+
+
+ PDF set 260001
+
+ PDF set 260002
+
+ PDF set 260003
+
+ PDF set 260004
+
+ PDF set 260005
+
+ PDF set 260006
+
+ PDF set 260007
+
+ PDF set 260008
+
+ PDF set 260009
+
+ PDF set 260010
+
+ PDF set 260011
+
+ PDF set 260012
+
+ PDF set 260013
+
+ PDF set 260014
+
+ PDF set 260015
+
+ PDF set 260016
+
+ PDF set 260017
+
+ PDF set 260018
+
+ PDF set 260019
+
+ PDF set 260020
+
+ PDF set 260021
+
+ PDF set 260022
+
+ PDF set 260023
+
+ PDF set 260024
+
+ PDF set 260025
+
+ PDF set 260026
+
+ PDF set 260027
+
+ PDF set 260028
+
+ PDF set 260029
+
+ PDF set 260030
+
+ PDF set 260031
+
+ PDF set 260032
+
+ PDF set 260033
+
+ PDF set 260034
+
+ PDF set 260035
+
+ PDF set 260036
+
+ PDF set 260037
+
+ PDF set 260038
+
+ PDF set 260039
+
+ PDF set 260040
+
+ PDF set 260041
+
+ PDF set 260042
+
+ PDF set 260043
+
+ PDF set 260044
+
+ PDF set 260045
+
+ PDF set 260046
+
+ PDF set 260047
+
+ PDF set 260048
+
+ PDF set 260049
+
+ PDF set 260050
+
+ PDF set 260051
+
+ PDF set 260052
+
+ PDF set 260053
+
+ PDF set 260054
+
+ PDF set 260055
+
+ PDF set 260056
+
+ PDF set 260057
+
+ PDF set 260058
+
+ PDF set 260059
+
+ PDF set 260060
+
+ PDF set 260061
+
+ PDF set 260062
+
+ PDF set 260063
+
+ PDF set 260064
+
+ PDF set 260065
+
+ PDF set 260066
+
+ PDF set 260067
+
+ PDF set 260068
+
+ PDF set 260069
+
+ PDF set 260070
+
+ PDF set 260071
+
+ PDF set 260072
+
+ PDF set 260073
+
+ PDF set 260074
+
+ PDF set 260075
+
+ PDF set 260076
+
+ PDF set 260077
+
+ PDF set 260078
+
+ PDF set 260079
+
+ PDF set 260080
+
+ PDF set 260081
+
+ PDF set 260082
+
+ PDF set 260083
+
+ PDF set 260084
+
+ PDF set 260085
+
+ PDF set 260086
+
+ PDF set 260087
+
+ PDF set 260088
+
+ PDF set 260089
+
+ PDF set 260090
+
+ PDF set 260091
+
+ PDF set 260092
+
+ PDF set 260093
+
+ PDF set 260094
+
+ PDF set 260095
+
+ PDF set 260096
+
+ PDF set 260097
+
+ PDF set 260098
+
+ PDF set 260099
+
+ PDF set 260100
+
+computing weights for NNPDF 3.0 alphas=0.117 variation
+
+
+ PDF set 265000
+
+computing weights for NNPDF 3.0 alphas=0.119 variation
+
+
+ PDF set 266000
+
+computing weights for 52+1 CT10 PDF variations
+
+
+ PDF set 11000
+
+ PDF set 11001
+
+ PDF set 11002
+
+ PDF set 11003
+
+ PDF set 11004
+
+ PDF set 11005
+
+ PDF set 11006
+
+ PDF set 11007
+
+ PDF set 11008
+
+ PDF set 11009
+
+ PDF set 11010
+
+ PDF set 11011
+
+ PDF set 11012
+
+ PDF set 11013
+
+ PDF set 11014
+
+ PDF set 11015
+
+ PDF set 11016
+
+ PDF set 11017
+
+ PDF set 11018
+
+ PDF set 11019
+
+ PDF set 11020
+
+ PDF set 11021
+
+ PDF set 11022
+
+ PDF set 11023
+
+ PDF set 11024
+
+ PDF set 11025
+
+ PDF set 11026
+
+ PDF set 11027
+
+ PDF set 11028
+
+ PDF set 11029
+
+ PDF set 11030
+
+ PDF set 11031
+
+ PDF set 11032
+
+ PDF set 11033
+
+ PDF set 11034
+
+ PDF set 11035
+
+ PDF set 11036
+
+ PDF set 11037
+
+ PDF set 11038
+
+ PDF set 11039
+
+ PDF set 11040
+
+ PDF set 11041
+
+ PDF set 11042
+
+ PDF set 11043
+
+ PDF set 11044
+
+ PDF set 11045
+
+ PDF set 11046
+
+ PDF set 11047
+
+ PDF set 11048
+
+ PDF set 11049
+
+ PDF set 11050
+
+ PDF set 11051
+
+ PDF set 11052
+
+computing weights for CT10 alphas=0.117 variation
+
+
+ PDF set 11067
+
+computing weights for CT10 alphas=0.119 variation
+
+
+ PDF set 11069
+
+computing weights for 50+1 MMHT2014nlo68clas118 PDF variations
+
+
+ PDF set 25200
+
+ PDF set 25201
+
+ PDF set 25202
+
+ PDF set 25203
+
+ PDF set 25204
+
+ PDF set 25205
+
+ PDF set 25206
+
+ PDF set 25207
+
+ PDF set 25208
+
+ PDF set 25209
+
+ PDF set 25210
+
+ PDF set 25211
+
+ PDF set 25212
+
+ PDF set 25213
+
+ PDF set 25214
+
+ PDF set 25215
+
+ PDF set 25216
+
+ PDF set 25217
+
+ PDF set 25218
+
+ PDF set 25219
+
+ PDF set 25220
+
+ PDF set 25221
+
+ PDF set 25222
+
+ PDF set 25223
+
+ PDF set 25224
+
+ PDF set 25225
+
+ PDF set 25226
+
+ PDF set 25227
+
+ PDF set 25228
+
+ PDF set 25229
+
+ PDF set 25230
+
+ PDF set 25231
+
+ PDF set 25232
+
+ PDF set 25233
+
+ PDF set 25234
+
+ PDF set 25235
+
+ PDF set 25236
+
+ PDF set 25237
+
+ PDF set 25238
+
+ PDF set 25239
+
+ PDF set 25240
+
+ PDF set 25241
+
+ PDF set 25242
+
+ PDF set 25243
+
+ PDF set 25244
+
+ PDF set 25245
+
+ PDF set 25246
+
+ PDF set 25247
+
+ PDF set 25248
+
+ PDF set 25249
+
+ PDF set 25250
+
+computing weights for 5 MMHT2014nlo68cl 5 alphas variations
+
+
+ PDF set 25260
+
+ PDF set 25261
+
+ PDF set 25262
+
+ PDF set 25263
+
+ PDF set 25264
+
+ finished computing weights ..
+
+-rw-r--r-- 1 32766 campus 18534418 Dec  6  2016 cmsgrid_final.lhe
+/afs/crc.nd.edu/user/p/pivie/cms/step1/cms_lhe-parrot-warp-seed9-run1/lheevent/powhegbox_ttH
+Output ready with cmsgrid_final.lhe at /afs/crc.nd.edu/user/p/pivie/cms/step1/cms_lhe-parrot-warp-seed9-run1/lheevent
+End of job on  Sun Dec 31 23:16:24 EST 2000
+31-Dec-2000 23:16:24 EST  Initiating request to open LHE file cmsgrid_final.lhe
+31-Dec-2000 23:16:25 EST  Successfully opened LHE file cmsgrid_final.lhe
+Begin processing the 1st record. Run 1, Event 1, LumiSection 1 at 31-Dec-2000 23:16:25.520 EST
+Begin processing the 2nd record. Run 1, Event 2, LumiSection 1 at 31-Dec-2000 23:16:25.590 EST
+Begin processing the 3rd record. Run 1, Event 3, LumiSection 1 at 31-Dec-2000 23:16:25.640 EST
+Begin processing the 4th record. Run 1, Event 4, LumiSection 1 at 31-Dec-2000 23:16:25.810 EST
+Begin processing the 5th record. Run 1, Event 5, LumiSection 1 at 31-Dec-2000 23:16:25.880 EST
+Begin processing the 6th record. Run 1, Event 6, LumiSection 1 at 31-Dec-2000 23:16:25.930 EST
+Begin processing the 7th record. Run 1, Event 7, LumiSection 1 at 31-Dec-2000 23:16:26.100 EST
+Begin processing the 8th record. Run 1, Event 8, LumiSection 1 at 31-Dec-2000 23:16:26.150 EST
+Begin processing the 9th record. Run 1, Event 9, LumiSection 1 at 31-Dec-2000 23:16:26.220 EST
+Begin processing the 10th record. Run 1, Event 10, LumiSection 1 at 31-Dec-2000 23:16:26.390 EST
+Begin processing the 11th record. Run 1, Event 11, LumiSection 1 at 31-Dec-2000 23:16:26.440 EST
+Begin processing the 12th record. Run 1, Event 12, LumiSection 1 at 31-Dec-2000 23:16:26.490 EST
+Begin processing the 13th record. Run 1, Event 13, LumiSection 1 at 31-Dec-2000 23:16:26.680 EST
+Begin processing the 14th record. Run 1, Event 14, LumiSection 1 at 31-Dec-2000 23:16:26.730 EST
+Begin processing the 15th record. Run 1, Event 15, LumiSection 1 at 31-Dec-2000 23:16:26.780 EST
+Begin processing the 16th record. Run 1, Event 16, LumiSection 1 at 31-Dec-2000 23:16:26.950 EST
+Begin processing the 17th record. Run 1, Event 17, LumiSection 1 at 31-Dec-2000 23:16:27.000 EST
+Begin processing the 18th record. Run 1, Event 18, LumiSection 1 at 31-Dec-2000 23:16:27.070 EST
+Begin processing the 19th record. Run 1, Event 19, LumiSection 1 at 31-Dec-2000 23:16:27.240 EST
+Begin processing the 20th record. Run 1, Event 20, LumiSection 1 at 31-Dec-2000 23:16:27.290 EST
+Begin processing the 21st record. Run 1, Event 21, LumiSection 1 at 31-Dec-2000 23:16:27.340 EST
+Begin processing the 22nd record. Run 1, Event 22, LumiSection 1 at 31-Dec-2000 23:16:27.530 EST
+Begin processing the 23rd record. Run 1, Event 23, LumiSection 1 at 31-Dec-2000 23:16:27.580 EST
+Begin processing the 24th record. Run 1, Event 24, LumiSection 1 at 31-Dec-2000 23:16:27.630 EST
+Begin processing the 25th record. Run 1, Event 25, LumiSection 1 at 31-Dec-2000 23:16:27.800 EST
+Begin processing the 26th record. Run 1, Event 26, LumiSection 1 at 31-Dec-2000 23:16:27.870 EST
+Begin processing the 27th record. Run 1, Event 27, LumiSection 1 at 31-Dec-2000 23:16:27.920 EST
+Begin processing the 28th record. Run 1, Event 28, LumiSection 1 at 31-Dec-2000 23:16:28.090 EST
+Begin processing the 29th record. Run 1, Event 29, LumiSection 1 at 31-Dec-2000 23:16:28.140 EST
+Begin processing the 30th record. Run 1, Event 30, LumiSection 1 at 31-Dec-2000 23:16:28.190 EST
+Begin processing the 31st record. Run 1, Event 31, LumiSection 1 at 31-Dec-2000 23:16:28.380 EST
+Begin processing the 32nd record. Run 1, Event 32, LumiSection 1 at 31-Dec-2000 23:16:28.430 EST
+Begin processing the 33rd record. Run 1, Event 33, LumiSection 1 at 31-Dec-2000 23:16:28.480 EST
+Begin processing the 34th record. Run 1, Event 34, LumiSection 1 at 31-Dec-2000 23:16:28.650 EST
+Begin processing the 35th record. Run 1, Event 35, LumiSection 1 at 31-Dec-2000 23:16:28.720 EST
+Begin processing the 36th record. Run 1, Event 36, LumiSection 1 at 31-Dec-2000 23:16:28.770 EST
+Begin processing the 37th record. Run 1, Event 37, LumiSection 1 at 31-Dec-2000 23:16:28.940 EST
+Begin processing the 38th record. Run 1, Event 38, LumiSection 1 at 31-Dec-2000 23:16:28.990 EST
+Begin processing the 39th record. Run 1, Event 39, LumiSection 1 at 31-Dec-2000 23:16:29.040 EST
+Begin processing the 40th record. Run 1, Event 40, LumiSection 1 at 31-Dec-2000 23:16:29.230 EST
+Begin processing the 41st record. Run 1, Event 41, LumiSection 1 at 31-Dec-2000 23:16:29.280 EST
+Begin processing the 42nd record. Run 1, Event 42, LumiSection 1 at 31-Dec-2000 23:16:29.330 EST
+Begin processing the 43rd record. Run 1, Event 43, LumiSection 1 at 31-Dec-2000 23:16:29.500 EST
+Begin processing the 44th record. Run 1, Event 44, LumiSection 1 at 31-Dec-2000 23:16:29.570 EST
+Begin processing the 45th record. Run 1, Event 45, LumiSection 1 at 31-Dec-2000 23:16:29.620 EST
+Begin processing the 46th record. Run 1, Event 46, LumiSection 1 at 31-Dec-2000 23:16:29.790 EST
+Begin processing the 47th record. Run 1, Event 47, LumiSection 1 at 31-Dec-2000 23:16:29.840 EST
+Begin processing the 48th record. Run 1, Event 48, LumiSection 1 at 31-Dec-2000 23:16:29.910 EST
+Begin processing the 49th record. Run 1, Event 49, LumiSection 1 at 31-Dec-2000 23:16:30.080 EST
+Begin processing the 50th record. Run 1, Event 50, LumiSection 1 at 31-Dec-2000 23:16:30.130 EST
+Begin processing the 51st record. Run 1, Event 51, LumiSection 1 at 31-Dec-2000 23:16:30.180 EST
+Begin processing the 52nd record. Run 1, Event 52, LumiSection 1 at 31-Dec-2000 23:16:30.350 EST
+Begin processing the 53rd record. Run 1, Event 53, LumiSection 1 at 31-Dec-2000 23:16:30.420 EST
+Begin processing the 54th record. Run 1, Event 54, LumiSection 1 at 31-Dec-2000 23:16:30.470 EST
+Begin processing the 55th record. Run 1, Event 55, LumiSection 1 at 31-Dec-2000 23:16:30.640 EST
+Begin processing the 56th record. Run 1, Event 56, LumiSection 1 at 31-Dec-2000 23:16:30.690 EST
+Begin processing the 57th record. Run 1, Event 57, LumiSection 1 at 31-Dec-2000 23:16:30.760 EST
+Begin processing the 58th record. Run 1, Event 58, LumiSection 1 at 31-Dec-2000 23:16:30.930 EST
+Begin processing the 59th record. Run 1, Event 59, LumiSection 1 at 31-Dec-2000 23:16:30.980 EST
+Begin processing the 60th record. Run 1, Event 60, LumiSection 1 at 31-Dec-2000 23:16:31.030 EST
+Begin processing the 61st record. Run 1, Event 61, LumiSection 1 at 31-Dec-2000 23:16:31.220 EST
+Begin processing the 62nd record. Run 1, Event 62, LumiSection 1 at 31-Dec-2000 23:16:31.270 EST
+Begin processing the 63rd record. Run 1, Event 63, LumiSection 1 at 31-Dec-2000 23:16:31.320 EST
+Begin processing the 64th record. Run 1, Event 64, LumiSection 1 at 31-Dec-2000 23:16:31.490 EST
+Begin processing the 65th record. Run 1, Event 65, LumiSection 1 at 31-Dec-2000 23:16:31.540 EST
+Begin processing the 66th record. Run 1, Event 66, LumiSection 1 at 31-Dec-2000 23:16:31.610 EST
+Begin processing the 67th record. Run 1, Event 67, LumiSection 1 at 31-Dec-2000 23:16:31.780 EST
+Begin processing the 68th record. Run 1, Event 68, LumiSection 1 at 31-Dec-2000 23:16:31.830 EST
+Begin processing the 69th record. Run 1, Event 69, LumiSection 1 at 31-Dec-2000 23:16:31.880 EST
+Begin processing the 70th record. Run 1, Event 70, LumiSection 1 at 31-Dec-2000 23:16:32.070 EST
+Begin processing the 71st record. Run 1, Event 71, LumiSection 1 at 31-Dec-2000 23:16:32.120 EST
+Begin processing the 72nd record. Run 1, Event 72, LumiSection 1 at 31-Dec-2000 23:16:32.170 EST
+Begin processing the 73rd record. Run 1, Event 73, LumiSection 1 at 31-Dec-2000 23:16:32.340 EST
+Begin processing the 74th record. Run 1, Event 74, LumiSection 1 at 31-Dec-2000 23:16:32.390 EST
+Begin processing the 75th record. Run 1, Event 75, LumiSection 1 at 31-Dec-2000 23:16:32.460 EST
+Begin processing the 76th record. Run 1, Event 76, LumiSection 1 at 31-Dec-2000 23:16:32.630 EST
+Begin processing the 77th record. Run 1, Event 77, LumiSection 1 at 31-Dec-2000 23:16:32.680 EST
+Begin processing the 78th record. Run 1, Event 78, LumiSection 1 at 31-Dec-2000 23:16:32.730 EST
+Begin processing the 79th record. Run 1, Event 79, LumiSection 1 at 31-Dec-2000 23:16:32.920 EST
+Begin processing the 80th record. Run 1, Event 80, LumiSection 1 at 31-Dec-2000 23:16:32.970 EST
+Begin processing the 81st record. Run 1, Event 81, LumiSection 1 at 31-Dec-2000 23:16:33.020 EST
+Begin processing the 82nd record. Run 1, Event 82, LumiSection 1 at 31-Dec-2000 23:16:33.190 EST
+Begin processing the 83rd record. Run 1, Event 83, LumiSection 1 at 31-Dec-2000 23:16:33.260 EST
+Begin processing the 84th record. Run 1, Event 84, LumiSection 1 at 31-Dec-2000 23:16:33.310 EST
+Begin processing the 85th record. Run 1, Event 85, LumiSection 1 at 31-Dec-2000 23:16:33.480 EST
+Begin processing the 86th record. Run 1, Event 86, LumiSection 1 at 31-Dec-2000 23:16:33.530 EST
+Begin processing the 87th record. Run 1, Event 87, LumiSection 1 at 31-Dec-2000 23:16:33.580 EST
+Begin processing the 88th record. Run 1, Event 88, LumiSection 1 at 31-Dec-2000 23:16:33.770 EST
+Begin processing the 89th record. Run 1, Event 89, LumiSection 1 at 31-Dec-2000 23:16:33.820 EST
+Begin processing the 90th record. Run 1, Event 90, LumiSection 1 at 31-Dec-2000 23:16:33.870 EST
+Begin processing the 91st record. Run 1, Event 91, LumiSection 1 at 31-Dec-2000 23:16:34.040 EST
+Begin processing the 92nd record. Run 1, Event 92, LumiSection 1 at 31-Dec-2000 23:16:34.110 EST
+Begin processing the 93rd record. Run 1, Event 93, LumiSection 1 at 31-Dec-2000 23:16:34.160 EST
+Begin processing the 94th record. Run 1, Event 94, LumiSection 1 at 31-Dec-2000 23:16:34.330 EST
+Begin processing the 95th record. Run 1, Event 95, LumiSection 1 at 31-Dec-2000 23:16:34.380 EST
+Begin processing the 96th record. Run 1, Event 96, LumiSection 1 at 31-Dec-2000 23:16:34.450 EST
+Begin processing the 97th record. Run 1, Event 97, LumiSection 1 at 31-Dec-2000 23:16:34.620 EST
+Begin processing the 98th record. Run 1, Event 98, LumiSection 1 at 31-Dec-2000 23:16:34.670 EST
+Begin processing the 99th record. Run 1, Event 99, LumiSection 1 at 31-Dec-2000 23:16:34.720 EST
+Begin processing the 100th record. Run 1, Event 100, LumiSection 1 at 31-Dec-2000 23:16:34.890 EST
+Begin processing the 101st record. Run 1, Event 101, LumiSection 1 at 31-Dec-2000 23:16:34.960 EST
+Begin processing the 102nd record. Run 1, Event 102, LumiSection 1 at 31-Dec-2000 23:16:35.010 EST
+Begin processing the 103rd record. Run 1, Event 103, LumiSection 1 at 31-Dec-2000 23:16:35.180 EST
+Begin processing the 104th record. Run 1, Event 104, LumiSection 1 at 31-Dec-2000 23:16:35.230 EST
+Begin processing the 105th record. Run 1, Event 105, LumiSection 1 at 31-Dec-2000 23:16:35.300 EST
+Begin processing the 106th record. Run 1, Event 106, LumiSection 1 at 31-Dec-2000 23:16:35.470 EST
+Begin processing the 107th record. Run 1, Event 107, LumiSection 1 at 31-Dec-2000 23:16:35.520 EST
+Begin processing the 108th record. Run 1, Event 108, LumiSection 1 at 31-Dec-2000 23:16:35.570 EST
+Begin processing the 109th record. Run 1, Event 109, LumiSection 1 at 31-Dec-2000 23:16:35.740 EST
+Begin processing the 110th record. Run 1, Event 110, LumiSection 1 at 31-Dec-2000 23:16:35.810 EST
+Begin processing the 111th record. Run 1, Event 111, LumiSection 1 at 31-Dec-2000 23:16:35.860 EST
+Begin processing the 112th record. Run 1, Event 112, LumiSection 1 at 31-Dec-2000 23:16:36.030 EST
+Begin processing the 113th record. Run 1, Event 113, LumiSection 1 at 31-Dec-2000 23:16:36.080 EST
+Begin processing the 114th record. Run 1, Event 114, LumiSection 1 at 31-Dec-2000 23:16:36.150 EST
+Begin processing the 115th record. Run 1, Event 115, LumiSection 1 at 31-Dec-2000 23:16:36.320 EST
+Begin processing the 116th record. Run 1, Event 116, LumiSection 1 at 31-Dec-2000 23:16:36.370 EST
+Begin processing the 117th record. Run 1, Event 117, LumiSection 1 at 31-Dec-2000 23:16:36.420 EST
+Begin processing the 118th record. Run 1, Event 118, LumiSection 1 at 31-Dec-2000 23:16:36.610 EST
+Begin processing the 119th record. Run 1, Event 119, LumiSection 1 at 31-Dec-2000 23:16:36.660 EST
+Begin processing the 120th record. Run 1, Event 120, LumiSection 1 at 31-Dec-2000 23:16:36.710 EST
+Begin processing the 121st record. Run 1, Event 121, LumiSection 1 at 31-Dec-2000 23:16:36.880 EST
+Begin processing the 122nd record. Run 1, Event 122, LumiSection 1 at 31-Dec-2000 23:16:36.930 EST
+Begin processing the 123rd record. Run 1, Event 123, LumiSection 1 at 31-Dec-2000 23:16:37.120 EST
+Begin processing the 124th record. Run 1, Event 124, LumiSection 1 at 31-Dec-2000 23:16:37.290 EST
+Begin processing the 125th record. Run 1, Event 125, LumiSection 1 at 31-Dec-2000 23:16:37.340 EST
+Begin processing the 126th record. Run 1, Event 126, LumiSection 1 at 31-Dec-2000 23:16:37.390 EST
+Begin processing the 127th record. Run 1, Event 127, LumiSection 1 at 31-Dec-2000 23:16:37.580 EST
+Begin processing the 128th record. Run 1, Event 128, LumiSection 1 at 31-Dec-2000 23:16:37.630 EST
+Begin processing the 129th record. Run 1, Event 129, LumiSection 1 at 31-Dec-2000 23:16:37.680 EST
+Begin processing the 130th record. Run 1, Event 130, LumiSection 1 at 31-Dec-2000 23:16:37.850 EST
+Begin processing the 131st record. Run 1, Event 131, LumiSection 1 at 31-Dec-2000 23:16:37.900 EST
+Begin processing the 132nd record. Run 1, Event 132, LumiSection 1 at 31-Dec-2000 23:16:37.970 EST
+Begin processing the 133rd record. Run 1, Event 133, LumiSection 1 at 31-Dec-2000 23:16:38.140 EST
+Begin processing the 134th record. Run 1, Event 134, LumiSection 1 at 31-Dec-2000 23:16:38.190 EST
+Begin processing the 135th record. Run 1, Event 135, LumiSection 1 at 31-Dec-2000 23:16:38.240 EST
+Begin processing the 136th record. Run 1, Event 136, LumiSection 1 at 31-Dec-2000 23:16:38.430 EST
+Begin processing the 137th record. Run 1, Event 137, LumiSection 1 at 31-Dec-2000 23:16:38.480 EST
+Begin processing the 138th record. Run 1, Event 138, LumiSection 1 at 31-Dec-2000 23:16:38.530 EST
+Begin processing the 139th record. Run 1, Event 139, LumiSection 1 at 31-Dec-2000 23:16:38.700 EST
+Begin processing the 140th record. Run 1, Event 140, LumiSection 1 at 31-Dec-2000 23:16:38.770 EST
+Begin processing the 141st record. Run 1, Event 141, LumiSection 1 at 31-Dec-2000 23:16:38.820 EST
+Begin processing the 142nd record. Run 1, Event 142, LumiSection 1 at 31-Dec-2000 23:16:38.990 EST
+Begin processing the 143rd record. Run 1, Event 143, LumiSection 1 at 31-Dec-2000 23:16:39.040 EST
+Begin processing the 144th record. Run 1, Event 144, LumiSection 1 at 31-Dec-2000 23:16:39.090 EST
+Begin processing the 145th record. Run 1, Event 145, LumiSection 1 at 31-Dec-2000 23:16:39.280 EST
+Begin processing the 146th record. Run 1, Event 146, LumiSection 1 at 31-Dec-2000 23:16:39.330 EST
+Begin processing the 147th record. Run 1, Event 147, LumiSection 1 at 31-Dec-2000 23:16:39.380 EST
+Begin processing the 148th record. Run 1, Event 148, LumiSection 1 at 31-Dec-2000 23:16:39.550 EST
+Begin processing the 149th record. Run 1, Event 149, LumiSection 1 at 31-Dec-2000 23:16:39.620 EST
+Begin processing the 150th record. Run 1, Event 150, LumiSection 1 at 31-Dec-2000 23:16:39.670 EST
+Begin processing the 151st record. Run 1, Event 151, LumiSection 1 at 31-Dec-2000 23:16:39.840 EST
+Begin processing the 152nd record. Run 1, Event 152, LumiSection 1 at 31-Dec-2000 23:16:39.890 EST
+Begin processing the 153rd record. Run 1, Event 153, LumiSection 1 at 31-Dec-2000 23:16:39.960 EST
+Begin processing the 154th record. Run 1, Event 154, LumiSection 1 at 31-Dec-2000 23:16:40.130 EST
+Begin processing the 155th record. Run 1, Event 155, LumiSection 1 at 31-Dec-2000 23:16:40.180 EST
+Begin processing the 156th record. Run 1, Event 156, LumiSection 1 at 31-Dec-2000 23:16:40.230 EST
+Begin processing the 157th record. Run 1, Event 157, LumiSection 1 at 31-Dec-2000 23:16:40.400 EST
+Begin processing the 158th record. Run 1, Event 158, LumiSection 1 at 31-Dec-2000 23:16:40.470 EST
+Begin processing the 159th record. Run 1, Event 159, LumiSection 1 at 31-Dec-2000 23:16:40.520 EST
+Begin processing the 160th record. Run 1, Event 160, LumiSection 1 at 31-Dec-2000 23:16:40.690 EST
+Begin processing the 161st record. Run 1, Event 161, LumiSection 1 at 31-Dec-2000 23:16:40.740 EST
+Begin processing the 162nd record. Run 1, Event 162, LumiSection 1 at 31-Dec-2000 23:16:40.810 EST
+Begin processing the 163rd record. Run 1, Event 163, LumiSection 1 at 31-Dec-2000 23:16:40.980 EST
+Begin processing the 164th record. Run 1, Event 164, LumiSection 1 at 31-Dec-2000 23:16:41.030 EST
+Begin processing the 165th record. Run 1, Event 165, LumiSection 1 at 31-Dec-2000 23:16:41.080 EST
+Begin processing the 166th record. Run 1, Event 166, LumiSection 1 at 31-Dec-2000 23:16:41.250 EST
+Begin processing the 167th record. Run 1, Event 167, LumiSection 1 at 31-Dec-2000 23:16:41.320 EST
+Begin processing the 168th record. Run 1, Event 168, LumiSection 1 at 31-Dec-2000 23:16:41.370 EST
+Begin processing the 169th record. Run 1, Event 169, LumiSection 1 at 31-Dec-2000 23:16:41.540 EST
+Begin processing the 170th record. Run 1, Event 170, LumiSection 1 at 31-Dec-2000 23:16:41.590 EST
+Begin processing the 171st record. Run 1, Event 171, LumiSection 1 at 31-Dec-2000 23:16:41.660 EST
+Begin processing the 172nd record. Run 1, Event 172, LumiSection 1 at 31-Dec-2000 23:16:41.830 EST
+Begin processing the 173rd record. Run 1, Event 173, LumiSection 1 at 31-Dec-2000 23:16:41.880 EST
+Begin processing the 174th record. Run 1, Event 174, LumiSection 1 at 31-Dec-2000 23:16:41.930 EST
+Begin processing the 175th record. Run 1, Event 175, LumiSection 1 at 31-Dec-2000 23:16:42.120 EST
+Begin processing the 176th record. Run 1, Event 176, LumiSection 1 at 31-Dec-2000 23:16:42.170 EST
+Begin processing the 177th record. Run 1, Event 177, LumiSection 1 at 31-Dec-2000 23:16:42.220 EST
+Begin processing the 178th record. Run 1, Event 178, LumiSection 1 at 31-Dec-2000 23:16:42.390 EST
+Begin processing the 179th record. Run 1, Event 179, LumiSection 1 at 31-Dec-2000 23:16:42.440 EST
+Begin processing the 180th record. Run 1, Event 180, LumiSection 1 at 31-Dec-2000 23:16:42.510 EST
+Begin processing the 181st record. Run 1, Event 181, LumiSection 1 at 31-Dec-2000 23:16:42.680 EST
+Begin processing the 182nd record. Run 1, Event 182, LumiSection 1 at 31-Dec-2000 23:16:42.730 EST
+Begin processing the 183rd record. Run 1, Event 183, LumiSection 1 at 31-Dec-2000 23:16:42.780 EST
+Begin processing the 184th record. Run 1, Event 184, LumiSection 1 at 31-Dec-2000 23:16:42.970 EST
+Begin processing the 185th record. Run 1, Event 185, LumiSection 1 at 31-Dec-2000 23:16:43.020 EST
+Begin processing the 186th record. Run 1, Event 186, LumiSection 1 at 31-Dec-2000 23:16:43.070 EST
+Begin processing the 187th record. Run 1, Event 187, LumiSection 1 at 31-Dec-2000 23:16:43.240 EST
+Begin processing the 188th record. Run 1, Event 188, LumiSection 1 at 31-Dec-2000 23:16:43.310 EST
+Begin processing the 189th record. Run 1, Event 189, LumiSection 1 at 31-Dec-2000 23:16:43.360 EST
+Begin processing the 190th record. Run 1, Event 190, LumiSection 1 at 31-Dec-2000 23:16:43.530 EST
+Begin processing the 191st record. Run 1, Event 191, LumiSection 1 at 31-Dec-2000 23:16:43.580 EST
+Begin processing the 192nd record. Run 1, Event 192, LumiSection 1 at 31-Dec-2000 23:16:43.630 EST
+Begin processing the 193rd record. Run 1, Event 193, LumiSection 1 at 31-Dec-2000 23:16:43.820 EST
+Begin processing the 194th record. Run 1, Event 194, LumiSection 1 at 31-Dec-2000 23:16:43.870 EST
+Begin processing the 195th record. Run 1, Event 195, LumiSection 1 at 31-Dec-2000 23:16:43.920 EST
+Begin processing the 196th record. Run 1, Event 196, LumiSection 1 at 31-Dec-2000 23:16:44.090 EST
+Begin processing the 197th record. Run 1, Event 197, LumiSection 1 at 31-Dec-2000 23:16:44.160 EST
+Begin processing the 198th record. Run 1, Event 198, LumiSection 1 at 31-Dec-2000 23:16:44.210 EST
+Begin processing the 199th record. Run 1, Event 199, LumiSection 1 at 31-Dec-2000 23:16:44.380 EST
+Begin processing the 200th record. Run 1, Event 200, LumiSection 1 at 31-Dec-2000 23:16:44.430 EST
+Begin processing the 201st record. Run 1, Event 201, LumiSection 1 at 31-Dec-2000 23:16:44.480 EST
+Begin processing the 202nd record. Run 1, Event 202, LumiSection 1 at 31-Dec-2000 23:16:44.670 EST
+Begin processing the 203rd record. Run 1, Event 203, LumiSection 1 at 31-Dec-2000 23:16:44.720 EST
+Begin processing the 204th record. Run 1, Event 204, LumiSection 1 at 31-Dec-2000 23:16:44.770 EST
+Begin processing the 205th record. Run 1, Event 205, LumiSection 1 at 31-Dec-2000 23:16:44.940 EST
+Begin processing the 206th record. Run 1, Event 206, LumiSection 1 at 31-Dec-2000 23:16:45.010 EST
+Begin processing the 207th record. Run 1, Event 207, LumiSection 1 at 31-Dec-2000 23:16:45.060 EST
+Begin processing the 208th record. Run 1, Event 208, LumiSection 1 at 31-Dec-2000 23:16:45.230 EST
+Begin processing the 209th record. Run 1, Event 209, LumiSection 1 at 31-Dec-2000 23:16:45.280 EST
+Begin processing the 210th record. Run 1, Event 210, LumiSection 1 at 31-Dec-2000 23:16:45.350 EST
+Begin processing the 211th record. Run 1, Event 211, LumiSection 1 at 31-Dec-2000 23:16:45.520 EST
+Begin processing the 212th record. Run 1, Event 212, LumiSection 1 at 31-Dec-2000 23:16:45.570 EST
+Begin processing the 213th record. Run 1, Event 213, LumiSection 1 at 31-Dec-2000 23:16:45.620 EST
+Begin processing the 214th record. Run 1, Event 214, LumiSection 1 at 31-Dec-2000 23:16:45.790 EST
+Begin processing the 215th record. Run 1, Event 215, LumiSection 1 at 31-Dec-2000 23:16:45.860 EST
+Begin processing the 216th record. Run 1, Event 216, LumiSection 1 at 31-Dec-2000 23:16:45.910 EST
+Begin processing the 217th record. Run 1, Event 217, LumiSection 1 at 31-Dec-2000 23:16:46.080 EST
+Begin processing the 218th record. Run 1, Event 218, LumiSection 1 at 31-Dec-2000 23:16:46.130 EST
+Begin processing the 219th record. Run 1, Event 219, LumiSection 1 at 31-Dec-2000 23:16:46.200 EST
+Begin processing the 220th record. Run 1, Event 220, LumiSection 1 at 31-Dec-2000 23:16:46.370 EST
+Begin processing the 221st record. Run 1, Event 221, LumiSection 1 at 31-Dec-2000 23:16:46.420 EST
+Begin processing the 222nd record. Run 1, Event 222, LumiSection 1 at 31-Dec-2000 23:16:46.470 EST
+Begin processing the 223rd record. Run 1, Event 223, LumiSection 1 at 31-Dec-2000 23:16:46.660 EST
+Begin processing the 224th record. Run 1, Event 224, LumiSection 1 at 31-Dec-2000 23:16:46.710 EST
+Begin processing the 225th record. Run 1, Event 225, LumiSection 1 at 31-Dec-2000 23:16:46.760 EST
+Begin processing the 226th record. Run 1, Event 226, LumiSection 1 at 31-Dec-2000 23:16:46.930 EST
+Begin processing the 227th record. Run 1, Event 227, LumiSection 1 at 31-Dec-2000 23:16:46.980 EST
+Begin processing the 228th record. Run 1, Event 228, LumiSection 1 at 31-Dec-2000 23:16:47.050 EST
+Begin processing the 229th record. Run 1, Event 229, LumiSection 1 at 31-Dec-2000 23:16:47.220 EST
+Begin processing the 230th record. Run 1, Event 230, LumiSection 1 at 31-Dec-2000 23:16:47.270 EST
+Begin processing the 231st record. Run 1, Event 231, LumiSection 1 at 31-Dec-2000 23:16:47.320 EST
+Begin processing the 232nd record. Run 1, Event 232, LumiSection 1 at 31-Dec-2000 23:16:47.510 EST
+Begin processing the 233rd record. Run 1, Event 233, LumiSection 1 at 31-Dec-2000 23:16:47.560 EST
+Begin processing the 234th record. Run 1, Event 234, LumiSection 1 at 31-Dec-2000 23:16:47.610 EST
+Begin processing the 235th record. Run 1, Event 235, LumiSection 1 at 31-Dec-2000 23:16:47.780 EST
+Begin processing the 236th record. Run 1, Event 236, LumiSection 1 at 31-Dec-2000 23:16:47.830 EST
+Begin processing the 237th record. Run 1, Event 237, LumiSection 1 at 31-Dec-2000 23:16:47.900 EST
+Begin processing the 238th record. Run 1, Event 238, LumiSection 1 at 31-Dec-2000 23:16:48.070 EST
+Begin processing the 239th record. Run 1, Event 239, LumiSection 1 at 31-Dec-2000 23:16:48.120 EST
+Begin processing the 240th record. Run 1, Event 240, LumiSection 1 at 31-Dec-2000 23:16:48.170 EST
+Begin processing the 241st record. Run 1, Event 241, LumiSection 1 at 31-Dec-2000 23:16:48.360 EST
+Begin processing the 242nd record. Run 1, Event 242, LumiSection 1 at 31-Dec-2000 23:16:48.410 EST
+Begin processing the 243rd record. Run 1, Event 243, LumiSection 1 at 31-Dec-2000 23:16:48.460 EST
+Begin processing the 244th record. Run 1, Event 244, LumiSection 1 at 31-Dec-2000 23:16:48.630 EST
+Begin processing the 245th record. Run 1, Event 245, LumiSection 1 at 31-Dec-2000 23:16:48.820 EST
+Begin processing the 246th record. Run 1, Event 246, LumiSection 1 at 31-Dec-2000 23:16:48.870 EST
+Begin processing the 247th record. Run 1, Event 247, LumiSection 1 at 31-Dec-2000 23:16:49.040 EST
+Begin processing the 248th record. Run 1, Event 248, LumiSection 1 at 31-Dec-2000 23:16:49.090 EST
+Begin processing the 249th record. Run 1, Event 249, LumiSection 1 at 31-Dec-2000 23:16:49.140 EST
+Begin processing the 250th record. Run 1, Event 250, LumiSection 1 at 31-Dec-2000 23:16:49.330 EST
+Begin processing the 251st record. Run 1, Event 251, LumiSection 1 at 31-Dec-2000 23:16:49.380 EST
+Begin processing the 252nd record. Run 1, Event 252, LumiSection 1 at 31-Dec-2000 23:16:49.430 EST
+Begin processing the 253rd record. Run 1, Event 253, LumiSection 1 at 31-Dec-2000 23:16:49.600 EST
+Begin processing the 254th record. Run 1, Event 254, LumiSection 1 at 31-Dec-2000 23:16:49.670 EST
+Begin processing the 255th record. Run 1, Event 255, LumiSection 1 at 31-Dec-2000 23:16:49.720 EST
+Begin processing the 256th record. Run 1, Event 256, LumiSection 1 at 31-Dec-2000 23:16:49.890 EST
+Begin processing the 257th record. Run 1, Event 257, LumiSection 1 at 31-Dec-2000 23:16:49.940 EST
+Begin processing the 258th record. Run 1, Event 258, LumiSection 1 at 31-Dec-2000 23:16:50.010 EST
+Begin processing the 259th record. Run 1, Event 259, LumiSection 1 at 31-Dec-2000 23:16:50.180 EST
+Begin processing the 260th record. Run 1, Event 260, LumiSection 1 at 31-Dec-2000 23:16:50.230 EST
+Begin processing the 261st record. Run 1, Event 261, LumiSection 1 at 31-Dec-2000 23:16:50.280 EST
+Begin processing the 262nd record. Run 1, Event 262, LumiSection 1 at 31-Dec-2000 23:16:50.450 EST
+Begin processing the 263rd record. Run 1, Event 263, LumiSection 1 at 31-Dec-2000 23:16:50.520 EST
+Begin processing the 264th record. Run 1, Event 264, LumiSection 1 at 31-Dec-2000 23:16:50.570 EST
+Begin processing the 265th record. Run 1, Event 265, LumiSection 1 at 31-Dec-2000 23:16:50.740 EST
+Begin processing the 266th record. Run 1, Event 266, LumiSection 1 at 31-Dec-2000 23:16:50.790 EST
+Begin processing the 267th record. Run 1, Event 267, LumiSection 1 at 31-Dec-2000 23:16:50.860 EST
+Begin processing the 268th record. Run 1, Event 268, LumiSection 1 at 31-Dec-2000 23:16:51.030 EST
+Begin processing the 269th record. Run 1, Event 269, LumiSection 1 at 31-Dec-2000 23:16:51.080 EST
+Begin processing the 270th record. Run 1, Event 270, LumiSection 1 at 31-Dec-2000 23:16:51.130 EST
+Begin processing the 271st record. Run 1, Event 271, LumiSection 1 at 31-Dec-2000 23:16:51.300 EST
+Begin processing the 272nd record. Run 1, Event 272, LumiSection 1 at 31-Dec-2000 23:16:51.370 EST
+Begin processing the 273rd record. Run 1, Event 273, LumiSection 1 at 31-Dec-2000 23:16:51.420 EST
+Begin processing the 274th record. Run 1, Event 274, LumiSection 1 at 31-Dec-2000 23:16:51.590 EST
+Begin processing the 275th record. Run 1, Event 275, LumiSection 1 at 31-Dec-2000 23:16:51.640 EST
+Begin processing the 276th record. Run 1, Event 276, LumiSection 1 at 31-Dec-2000 23:16:51.710 EST
+Begin processing the 277th record. Run 1, Event 277, LumiSection 1 at 31-Dec-2000 23:16:51.880 EST
+Begin processing the 278th record. Run 1, Event 278, LumiSection 1 at 31-Dec-2000 23:16:51.930 EST
+Begin processing the 279th record. Run 1, Event 279, LumiSection 1 at 31-Dec-2000 23:16:51.980 EST
+Begin processing the 280th record. Run 1, Event 280, LumiSection 1 at 31-Dec-2000 23:16:52.170 EST
+Begin processing the 281st record. Run 1, Event 281, LumiSection 1 at 31-Dec-2000 23:16:52.220 EST
+Begin processing the 282nd record. Run 1, Event 282, LumiSection 1 at 31-Dec-2000 23:16:52.270 EST
+Begin processing the 283rd record. Run 1, Event 283, LumiSection 1 at 31-Dec-2000 23:16:52.440 EST
+Begin processing the 284th record. Run 1, Event 284, LumiSection 1 at 31-Dec-2000 23:16:52.490 EST
+Begin processing the 285th record. Run 1, Event 285, LumiSection 1 at 31-Dec-2000 23:16:52.560 EST
+Begin processing the 286th record. Run 1, Event 286, LumiSection 1 at 31-Dec-2000 23:16:52.730 EST
+Begin processing the 287th record. Run 1, Event 287, LumiSection 1 at 31-Dec-2000 23:16:52.780 EST
+Begin processing the 288th record. Run 1, Event 288, LumiSection 1 at 31-Dec-2000 23:16:52.830 EST
+Begin processing the 289th record. Run 1, Event 289, LumiSection 1 at 31-Dec-2000 23:16:53.020 EST
+Begin processing the 290th record. Run 1, Event 290, LumiSection 1 at 31-Dec-2000 23:16:53.070 EST
+Begin processing the 291st record. Run 1, Event 291, LumiSection 1 at 31-Dec-2000 23:16:53.120 EST
+Begin processing the 292nd record. Run 1, Event 292, LumiSection 1 at 31-Dec-2000 23:16:53.290 EST
+Begin processing the 293rd record. Run 1, Event 293, LumiSection 1 at 31-Dec-2000 23:16:53.360 EST
+Begin processing the 294th record. Run 1, Event 294, LumiSection 1 at 31-Dec-2000 23:16:53.410 EST
+Begin processing the 295th record. Run 1, Event 295, LumiSection 1 at 31-Dec-2000 23:16:53.580 EST
+Begin processing the 296th record. Run 1, Event 296, LumiSection 1 at 31-Dec-2000 23:16:53.630 EST
+Begin processing the 297th record. Run 1, Event 297, LumiSection 1 at 31-Dec-2000 23:16:53.680 EST
+Begin processing the 298th record. Run 1, Event 298, LumiSection 1 at 31-Dec-2000 23:16:53.870 EST
+Begin processing the 299th record. Run 1, Event 299, LumiSection 1 at 31-Dec-2000 23:16:53.920 EST
+Begin processing the 300th record. Run 1, Event 300, LumiSection 1 at 31-Dec-2000 23:16:53.970 EST
+Begin processing the 301st record. Run 1, Event 301, LumiSection 1 at 31-Dec-2000 23:16:54.140 EST
+Begin processing the 302nd record. Run 1, Event 302, LumiSection 1 at 31-Dec-2000 23:16:54.210 EST
+Begin processing the 303rd record. Run 1, Event 303, LumiSection 1 at 31-Dec-2000 23:16:54.260 EST
+Begin processing the 304th record. Run 1, Event 304, LumiSection 1 at 31-Dec-2000 23:16:54.430 EST
+Begin processing the 305th record. Run 1, Event 305, LumiSection 1 at 31-Dec-2000 23:16:54.480 EST
+Begin processing the 306th record. Run 1, Event 306, LumiSection 1 at 31-Dec-2000 23:16:54.530 EST
+Begin processing the 307th record. Run 1, Event 307, LumiSection 1 at 31-Dec-2000 23:16:54.720 EST
+Begin processing the 308th record. Run 1, Event 308, LumiSection 1 at 31-Dec-2000 23:16:54.770 EST
+Begin processing the 309th record. Run 1, Event 309, LumiSection 1 at 31-Dec-2000 23:16:54.820 EST
+Begin processing the 310th record. Run 1, Event 310, LumiSection 1 at 31-Dec-2000 23:16:54.990 EST
+Begin processing the 311th record. Run 1, Event 311, LumiSection 1 at 31-Dec-2000 23:16:55.060 EST
+Begin processing the 312th record. Run 1, Event 312, LumiSection 1 at 31-Dec-2000 23:16:55.110 EST
+Begin processing the 313th record. Run 1, Event 313, LumiSection 1 at 31-Dec-2000 23:16:55.280 EST
+Begin processing the 314th record. Run 1, Event 314, LumiSection 1 at 31-Dec-2000 23:16:55.330 EST
+Begin processing the 315th record. Run 1, Event 315, LumiSection 1 at 31-Dec-2000 23:16:55.400 EST
+Begin processing the 316th record. Run 1, Event 316, LumiSection 1 at 31-Dec-2000 23:16:55.570 EST
+Begin processing the 317th record. Run 1, Event 317, LumiSection 1 at 31-Dec-2000 23:16:55.620 EST
+Begin processing the 318th record. Run 1, Event 318, LumiSection 1 at 31-Dec-2000 23:16:55.670 EST
+Begin processing the 319th record. Run 1, Event 319, LumiSection 1 at 31-Dec-2000 23:16:55.840 EST
+Begin processing the 320th record. Run 1, Event 320, LumiSection 1 at 31-Dec-2000 23:16:55.910 EST
+Begin processing the 321st record. Run 1, Event 321, LumiSection 1 at 31-Dec-2000 23:16:55.960 EST
+Begin processing the 322nd record. Run 1, Event 322, LumiSection 1 at 31-Dec-2000 23:16:56.130 EST
+Begin processing the 323rd record. Run 1, Event 323, LumiSection 1 at 31-Dec-2000 23:16:56.180 EST
+Begin processing the 324th record. Run 1, Event 324, LumiSection 1 at 31-Dec-2000 23:16:56.250 EST
+Begin processing the 325th record. Run 1, Event 325, LumiSection 1 at 31-Dec-2000 23:16:56.420 EST
+Begin processing the 326th record. Run 1, Event 326, LumiSection 1 at 31-Dec-2000 23:16:56.470 EST
+Begin processing the 327th record. Run 1, Event 327, LumiSection 1 at 31-Dec-2000 23:16:56.520 EST
+Begin processing the 328th record. Run 1, Event 328, LumiSection 1 at 31-Dec-2000 23:16:56.710 EST
+Begin processing the 329th record. Run 1, Event 329, LumiSection 1 at 31-Dec-2000 23:16:56.760 EST
+Begin processing the 330th record. Run 1, Event 330, LumiSection 1 at 31-Dec-2000 23:16:56.810 EST
+Begin processing the 331st record. Run 1, Event 331, LumiSection 1 at 31-Dec-2000 23:16:56.980 EST
+Begin processing the 332nd record. Run 1, Event 332, LumiSection 1 at 31-Dec-2000 23:16:57.030 EST
+Begin processing the 333rd record. Run 1, Event 333, LumiSection 1 at 31-Dec-2000 23:16:57.100 EST
+Begin processing the 334th record. Run 1, Event 334, LumiSection 1 at 31-Dec-2000 23:16:57.270 EST
+Begin processing the 335th record. Run 1, Event 335, LumiSection 1 at 31-Dec-2000 23:16:57.320 EST
+Begin processing the 336th record. Run 1, Event 336, LumiSection 1 at 31-Dec-2000 23:16:57.370 EST
+Begin processing the 337th record. Run 1, Event 337, LumiSection 1 at 31-Dec-2000 23:16:57.560 EST
+Begin processing the 338th record. Run 1, Event 338, LumiSection 1 at 31-Dec-2000 23:16:57.610 EST
+Begin processing the 339th record. Run 1, Event 339, LumiSection 1 at 31-Dec-2000 23:16:57.660 EST
+Begin processing the 340th record. Run 1, Event 340, LumiSection 1 at 31-Dec-2000 23:16:57.830 EST
+Begin processing the 341st record. Run 1, Event 341, LumiSection 1 at 31-Dec-2000 23:16:57.880 EST
+Begin processing the 342nd record. Run 1, Event 342, LumiSection 1 at 31-Dec-2000 23:16:57.950 EST
+Begin processing the 343rd record. Run 1, Event 343, LumiSection 1 at 31-Dec-2000 23:16:58.120 EST
+Begin processing the 344th record. Run 1, Event 344, LumiSection 1 at 31-Dec-2000 23:16:58.170 EST
+Begin processing the 345th record. Run 1, Event 345, LumiSection 1 at 31-Dec-2000 23:16:58.220 EST
+Begin processing the 346th record. Run 1, Event 346, LumiSection 1 at 31-Dec-2000 23:16:58.410 EST
+Begin processing the 347th record. Run 1, Event 347, LumiSection 1 at 31-Dec-2000 23:16:58.460 EST
+Begin processing the 348th record. Run 1, Event 348, LumiSection 1 at 31-Dec-2000 23:16:58.510 EST
+Begin processing the 349th record. Run 1, Event 349, LumiSection 1 at 31-Dec-2000 23:16:58.680 EST
+Begin processing the 350th record. Run 1, Event 350, LumiSection 1 at 31-Dec-2000 23:16:58.750 EST
+Begin processing the 351st record. Run 1, Event 351, LumiSection 1 at 31-Dec-2000 23:16:58.800 EST
+Begin processing the 352nd record. Run 1, Event 352, LumiSection 1 at 31-Dec-2000 23:16:58.970 EST
+Begin processing the 353rd record. Run 1, Event 353, LumiSection 1 at 31-Dec-2000 23:16:59.020 EST
+Begin processing the 354th record. Run 1, Event 354, LumiSection 1 at 31-Dec-2000 23:16:59.070 EST
+Begin processing the 355th record. Run 1, Event 355, LumiSection 1 at 31-Dec-2000 23:16:59.260 EST
+Begin processing the 356th record. Run 1, Event 356, LumiSection 1 at 31-Dec-2000 23:16:59.310 EST
+Begin processing the 357th record. Run 1, Event 357, LumiSection 1 at 31-Dec-2000 23:16:59.360 EST
+Begin processing the 358th record. Run 1, Event 358, LumiSection 1 at 31-Dec-2000 23:16:59.530 EST
+Begin processing the 359th record. Run 1, Event 359, LumiSection 1 at 31-Dec-2000 23:16:59.600 EST
+Begin processing the 360th record. Run 1, Event 360, LumiSection 1 at 31-Dec-2000 23:16:59.650 EST
+Begin processing the 361st record. Run 1, Event 361, LumiSection 1 at 31-Dec-2000 23:16:59.820 EST
+Begin processing the 362nd record. Run 1, Event 362, LumiSection 1 at 31-Dec-2000 23:16:59.870 EST
+Begin processing the 363rd record. Run 1, Event 363, LumiSection 1 at 31-Dec-2000 23:16:59.940 EST
+Begin processing the 364th record. Run 1, Event 364, LumiSection 1 at 31-Dec-2000 23:17:00.110 EST
+Begin processing the 365th record. Run 1, Event 365, LumiSection 1 at 31-Dec-2000 23:17:00.160 EST
+Begin processing the 366th record. Run 1, Event 366, LumiSection 1 at 31-Dec-2000 23:17:00.210 EST
+Begin processing the 367th record. Run 1, Event 367, LumiSection 1 at 31-Dec-2000 23:17:00.500 EST
+Begin processing the 368th record. Run 1, Event 368, LumiSection 1 at 31-Dec-2000 23:17:00.570 EST
+Begin processing the 369th record. Run 1, Event 369, LumiSection 1 at 31-Dec-2000 23:17:00.620 EST
+Begin processing the 370th record. Run 1, Event 370, LumiSection 1 at 31-Dec-2000 23:17:00.790 EST
+Begin processing the 371st record. Run 1, Event 371, LumiSection 1 at 31-Dec-2000 23:17:00.840 EST
+Begin processing the 372nd record. Run 1, Event 372, LumiSection 1 at 31-Dec-2000 23:17:00.910 EST
+Begin processing the 373rd record. Run 1, Event 373, LumiSection 1 at 31-Dec-2000 23:17:01.080 EST
+Begin processing the 374th record. Run 1, Event 374, LumiSection 1 at 31-Dec-2000 23:17:01.130 EST
+Begin processing the 375th record. Run 1, Event 375, LumiSection 1 at 31-Dec-2000 23:17:01.180 EST
+Begin processing the 376th record. Run 1, Event 376, LumiSection 1 at 31-Dec-2000 23:17:01.350 EST
+Begin processing the 377th record. Run 1, Event 377, LumiSection 1 at 31-Dec-2000 23:17:01.420 EST
+Begin processing the 378th record. Run 1, Event 378, LumiSection 1 at 31-Dec-2000 23:17:01.470 EST
+Begin processing the 379th record. Run 1, Event 379, LumiSection 1 at 31-Dec-2000 23:17:01.640 EST
+Begin processing the 380th record. Run 1, Event 380, LumiSection 1 at 31-Dec-2000 23:17:01.810 EST
+Begin processing the 381st record. Run 1, Event 381, LumiSection 1 at 31-Dec-2000 23:17:01.880 EST
+Begin processing the 382nd record. Run 1, Event 382, LumiSection 1 at 31-Dec-2000 23:17:02.050 EST
+Begin processing the 383rd record. Run 1, Event 383, LumiSection 1 at 31-Dec-2000 23:17:02.100 EST
+Begin processing the 384th record. Run 1, Event 384, LumiSection 1 at 31-Dec-2000 23:17:02.150 EST
+Begin processing the 385th record. Run 1, Event 385, LumiSection 1 at 31-Dec-2000 23:17:02.340 EST
+Begin processing the 386th record. Run 1, Event 386, LumiSection 1 at 31-Dec-2000 23:17:02.390 EST
+Begin processing the 387th record. Run 1, Event 387, LumiSection 1 at 31-Dec-2000 23:17:02.440 EST
+Begin processing the 388th record. Run 1, Event 388, LumiSection 1 at 31-Dec-2000 23:17:02.610 EST
+Begin processing the 389th record. Run 1, Event 389, LumiSection 1 at 31-Dec-2000 23:17:02.660 EST
+Begin processing the 390th record. Run 1, Event 390, LumiSection 1 at 31-Dec-2000 23:17:02.730 EST
+Begin processing the 391st record. Run 1, Event 391, LumiSection 1 at 31-Dec-2000 23:17:02.900 EST
+Begin processing the 392nd record. Run 1, Event 392, LumiSection 1 at 31-Dec-2000 23:17:02.950 EST
+Begin processing the 393rd record. Run 1, Event 393, LumiSection 1 at 31-Dec-2000 23:17:03.000 EST
+Begin processing the 394th record. Run 1, Event 394, LumiSection 1 at 31-Dec-2000 23:17:03.190 EST
+Begin processing the 395th record. Run 1, Event 395, LumiSection 1 at 31-Dec-2000 23:17:03.240 EST
+Begin processing the 396th record. Run 1, Event 396, LumiSection 1 at 31-Dec-2000 23:17:03.290 EST
+Begin processing the 397th record. Run 1, Event 397, LumiSection 1 at 31-Dec-2000 23:17:03.460 EST
+Begin processing the 398th record. Run 1, Event 398, LumiSection 1 at 31-Dec-2000 23:17:03.530 EST
+Begin processing the 399th record. Run 1, Event 399, LumiSection 1 at 31-Dec-2000 23:17:03.580 EST
+Begin processing the 400th record. Run 1, Event 400, LumiSection 1 at 31-Dec-2000 23:17:03.750 EST
+Begin processing the 401st record. Run 1, Event 401, LumiSection 1 at 31-Dec-2000 23:17:03.800 EST
+Begin processing the 402nd record. Run 1, Event 402, LumiSection 1 at 31-Dec-2000 23:17:03.850 EST
+Begin processing the 403rd record. Run 1, Event 403, LumiSection 1 at 31-Dec-2000 23:17:04.040 EST
+Begin processing the 404th record. Run 1, Event 404, LumiSection 1 at 31-Dec-2000 23:17:04.090 EST
+Begin processing the 405th record. Run 1, Event 405, LumiSection 1 at 31-Dec-2000 23:17:04.140 EST
+Begin processing the 406th record. Run 1, Event 406, LumiSection 1 at 31-Dec-2000 23:17:04.310 EST
+Begin processing the 407th record. Run 1, Event 407, LumiSection 1 at 31-Dec-2000 23:17:04.380 EST
+Begin processing the 408th record. Run 1, Event 408, LumiSection 1 at 31-Dec-2000 23:17:04.430 EST
+Begin processing the 409th record. Run 1, Event 409, LumiSection 1 at 31-Dec-2000 23:17:04.600 EST
+Begin processing the 410th record. Run 1, Event 410, LumiSection 1 at 31-Dec-2000 23:17:04.650 EST
+Begin processing the 411th record. Run 1, Event 411, LumiSection 1 at 31-Dec-2000 23:17:04.700 EST
+Begin processing the 412th record. Run 1, Event 412, LumiSection 1 at 31-Dec-2000 23:17:04.890 EST
+Begin processing the 413th record. Run 1, Event 413, LumiSection 1 at 31-Dec-2000 23:17:04.940 EST
+Begin processing the 414th record. Run 1, Event 414, LumiSection 1 at 31-Dec-2000 23:17:04.990 EST
+Begin processing the 415th record. Run 1, Event 415, LumiSection 1 at 31-Dec-2000 23:17:05.160 EST
+Begin processing the 416th record. Run 1, Event 416, LumiSection 1 at 31-Dec-2000 23:17:05.230 EST
+Begin processing the 417th record. Run 1, Event 417, LumiSection 1 at 31-Dec-2000 23:17:05.280 EST
+Begin processing the 418th record. Run 1, Event 418, LumiSection 1 at 31-Dec-2000 23:17:05.450 EST
+Begin processing the 419th record. Run 1, Event 419, LumiSection 1 at 31-Dec-2000 23:17:05.500 EST
+Begin processing the 420th record. Run 1, Event 420, LumiSection 1 at 31-Dec-2000 23:17:05.570 EST
+Begin processing the 421st record. Run 1, Event 421, LumiSection 1 at 31-Dec-2000 23:17:05.740 EST
+Begin processing the 422nd record. Run 1, Event 422, LumiSection 1 at 31-Dec-2000 23:17:05.790 EST
+Begin processing the 423rd record. Run 1, Event 423, LumiSection 1 at 31-Dec-2000 23:17:05.840 EST
+Begin processing the 424th record. Run 1, Event 424, LumiSection 1 at 31-Dec-2000 23:17:06.010 EST
+Begin processing the 425th record. Run 1, Event 425, LumiSection 1 at 31-Dec-2000 23:17:06.080 EST
+Begin processing the 426th record. Run 1, Event 426, LumiSection 1 at 31-Dec-2000 23:17:06.130 EST
+Begin processing the 427th record. Run 1, Event 427, LumiSection 1 at 31-Dec-2000 23:17:06.300 EST
+Begin processing the 428th record. Run 1, Event 428, LumiSection 1 at 31-Dec-2000 23:17:06.350 EST
+Begin processing the 429th record. Run 1, Event 429, LumiSection 1 at 31-Dec-2000 23:17:06.420 EST
+Begin processing the 430th record. Run 1, Event 430, LumiSection 1 at 31-Dec-2000 23:17:06.590 EST
+Begin processing the 431st record. Run 1, Event 431, LumiSection 1 at 31-Dec-2000 23:17:06.640 EST
+Begin processing the 432nd record. Run 1, Event 432, LumiSection 1 at 31-Dec-2000 23:17:06.690 EST
+Begin processing the 433rd record. Run 1, Event 433, LumiSection 1 at 31-Dec-2000 23:17:06.880 EST
+Begin processing the 434th record. Run 1, Event 434, LumiSection 1 at 31-Dec-2000 23:17:06.930 EST
+Begin processing the 435th record. Run 1, Event 435, LumiSection 1 at 31-Dec-2000 23:17:06.980 EST
+Begin processing the 436th record. Run 1, Event 436, LumiSection 1 at 31-Dec-2000 23:17:07.150 EST
+Begin processing the 437th record. Run 1, Event 437, LumiSection 1 at 31-Dec-2000 23:17:07.200 EST
+Begin processing the 438th record. Run 1, Event 438, LumiSection 1 at 31-Dec-2000 23:17:07.270 EST
+Begin processing the 439th record. Run 1, Event 439, LumiSection 1 at 31-Dec-2000 23:17:07.440 EST
+Begin processing the 440th record. Run 1, Event 440, LumiSection 1 at 31-Dec-2000 23:17:07.490 EST
+Begin processing the 441st record. Run 1, Event 441, LumiSection 1 at 31-Dec-2000 23:17:07.540 EST
+Begin processing the 442nd record. Run 1, Event 442, LumiSection 1 at 31-Dec-2000 23:17:07.730 EST
+Begin processing the 443rd record. Run 1, Event 443, LumiSection 1 at 31-Dec-2000 23:17:07.780 EST
+Begin processing the 444th record. Run 1, Event 444, LumiSection 1 at 31-Dec-2000 23:17:07.830 EST
+Begin processing the 445th record. Run 1, Event 445, LumiSection 1 at 31-Dec-2000 23:17:08.000 EST
+Begin processing the 446th record. Run 1, Event 446, LumiSection 1 at 31-Dec-2000 23:17:08.050 EST
+Begin processing the 447th record. Run 1, Event 447, LumiSection 1 at 31-Dec-2000 23:17:08.120 EST
+Begin processing the 448th record. Run 1, Event 448, LumiSection 1 at 31-Dec-2000 23:17:08.290 EST
+Begin processing the 449th record. Run 1, Event 449, LumiSection 1 at 31-Dec-2000 23:17:08.340 EST
+Begin processing the 450th record. Run 1, Event 450, LumiSection 1 at 31-Dec-2000 23:17:08.390 EST
+Begin processing the 451st record. Run 1, Event 451, LumiSection 1 at 31-Dec-2000 23:17:08.580 EST
+Begin processing the 452nd record. Run 1, Event 452, LumiSection 1 at 31-Dec-2000 23:17:08.630 EST
+Begin processing the 453rd record. Run 1, Event 453, LumiSection 1 at 31-Dec-2000 23:17:08.680 EST
+Begin processing the 454th record. Run 1, Event 454, LumiSection 1 at 31-Dec-2000 23:17:08.850 EST
+Begin processing the 455th record. Run 1, Event 455, LumiSection 1 at 31-Dec-2000 23:17:08.920 EST
+Begin processing the 456th record. Run 1, Event 456, LumiSection 1 at 31-Dec-2000 23:17:08.970 EST
+Begin processing the 457th record. Run 1, Event 457, LumiSection 1 at 31-Dec-2000 23:17:09.140 EST
+Begin processing the 458th record. Run 1, Event 458, LumiSection 1 at 31-Dec-2000 23:17:09.190 EST
+Begin processing the 459th record. Run 1, Event 459, LumiSection 1 at 31-Dec-2000 23:17:09.240 EST
+Begin processing the 460th record. Run 1, Event 460, LumiSection 1 at 31-Dec-2000 23:17:09.430 EST
+Begin processing the 461st record. Run 1, Event 461, LumiSection 1 at 31-Dec-2000 23:17:09.480 EST
+Begin processing the 462nd record. Run 1, Event 462, LumiSection 1 at 31-Dec-2000 23:17:09.530 EST
+Begin processing the 463rd record. Run 1, Event 463, LumiSection 1 at 31-Dec-2000 23:17:09.700 EST
+Begin processing the 464th record. Run 1, Event 464, LumiSection 1 at 31-Dec-2000 23:17:09.770 EST
+Begin processing the 465th record. Run 1, Event 465, LumiSection 1 at 31-Dec-2000 23:17:09.820 EST
+Begin processing the 466th record. Run 1, Event 466, LumiSection 1 at 31-Dec-2000 23:17:09.990 EST
+Begin processing the 467th record. Run 1, Event 467, LumiSection 1 at 31-Dec-2000 23:17:10.040 EST
+Begin processing the 468th record. Run 1, Event 468, LumiSection 1 at 31-Dec-2000 23:17:10.110 EST
+Begin processing the 469th record. Run 1, Event 469, LumiSection 1 at 31-Dec-2000 23:17:10.280 EST
+Begin processing the 470th record. Run 1, Event 470, LumiSection 1 at 31-Dec-2000 23:17:10.330 EST
+Begin processing the 471st record. Run 1, Event 471, LumiSection 1 at 31-Dec-2000 23:17:10.380 EST
+Begin processing the 472nd record. Run 1, Event 472, LumiSection 1 at 31-Dec-2000 23:17:10.550 EST
+Begin processing the 473rd record. Run 1, Event 473, LumiSection 1 at 31-Dec-2000 23:17:10.620 EST
+Begin processing the 474th record. Run 1, Event 474, LumiSection 1 at 31-Dec-2000 23:17:10.670 EST
+Begin processing the 475th record. Run 1, Event 475, LumiSection 1 at 31-Dec-2000 23:17:10.840 EST
+Begin processing the 476th record. Run 1, Event 476, LumiSection 1 at 31-Dec-2000 23:17:10.890 EST
+Begin processing the 477th record. Run 1, Event 477, LumiSection 1 at 31-Dec-2000 23:17:10.960 EST
+Begin processing the 478th record. Run 1, Event 478, LumiSection 1 at 31-Dec-2000 23:17:11.130 EST
+Begin processing the 479th record. Run 1, Event 479, LumiSection 1 at 31-Dec-2000 23:17:11.180 EST
+Begin processing the 480th record. Run 1, Event 480, LumiSection 1 at 31-Dec-2000 23:17:11.230 EST
+Begin processing the 481st record. Run 1, Event 481, LumiSection 1 at 31-Dec-2000 23:17:11.400 EST
+Begin processing the 482nd record. Run 1, Event 482, LumiSection 1 at 31-Dec-2000 23:17:11.470 EST
+Begin processing the 483rd record. Run 1, Event 483, LumiSection 1 at 31-Dec-2000 23:17:11.520 EST
+Begin processing the 484th record. Run 1, Event 484, LumiSection 1 at 31-Dec-2000 23:17:11.690 EST
+Begin processing the 485th record. Run 1, Event 485, LumiSection 1 at 31-Dec-2000 23:17:11.740 EST
+Begin processing the 486th record. Run 1, Event 486, LumiSection 1 at 31-Dec-2000 23:17:11.810 EST
+Begin processing the 487th record. Run 1, Event 487, LumiSection 1 at 31-Dec-2000 23:17:11.980 EST
+Begin processing the 488th record. Run 1, Event 488, LumiSection 1 at 31-Dec-2000 23:17:12.030 EST
+Begin processing the 489th record. Run 1, Event 489, LumiSection 1 at 31-Dec-2000 23:17:12.200 EST
+Begin processing the 490th record. Run 1, Event 490, LumiSection 1 at 31-Dec-2000 23:17:12.390 EST
+Begin processing the 491st record. Run 1, Event 491, LumiSection 1 at 31-Dec-2000 23:17:12.440 EST
+Begin processing the 492nd record. Run 1, Event 492, LumiSection 1 at 31-Dec-2000 23:17:12.490 EST
+Begin processing the 493rd record. Run 1, Event 493, LumiSection 1 at 31-Dec-2000 23:17:12.660 EST
+Begin processing the 494th record. Run 1, Event 494, LumiSection 1 at 31-Dec-2000 23:17:12.710 EST
+Begin processing the 495th record. Run 1, Event 495, LumiSection 1 at 31-Dec-2000 23:17:12.780 EST
+Begin processing the 496th record. Run 1, Event 496, LumiSection 1 at 31-Dec-2000 23:17:12.950 EST
+Begin processing the 497th record. Run 1, Event 497, LumiSection 1 at 31-Dec-2000 23:17:13.000 EST
+Begin processing the 498th record. Run 1, Event 498, LumiSection 1 at 31-Dec-2000 23:17:13.050 EST
+Begin processing the 499th record. Run 1, Event 499, LumiSection 1 at 31-Dec-2000 23:17:13.240 EST
+Begin processing the 500th record. Run 1, Event 500, LumiSection 1 at 31-Dec-2000 23:17:13.290 EST
+Begin processing the 501st record. Run 1, Event 501, LumiSection 1 at 31-Dec-2000 23:17:13.340 EST
+Begin processing the 502nd record. Run 1, Event 502, LumiSection 1 at 31-Dec-2000 23:17:13.510 EST
+Begin processing the 503rd record. Run 1, Event 503, LumiSection 1 at 31-Dec-2000 23:17:13.580 EST
+Begin processing the 504th record. Run 1, Event 504, LumiSection 1 at 31-Dec-2000 23:17:13.630 EST
+Begin processing the 505th record. Run 1, Event 505, LumiSection 1 at 31-Dec-2000 23:17:13.800 EST
+Begin processing the 506th record. Run 1, Event 506, LumiSection 1 at 31-Dec-2000 23:17:13.850 EST
+Begin processing the 507th record. Run 1, Event 507, LumiSection 1 at 31-Dec-2000 23:17:13.900 EST
+Begin processing the 508th record. Run 1, Event 508, LumiSection 1 at 31-Dec-2000 23:17:14.090 EST
+Begin processing the 509th record. Run 1, Event 509, LumiSection 1 at 31-Dec-2000 23:17:14.140 EST
+Begin processing the 510th record. Run 1, Event 510, LumiSection 1 at 31-Dec-2000 23:17:14.190 EST
+Begin processing the 511th record. Run 1, Event 511, LumiSection 1 at 31-Dec-2000 23:17:14.360 EST
+Begin processing the 512th record. Run 1, Event 512, LumiSection 1 at 31-Dec-2000 23:17:14.430 EST
+Begin processing the 513th record. Run 1, Event 513, LumiSection 1 at 31-Dec-2000 23:17:14.480 EST
+Begin processing the 514th record. Run 1, Event 514, LumiSection 1 at 31-Dec-2000 23:17:14.650 EST
+Begin processing the 515th record. Run 1, Event 515, LumiSection 1 at 31-Dec-2000 23:17:14.700 EST
+Begin processing the 516th record. Run 1, Event 516, LumiSection 1 at 31-Dec-2000 23:17:14.750 EST
+Begin processing the 517th record. Run 1, Event 517, LumiSection 1 at 31-Dec-2000 23:17:14.940 EST
+Begin processing the 518th record. Run 1, Event 518, LumiSection 1 at 31-Dec-2000 23:17:14.990 EST
+Begin processing the 519th record. Run 1, Event 519, LumiSection 1 at 31-Dec-2000 23:17:15.040 EST
+Begin processing the 520th record. Run 1, Event 520, LumiSection 1 at 31-Dec-2000 23:17:15.210 EST
+Begin processing the 521st record. Run 1, Event 521, LumiSection 1 at 31-Dec-2000 23:17:15.280 EST
+Begin processing the 522nd record. Run 1, Event 522, LumiSection 1 at 31-Dec-2000 23:17:15.330 EST
+Begin processing the 523rd record. Run 1, Event 523, LumiSection 1 at 31-Dec-2000 23:17:15.500 EST
+Begin processing the 524th record. Run 1, Event 524, LumiSection 1 at 31-Dec-2000 23:17:15.550 EST
+Begin processing the 525th record. Run 1, Event 525, LumiSection 1 at 31-Dec-2000 23:17:15.620 EST
+Begin processing the 526th record. Run 1, Event 526, LumiSection 1 at 31-Dec-2000 23:17:15.790 EST
+Begin processing the 527th record. Run 1, Event 527, LumiSection 1 at 31-Dec-2000 23:17:15.840 EST
+Begin processing the 528th record. Run 1, Event 528, LumiSection 1 at 31-Dec-2000 23:17:15.890 EST
+Begin processing the 529th record. Run 1, Event 529, LumiSection 1 at 31-Dec-2000 23:17:16.060 EST
+Begin processing the 530th record. Run 1, Event 530, LumiSection 1 at 31-Dec-2000 23:17:16.130 EST
+Begin processing the 531st record. Run 1, Event 531, LumiSection 1 at 31-Dec-2000 23:17:16.180 EST
+Begin processing the 532nd record. Run 1, Event 532, LumiSection 1 at 31-Dec-2000 23:17:16.350 EST
+Begin processing the 533rd record. Run 1, Event 533, LumiSection 1 at 31-Dec-2000 23:17:16.400 EST
+Begin processing the 534th record. Run 1, Event 534, LumiSection 1 at 31-Dec-2000 23:17:16.470 EST
+Begin processing the 535th record. Run 1, Event 535, LumiSection 1 at 31-Dec-2000 23:17:16.640 EST
+Begin processing the 536th record. Run 1, Event 536, LumiSection 1 at 31-Dec-2000 23:17:16.690 EST
+Begin processing the 537th record. Run 1, Event 537, LumiSection 1 at 31-Dec-2000 23:17:16.740 EST
+Begin processing the 538th record. Run 1, Event 538, LumiSection 1 at 31-Dec-2000 23:17:16.910 EST
+Begin processing the 539th record. Run 1, Event 539, LumiSection 1 at 31-Dec-2000 23:17:16.980 EST
+Begin processing the 540th record. Run 1, Event 540, LumiSection 1 at 31-Dec-2000 23:17:17.030 EST
+Begin processing the 541st record. Run 1, Event 541, LumiSection 1 at 31-Dec-2000 23:17:17.200 EST
+Begin processing the 542nd record. Run 1, Event 542, LumiSection 1 at 31-Dec-2000 23:17:17.250 EST
+Begin processing the 543rd record. Run 1, Event 543, LumiSection 1 at 31-Dec-2000 23:17:17.320 EST
+Begin processing the 544th record. Run 1, Event 544, LumiSection 1 at 31-Dec-2000 23:17:17.490 EST
+Begin processing the 545th record. Run 1, Event 545, LumiSection 1 at 31-Dec-2000 23:17:17.540 EST
+Begin processing the 546th record. Run 1, Event 546, LumiSection 1 at 31-Dec-2000 23:17:17.590 EST
+Begin processing the 547th record. Run 1, Event 547, LumiSection 1 at 31-Dec-2000 23:17:17.780 EST
+Begin processing the 548th record. Run 1, Event 548, LumiSection 1 at 31-Dec-2000 23:17:17.830 EST
+Begin processing the 549th record. Run 1, Event 549, LumiSection 1 at 31-Dec-2000 23:17:17.880 EST
+Begin processing the 550th record. Run 1, Event 550, LumiSection 1 at 31-Dec-2000 23:17:18.050 EST
+Begin processing the 551st record. Run 1, Event 551, LumiSection 1 at 31-Dec-2000 23:17:18.100 EST
+Begin processing the 552nd record. Run 1, Event 552, LumiSection 1 at 31-Dec-2000 23:17:18.170 EST
+Begin processing the 553rd record. Run 1, Event 553, LumiSection 1 at 31-Dec-2000 23:17:18.340 EST
+Begin processing the 554th record. Run 1, Event 554, LumiSection 1 at 31-Dec-2000 23:17:18.390 EST
+Begin processing the 555th record. Run 1, Event 555, LumiSection 1 at 31-Dec-2000 23:17:18.440 EST
+Begin processing the 556th record. Run 1, Event 556, LumiSection 1 at 31-Dec-2000 23:17:18.630 EST
+Begin processing the 557th record. Run 1, Event 557, LumiSection 1 at 31-Dec-2000 23:17:18.680 EST
+Begin processing the 558th record. Run 1, Event 558, LumiSection 1 at 31-Dec-2000 23:17:18.730 EST
+Begin processing the 559th record. Run 1, Event 559, LumiSection 1 at 31-Dec-2000 23:17:18.900 EST
+Begin processing the 560th record. Run 1, Event 560, LumiSection 1 at 31-Dec-2000 23:17:18.970 EST
+Begin processing the 561st record. Run 1, Event 561, LumiSection 1 at 31-Dec-2000 23:17:19.020 EST
+Begin processing the 562nd record. Run 1, Event 562, LumiSection 1 at 31-Dec-2000 23:17:19.190 EST
+Begin processing the 563rd record. Run 1, Event 563, LumiSection 1 at 31-Dec-2000 23:17:19.240 EST
+Begin processing the 564th record. Run 1, Event 564, LumiSection 1 at 31-Dec-2000 23:17:19.290 EST
+Begin processing the 565th record. Run 1, Event 565, LumiSection 1 at 31-Dec-2000 23:17:19.480 EST
+Begin processing the 566th record. Run 1, Event 566, LumiSection 1 at 31-Dec-2000 23:17:19.530 EST
+Begin processing the 567th record. Run 1, Event 567, LumiSection 1 at 31-Dec-2000 23:17:19.580 EST
+Begin processing the 568th record. Run 1, Event 568, LumiSection 1 at 31-Dec-2000 23:17:19.750 EST
+Begin processing the 569th record. Run 1, Event 569, LumiSection 1 at 31-Dec-2000 23:17:19.820 EST
+Begin processing the 570th record. Run 1, Event 570, LumiSection 1 at 31-Dec-2000 23:17:19.870 EST
+Begin processing the 571st record. Run 1, Event 571, LumiSection 1 at 31-Dec-2000 23:17:20.040 EST
+Begin processing the 572nd record. Run 1, Event 572, LumiSection 1 at 31-Dec-2000 23:17:20.090 EST
+Begin processing the 573rd record. Run 1, Event 573, LumiSection 1 at 31-Dec-2000 23:17:20.140 EST
+Begin processing the 574th record. Run 1, Event 574, LumiSection 1 at 31-Dec-2000 23:17:20.330 EST
+Begin processing the 575th record. Run 1, Event 575, LumiSection 1 at 31-Dec-2000 23:17:20.380 EST
+Begin processing the 576th record. Run 1, Event 576, LumiSection 1 at 31-Dec-2000 23:17:20.430 EST
+Begin processing the 577th record. Run 1, Event 577, LumiSection 1 at 31-Dec-2000 23:17:20.600 EST
+Begin processing the 578th record. Run 1, Event 578, LumiSection 1 at 31-Dec-2000 23:17:20.670 EST
+Begin processing the 579th record. Run 1, Event 579, LumiSection 1 at 31-Dec-2000 23:17:20.720 EST
+Begin processing the 580th record. Run 1, Event 580, LumiSection 1 at 31-Dec-2000 23:17:20.890 EST
+Begin processing the 581st record. Run 1, Event 581, LumiSection 1 at 31-Dec-2000 23:17:20.940 EST
+Begin processing the 582nd record. Run 1, Event 582, LumiSection 1 at 31-Dec-2000 23:17:21.010 EST
+Begin processing the 583rd record. Run 1, Event 583, LumiSection 1 at 31-Dec-2000 23:17:21.300 EST
+Begin processing the 584th record. Run 1, Event 584, LumiSection 1 at 31-Dec-2000 23:17:21.350 EST
+Begin processing the 585th record. Run 1, Event 585, LumiSection 1 at 31-Dec-2000 23:17:21.400 EST
+Begin processing the 586th record. Run 1, Event 586, LumiSection 1 at 31-Dec-2000 23:17:21.570 EST
+Begin processing the 587th record. Run 1, Event 587, LumiSection 1 at 31-Dec-2000 23:17:21.640 EST
+Begin processing the 588th record. Run 1, Event 588, LumiSection 1 at 31-Dec-2000 23:17:21.690 EST
+Begin processing the 589th record. Run 1, Event 589, LumiSection 1 at 31-Dec-2000 23:17:21.860 EST
+Begin processing the 590th record. Run 1, Event 590, LumiSection 1 at 31-Dec-2000 23:17:21.910 EST
+Begin processing the 591st record. Run 1, Event 591, LumiSection 1 at 31-Dec-2000 23:17:21.980 EST
+Begin processing the 592nd record. Run 1, Event 592, LumiSection 1 at 31-Dec-2000 23:17:22.150 EST
+Begin processing the 593rd record. Run 1, Event 593, LumiSection 1 at 31-Dec-2000 23:17:22.200 EST
+Begin processing the 594th record. Run 1, Event 594, LumiSection 1 at 31-Dec-2000 23:17:22.250 EST
+Begin processing the 595th record. Run 1, Event 595, LumiSection 1 at 31-Dec-2000 23:17:22.440 EST
+Begin processing the 596th record. Run 1, Event 596, LumiSection 1 at 31-Dec-2000 23:17:22.490 EST
+Begin processing the 597th record. Run 1, Event 597, LumiSection 1 at 31-Dec-2000 23:17:22.540 EST
+Begin processing the 598th record. Run 1, Event 598, LumiSection 1 at 31-Dec-2000 23:17:22.710 EST
+Begin processing the 599th record. Run 1, Event 599, LumiSection 1 at 31-Dec-2000 23:17:22.760 EST
+Begin processing the 600th record. Run 1, Event 600, LumiSection 1 at 31-Dec-2000 23:17:22.830 EST
+Begin processing the 601st record. Run 1, Event 601, LumiSection 1 at 31-Dec-2000 23:17:23.000 EST
+Begin processing the 602nd record. Run 1, Event 602, LumiSection 1 at 31-Dec-2000 23:17:23.050 EST
+Begin processing the 603rd record. Run 1, Event 603, LumiSection 1 at 31-Dec-2000 23:17:23.100 EST
+Begin processing the 604th record. Run 1, Event 604, LumiSection 1 at 31-Dec-2000 23:17:23.290 EST
+Begin processing the 605th record. Run 1, Event 605, LumiSection 1 at 31-Dec-2000 23:17:23.340 EST
+Begin processing the 606th record. Run 1, Event 606, LumiSection 1 at 31-Dec-2000 23:17:23.390 EST
+Begin processing the 607th record. Run 1, Event 607, LumiSection 1 at 31-Dec-2000 23:17:23.560 EST
+Begin processing the 608th record. Run 1, Event 608, LumiSection 1 at 31-Dec-2000 23:17:23.610 EST
+Begin processing the 609th record. Run 1, Event 609, LumiSection 1 at 31-Dec-2000 23:17:23.680 EST
+Begin processing the 610th record. Run 1, Event 610, LumiSection 1 at 31-Dec-2000 23:17:23.850 EST
+Begin processing the 611th record. Run 1, Event 611, LumiSection 1 at 31-Dec-2000 23:17:24.020 EST
+Begin processing the 612th record. Run 1, Event 612, LumiSection 1 at 31-Dec-2000 23:17:24.070 EST
+Begin processing the 613th record. Run 1, Event 613, LumiSection 1 at 31-Dec-2000 23:17:24.260 EST
+Begin processing the 614th record. Run 1, Event 614, LumiSection 1 at 31-Dec-2000 23:17:24.310 EST
+Begin processing the 615th record. Run 1, Event 615, LumiSection 1 at 31-Dec-2000 23:17:24.360 EST
+Begin processing the 616th record. Run 1, Event 616, LumiSection 1 at 31-Dec-2000 23:17:24.530 EST
+Begin processing the 617th record. Run 1, Event 617, LumiSection 1 at 31-Dec-2000 23:17:24.600 EST
+Begin processing the 618th record. Run 1, Event 618, LumiSection 1 at 31-Dec-2000 23:17:24.650 EST
+Begin processing the 619th record. Run 1, Event 619, LumiSection 1 at 31-Dec-2000 23:17:24.820 EST
+Begin processing the 620th record. Run 1, Event 620, LumiSection 1 at 31-Dec-2000 23:17:24.870 EST
+Begin processing the 621st record. Run 1, Event 621, LumiSection 1 at 31-Dec-2000 23:17:24.920 EST
+Begin processing the 622nd record. Run 1, Event 622, LumiSection 1 at 31-Dec-2000 23:17:25.110 EST
+Begin processing the 623rd record. Run 1, Event 623, LumiSection 1 at 31-Dec-2000 23:17:25.160 EST
+Begin processing the 624th record. Run 1, Event 624, LumiSection 1 at 31-Dec-2000 23:17:25.210 EST
+Begin processing the 625th record. Run 1, Event 625, LumiSection 1 at 31-Dec-2000 23:17:25.380 EST
+Begin processing the 626th record. Run 1, Event 626, LumiSection 1 at 31-Dec-2000 23:17:25.450 EST
+Begin processing the 627th record. Run 1, Event 627, LumiSection 1 at 31-Dec-2000 23:17:25.500 EST
+Begin processing the 628th record. Run 1, Event 628, LumiSection 1 at 31-Dec-2000 23:17:25.670 EST
+Begin processing the 629th record. Run 1, Event 629, LumiSection 1 at 31-Dec-2000 23:17:25.720 EST
+Begin processing the 630th record. Run 1, Event 630, LumiSection 1 at 31-Dec-2000 23:17:25.790 EST
+Begin processing the 631st record. Run 1, Event 631, LumiSection 1 at 31-Dec-2000 23:17:25.960 EST
+Begin processing the 632nd record. Run 1, Event 632, LumiSection 1 at 31-Dec-2000 23:17:26.010 EST
+Begin processing the 633rd record. Run 1, Event 633, LumiSection 1 at 31-Dec-2000 23:17:26.060 EST
+Begin processing the 634th record. Run 1, Event 634, LumiSection 1 at 31-Dec-2000 23:17:26.230 EST
+Begin processing the 635th record. Run 1, Event 635, LumiSection 1 at 31-Dec-2000 23:17:26.300 EST
+Begin processing the 636th record. Run 1, Event 636, LumiSection 1 at 31-Dec-2000 23:17:26.350 EST
+Begin processing the 637th record. Run 1, Event 637, LumiSection 1 at 31-Dec-2000 23:17:26.520 EST
+Begin processing the 638th record. Run 1, Event 638, LumiSection 1 at 31-Dec-2000 23:17:26.570 EST
+Begin processing the 639th record. Run 1, Event 639, LumiSection 1 at 31-Dec-2000 23:17:26.640 EST
+Begin processing the 640th record. Run 1, Event 640, LumiSection 1 at 31-Dec-2000 23:17:26.810 EST
+Begin processing the 641st record. Run 1, Event 641, LumiSection 1 at 31-Dec-2000 23:17:26.860 EST
+Begin processing the 642nd record. Run 1, Event 642, LumiSection 1 at 31-Dec-2000 23:17:26.910 EST
+Begin processing the 643rd record. Run 1, Event 643, LumiSection 1 at 31-Dec-2000 23:17:27.080 EST
+Begin processing the 644th record. Run 1, Event 644, LumiSection 1 at 31-Dec-2000 23:17:27.150 EST
+Begin processing the 645th record. Run 1, Event 645, LumiSection 1 at 31-Dec-2000 23:17:27.200 EST
+Begin processing the 646th record. Run 1, Event 646, LumiSection 1 at 31-Dec-2000 23:17:27.370 EST
+Begin processing the 647th record. Run 1, Event 647, LumiSection 1 at 31-Dec-2000 23:17:27.420 EST
+Begin processing the 648th record. Run 1, Event 648, LumiSection 1 at 31-Dec-2000 23:17:27.490 EST
+Begin processing the 649th record. Run 1, Event 649, LumiSection 1 at 31-Dec-2000 23:17:27.660 EST
+Begin processing the 650th record. Run 1, Event 650, LumiSection 1 at 31-Dec-2000 23:17:27.710 EST
+Begin processing the 651st record. Run 1, Event 651, LumiSection 1 at 31-Dec-2000 23:17:27.760 EST
+Begin processing the 652nd record. Run 1, Event 652, LumiSection 1 at 31-Dec-2000 23:17:27.950 EST
+Begin processing the 653rd record. Run 1, Event 653, LumiSection 1 at 31-Dec-2000 23:17:28.000 EST
+Begin processing the 654th record. Run 1, Event 654, LumiSection 1 at 31-Dec-2000 23:17:28.050 EST
+Begin processing the 655th record. Run 1, Event 655, LumiSection 1 at 31-Dec-2000 23:17:28.220 EST
+Begin processing the 656th record. Run 1, Event 656, LumiSection 1 at 31-Dec-2000 23:17:28.270 EST
+Begin processing the 657th record. Run 1, Event 657, LumiSection 1 at 31-Dec-2000 23:17:28.340 EST
+Begin processing the 658th record. Run 1, Event 658, LumiSection 1 at 31-Dec-2000 23:17:28.510 EST
+Begin processing the 659th record. Run 1, Event 659, LumiSection 1 at 31-Dec-2000 23:17:28.560 EST
+Begin processing the 660th record. Run 1, Event 660, LumiSection 1 at 31-Dec-2000 23:17:28.610 EST
+Begin processing the 661st record. Run 1, Event 661, LumiSection 1 at 31-Dec-2000 23:17:28.800 EST
+Begin processing the 662nd record. Run 1, Event 662, LumiSection 1 at 31-Dec-2000 23:17:28.850 EST
+Begin processing the 663rd record. Run 1, Event 663, LumiSection 1 at 31-Dec-2000 23:17:28.900 EST
+Begin processing the 664th record. Run 1, Event 664, LumiSection 1 at 31-Dec-2000 23:17:29.070 EST
+Begin processing the 665th record. Run 1, Event 665, LumiSection 1 at 31-Dec-2000 23:17:29.140 EST
+Begin processing the 666th record. Run 1, Event 666, LumiSection 1 at 31-Dec-2000 23:17:29.190 EST
+Begin processing the 667th record. Run 1, Event 667, LumiSection 1 at 31-Dec-2000 23:17:29.360 EST
+Begin processing the 668th record. Run 1, Event 668, LumiSection 1 at 31-Dec-2000 23:17:29.410 EST
+Begin processing the 669th record. Run 1, Event 669, LumiSection 1 at 31-Dec-2000 23:17:29.460 EST
+Begin processing the 670th record. Run 1, Event 670, LumiSection 1 at 31-Dec-2000 23:17:29.650 EST
+Begin processing the 671st record. Run 1, Event 671, LumiSection 1 at 31-Dec-2000 23:17:29.700 EST
+Begin processing the 672nd record. Run 1, Event 672, LumiSection 1 at 31-Dec-2000 23:17:29.750 EST
+Begin processing the 673rd record. Run 1, Event 673, LumiSection 1 at 31-Dec-2000 23:17:29.920 EST
+Begin processing the 674th record. Run 1, Event 674, LumiSection 1 at 31-Dec-2000 23:17:29.990 EST
+Begin processing the 675th record. Run 1, Event 675, LumiSection 1 at 31-Dec-2000 23:17:30.040 EST
+Begin processing the 676th record. Run 1, Event 676, LumiSection 1 at 31-Dec-2000 23:17:30.210 EST
+Begin processing the 677th record. Run 1, Event 677, LumiSection 1 at 31-Dec-2000 23:17:30.260 EST
+Begin processing the 678th record. Run 1, Event 678, LumiSection 1 at 31-Dec-2000 23:17:30.310 EST
+Begin processing the 679th record. Run 1, Event 679, LumiSection 1 at 31-Dec-2000 23:17:30.500 EST
+Begin processing the 680th record. Run 1, Event 680, LumiSection 1 at 31-Dec-2000 23:17:30.550 EST
+Begin processing the 681st record. Run 1, Event 681, LumiSection 1 at 31-Dec-2000 23:17:30.600 EST
+Begin processing the 682nd record. Run 1, Event 682, LumiSection 1 at 31-Dec-2000 23:17:30.770 EST
+Begin processing the 683rd record. Run 1, Event 683, LumiSection 1 at 31-Dec-2000 23:17:30.840 EST
+Begin processing the 684th record. Run 1, Event 684, LumiSection 1 at 31-Dec-2000 23:17:30.890 EST
+Begin processing the 685th record. Run 1, Event 685, LumiSection 1 at 31-Dec-2000 23:17:31.060 EST
+Begin processing the 686th record. Run 1, Event 686, LumiSection 1 at 31-Dec-2000 23:17:31.110 EST
+Begin processing the 687th record. Run 1, Event 687, LumiSection 1 at 31-Dec-2000 23:17:31.180 EST
+Begin processing the 688th record. Run 1, Event 688, LumiSection 1 at 31-Dec-2000 23:17:31.350 EST
+Begin processing the 689th record. Run 1, Event 689, LumiSection 1 at 31-Dec-2000 23:17:31.400 EST
+Begin processing the 690th record. Run 1, Event 690, LumiSection 1 at 31-Dec-2000 23:17:31.450 EST
+Begin processing the 691st record. Run 1, Event 691, LumiSection 1 at 31-Dec-2000 23:17:31.620 EST
+Begin processing the 692nd record. Run 1, Event 692, LumiSection 1 at 31-Dec-2000 23:17:31.690 EST
+Begin processing the 693rd record. Run 1, Event 693, LumiSection 1 at 31-Dec-2000 23:17:31.740 EST
+Begin processing the 694th record. Run 1, Event 694, LumiSection 1 at 31-Dec-2000 23:17:31.910 EST
+Begin processing the 695th record. Run 1, Event 695, LumiSection 1 at 31-Dec-2000 23:17:31.960 EST
+Begin processing the 696th record. Run 1, Event 696, LumiSection 1 at 31-Dec-2000 23:17:32.030 EST
+Begin processing the 697th record. Run 1, Event 697, LumiSection 1 at 31-Dec-2000 23:17:32.200 EST
+Begin processing the 698th record. Run 1, Event 698, LumiSection 1 at 31-Dec-2000 23:17:32.250 EST
+Begin processing the 699th record. Run 1, Event 699, LumiSection 1 at 31-Dec-2000 23:17:32.300 EST
+Begin processing the 700th record. Run 1, Event 700, LumiSection 1 at 31-Dec-2000 23:17:32.490 EST
+Begin processing the 701st record. Run 1, Event 701, LumiSection 1 at 31-Dec-2000 23:17:32.540 EST
+Begin processing the 702nd record. Run 1, Event 702, LumiSection 1 at 31-Dec-2000 23:17:32.590 EST
+Begin processing the 703rd record. Run 1, Event 703, LumiSection 1 at 31-Dec-2000 23:17:32.760 EST
+Begin processing the 704th record. Run 1, Event 704, LumiSection 1 at 31-Dec-2000 23:17:32.810 EST
+Begin processing the 705th record. Run 1, Event 705, LumiSection 1 at 31-Dec-2000 23:17:32.880 EST
+Begin processing the 706th record. Run 1, Event 706, LumiSection 1 at 31-Dec-2000 23:17:33.050 EST
+Begin processing the 707th record. Run 1, Event 707, LumiSection 1 at 31-Dec-2000 23:17:33.100 EST
+Begin processing the 708th record. Run 1, Event 708, LumiSection 1 at 31-Dec-2000 23:17:33.150 EST
+Begin processing the 709th record. Run 1, Event 709, LumiSection 1 at 31-Dec-2000 23:17:33.340 EST
+Begin processing the 710th record. Run 1, Event 710, LumiSection 1 at 31-Dec-2000 23:17:33.390 EST
+Begin processing the 711th record. Run 1, Event 711, LumiSection 1 at 31-Dec-2000 23:17:33.440 EST
+Begin processing the 712th record. Run 1, Event 712, LumiSection 1 at 31-Dec-2000 23:17:33.610 EST
+Begin processing the 713th record. Run 1, Event 713, LumiSection 1 at 31-Dec-2000 23:17:33.660 EST
+Begin processing the 714th record. Run 1, Event 714, LumiSection 1 at 31-Dec-2000 23:17:33.730 EST
+Begin processing the 715th record. Run 1, Event 715, LumiSection 1 at 31-Dec-2000 23:17:33.900 EST
+Begin processing the 716th record. Run 1, Event 716, LumiSection 1 at 31-Dec-2000 23:17:33.950 EST
+Begin processing the 717th record. Run 1, Event 717, LumiSection 1 at 31-Dec-2000 23:17:34.000 EST
+Begin processing the 718th record. Run 1, Event 718, LumiSection 1 at 31-Dec-2000 23:17:34.190 EST
+Begin processing the 719th record. Run 1, Event 719, LumiSection 1 at 31-Dec-2000 23:17:34.240 EST
+Begin processing the 720th record. Run 1, Event 720, LumiSection 1 at 31-Dec-2000 23:17:34.290 EST
+Begin processing the 721st record. Run 1, Event 721, LumiSection 1 at 31-Dec-2000 23:17:34.460 EST
+Begin processing the 722nd record. Run 1, Event 722, LumiSection 1 at 31-Dec-2000 23:17:34.530 EST
+Begin processing the 723rd record. Run 1, Event 723, LumiSection 1 at 31-Dec-2000 23:17:34.580 EST
+Begin processing the 724th record. Run 1, Event 724, LumiSection 1 at 31-Dec-2000 23:17:34.750 EST
+Begin processing the 725th record. Run 1, Event 725, LumiSection 1 at 31-Dec-2000 23:17:34.800 EST
+Begin processing the 726th record. Run 1, Event 726, LumiSection 1 at 31-Dec-2000 23:17:34.850 EST
+Begin processing the 727th record. Run 1, Event 727, LumiSection 1 at 31-Dec-2000 23:17:35.040 EST
+Begin processing the 728th record. Run 1, Event 728, LumiSection 1 at 31-Dec-2000 23:17:35.090 EST
+Begin processing the 729th record. Run 1, Event 729, LumiSection 1 at 31-Dec-2000 23:17:35.140 EST
+Begin processing the 730th record. Run 1, Event 730, LumiSection 1 at 31-Dec-2000 23:17:35.310 EST
+Begin processing the 731st record. Run 1, Event 731, LumiSection 1 at 31-Dec-2000 23:17:35.380 EST
+Begin processing the 732nd record. Run 1, Event 732, LumiSection 1 at 31-Dec-2000 23:17:35.430 EST
+Begin processing the 733rd record. Run 1, Event 733, LumiSection 1 at 31-Dec-2000 23:17:35.720 EST
+Begin processing the 734th record. Run 1, Event 734, LumiSection 1 at 31-Dec-2000 23:17:35.770 EST
+Begin processing the 735th record. Run 1, Event 735, LumiSection 1 at 31-Dec-2000 23:17:35.840 EST
+Begin processing the 736th record. Run 1, Event 736, LumiSection 1 at 31-Dec-2000 23:17:36.010 EST
+Begin processing the 737th record. Run 1, Event 737, LumiSection 1 at 31-Dec-2000 23:17:36.060 EST
+Begin processing the 738th record. Run 1, Event 738, LumiSection 1 at 31-Dec-2000 23:17:36.110 EST
+Begin processing the 739th record. Run 1, Event 739, LumiSection 1 at 31-Dec-2000 23:17:36.280 EST
+Begin processing the 740th record. Run 1, Event 740, LumiSection 1 at 31-Dec-2000 23:17:36.350 EST
+Begin processing the 741st record. Run 1, Event 741, LumiSection 1 at 31-Dec-2000 23:17:36.400 EST
+Begin processing the 742nd record. Run 1, Event 742, LumiSection 1 at 31-Dec-2000 23:17:36.570 EST
+Begin processing the 743rd record. Run 1, Event 743, LumiSection 1 at 31-Dec-2000 23:17:36.620 EST
+Begin processing the 744th record. Run 1, Event 744, LumiSection 1 at 31-Dec-2000 23:17:36.690 EST
+Begin processing the 745th record. Run 1, Event 745, LumiSection 1 at 31-Dec-2000 23:17:36.860 EST
+Begin processing the 746th record. Run 1, Event 746, LumiSection 1 at 31-Dec-2000 23:17:36.910 EST
+Begin processing the 747th record. Run 1, Event 747, LumiSection 1 at 31-Dec-2000 23:17:36.960 EST
+Begin processing the 748th record. Run 1, Event 748, LumiSection 1 at 31-Dec-2000 23:17:37.130 EST
+Begin processing the 749th record. Run 1, Event 749, LumiSection 1 at 31-Dec-2000 23:17:37.200 EST
+Begin processing the 750th record. Run 1, Event 750, LumiSection 1 at 31-Dec-2000 23:17:37.250 EST
+Begin processing the 751st record. Run 1, Event 751, LumiSection 1 at 31-Dec-2000 23:17:37.420 EST
+Begin processing the 752nd record. Run 1, Event 752, LumiSection 1 at 31-Dec-2000 23:17:37.470 EST
+Begin processing the 753rd record. Run 1, Event 753, LumiSection 1 at 31-Dec-2000 23:17:37.540 EST
+Begin processing the 754th record. Run 1, Event 754, LumiSection 1 at 31-Dec-2000 23:17:37.710 EST
+Begin processing the 755th record. Run 1, Event 755, LumiSection 1 at 31-Dec-2000 23:17:37.760 EST
+Begin processing the 756th record. Run 1, Event 756, LumiSection 1 at 31-Dec-2000 23:17:37.810 EST
+Begin processing the 757th record. Run 1, Event 757, LumiSection 1 at 31-Dec-2000 23:17:38.000 EST
+Begin processing the 758th record. Run 1, Event 758, LumiSection 1 at 31-Dec-2000 23:17:38.050 EST
+Begin processing the 759th record. Run 1, Event 759, LumiSection 1 at 31-Dec-2000 23:17:38.220 EST
+Begin processing the 760th record. Run 1, Event 760, LumiSection 1 at 31-Dec-2000 23:17:38.390 EST
+Begin processing the 761st record. Run 1, Event 761, LumiSection 1 at 31-Dec-2000 23:17:38.440 EST
+Begin processing the 762nd record. Run 1, Event 762, LumiSection 1 at 31-Dec-2000 23:17:38.510 EST
+Begin processing the 763rd record. Run 1, Event 763, LumiSection 1 at 31-Dec-2000 23:17:38.680 EST
+Begin processing the 764th record. Run 1, Event 764, LumiSection 1 at 31-Dec-2000 23:17:38.730 EST
+Begin processing the 765th record. Run 1, Event 765, LumiSection 1 at 31-Dec-2000 23:17:38.780 EST
+Begin processing the 766th record. Run 1, Event 766, LumiSection 1 at 31-Dec-2000 23:17:38.970 EST
+Begin processing the 767th record. Run 1, Event 767, LumiSection 1 at 31-Dec-2000 23:17:39.020 EST
+Begin processing the 768th record. Run 1, Event 768, LumiSection 1 at 31-Dec-2000 23:17:39.070 EST
+Begin processing the 769th record. Run 1, Event 769, LumiSection 1 at 31-Dec-2000 23:17:39.240 EST
+Begin processing the 770th record. Run 1, Event 770, LumiSection 1 at 31-Dec-2000 23:17:39.310 EST
+Begin processing the 771st record. Run 1, Event 771, LumiSection 1 at 31-Dec-2000 23:17:39.360 EST
+Begin processing the 772nd record. Run 1, Event 772, LumiSection 1 at 31-Dec-2000 23:17:39.530 EST
+Begin processing the 773rd record. Run 1, Event 773, LumiSection 1 at 31-Dec-2000 23:17:39.580 EST
+Begin processing the 774th record. Run 1, Event 774, LumiSection 1 at 31-Dec-2000 23:17:39.630 EST
+Begin processing the 775th record. Run 1, Event 775, LumiSection 1 at 31-Dec-2000 23:17:39.820 EST
+Begin processing the 776th record. Run 1, Event 776, LumiSection 1 at 31-Dec-2000 23:17:39.870 EST
+Begin processing the 777th record. Run 1, Event 777, LumiSection 1 at 31-Dec-2000 23:17:39.920 EST
+Begin processing the 778th record. Run 1, Event 778, LumiSection 1 at 31-Dec-2000 23:17:40.090 EST
+Begin processing the 779th record. Run 1, Event 779, LumiSection 1 at 31-Dec-2000 23:17:40.160 EST
+Begin processing the 780th record. Run 1, Event 780, LumiSection 1 at 31-Dec-2000 23:17:40.210 EST
+Begin processing the 781st record. Run 1, Event 781, LumiSection 1 at 31-Dec-2000 23:17:40.380 EST
+Begin processing the 782nd record. Run 1, Event 782, LumiSection 1 at 31-Dec-2000 23:17:40.430 EST
+Begin processing the 783rd record. Run 1, Event 783, LumiSection 1 at 31-Dec-2000 23:17:40.480 EST
+Begin processing the 784th record. Run 1, Event 784, LumiSection 1 at 31-Dec-2000 23:17:40.670 EST
+Begin processing the 785th record. Run 1, Event 785, LumiSection 1 at 31-Dec-2000 23:17:40.720 EST
+Begin processing the 786th record. Run 1, Event 786, LumiSection 1 at 31-Dec-2000 23:17:40.770 EST
+Begin processing the 787th record. Run 1, Event 787, LumiSection 1 at 31-Dec-2000 23:17:40.940 EST
+Begin processing the 788th record. Run 1, Event 788, LumiSection 1 at 31-Dec-2000 23:17:41.010 EST
+Begin processing the 789th record. Run 1, Event 789, LumiSection 1 at 31-Dec-2000 23:17:41.060 EST
+Begin processing the 790th record. Run 1, Event 790, LumiSection 1 at 31-Dec-2000 23:17:41.230 EST
+Begin processing the 791st record. Run 1, Event 791, LumiSection 1 at 31-Dec-2000 23:17:41.280 EST
+Begin processing the 792nd record. Run 1, Event 792, LumiSection 1 at 31-Dec-2000 23:17:41.350 EST
+Begin processing the 793rd record. Run 1, Event 793, LumiSection 1 at 31-Dec-2000 23:17:41.520 EST
+Begin processing the 794th record. Run 1, Event 794, LumiSection 1 at 31-Dec-2000 23:17:41.570 EST
+Begin processing the 795th record. Run 1, Event 795, LumiSection 1 at 31-Dec-2000 23:17:41.620 EST
+Begin processing the 796th record. Run 1, Event 796, LumiSection 1 at 31-Dec-2000 23:17:41.790 EST
+Begin processing the 797th record. Run 1, Event 797, LumiSection 1 at 31-Dec-2000 23:17:41.860 EST
+Begin processing the 798th record. Run 1, Event 798, LumiSection 1 at 31-Dec-2000 23:17:41.910 EST
+Begin processing the 799th record. Run 1, Event 799, LumiSection 1 at 31-Dec-2000 23:17:42.080 EST
+Begin processing the 800th record. Run 1, Event 800, LumiSection 1 at 31-Dec-2000 23:17:42.130 EST
+Begin processing the 801st record. Run 1, Event 801, LumiSection 1 at 31-Dec-2000 23:17:42.200 EST
+Begin processing the 802nd record. Run 1, Event 802, LumiSection 1 at 31-Dec-2000 23:17:42.370 EST
+Begin processing the 803rd record. Run 1, Event 803, LumiSection 1 at 31-Dec-2000 23:17:42.420 EST
+Begin processing the 804th record. Run 1, Event 804, LumiSection 1 at 31-Dec-2000 23:17:42.470 EST
+Begin processing the 805th record. Run 1, Event 805, LumiSection 1 at 31-Dec-2000 23:17:42.660 EST
+Begin processing the 806th record. Run 1, Event 806, LumiSection 1 at 31-Dec-2000 23:17:42.710 EST
+Begin processing the 807th record. Run 1, Event 807, LumiSection 1 at 31-Dec-2000 23:17:42.760 EST
+Begin processing the 808th record. Run 1, Event 808, LumiSection 1 at 31-Dec-2000 23:17:42.930 EST
+Begin processing the 809th record. Run 1, Event 809, LumiSection 1 at 31-Dec-2000 23:17:42.980 EST
+Begin processing the 810th record. Run 1, Event 810, LumiSection 1 at 31-Dec-2000 23:17:43.050 EST
+Begin processing the 811th record. Run 1, Event 811, LumiSection 1 at 31-Dec-2000 23:17:43.220 EST
+Begin processing the 812th record. Run 1, Event 812, LumiSection 1 at 31-Dec-2000 23:17:43.270 EST
+Begin processing the 813th record. Run 1, Event 813, LumiSection 1 at 31-Dec-2000 23:17:43.320 EST
+Begin processing the 814th record. Run 1, Event 814, LumiSection 1 at 31-Dec-2000 23:17:43.510 EST
+Begin processing the 815th record. Run 1, Event 815, LumiSection 1 at 31-Dec-2000 23:17:43.560 EST
+Begin processing the 816th record. Run 1, Event 816, LumiSection 1 at 31-Dec-2000 23:17:43.730 EST
+Begin processing the 817th record. Run 1, Event 817, LumiSection 1 at 31-Dec-2000 23:17:43.900 EST
+Begin processing the 818th record. Run 1, Event 818, LumiSection 1 at 31-Dec-2000 23:17:43.950 EST
+Begin processing the 819th record. Run 1, Event 819, LumiSection 1 at 31-Dec-2000 23:17:44.020 EST
+Begin processing the 820th record. Run 1, Event 820, LumiSection 1 at 31-Dec-2000 23:17:44.190 EST
+Begin processing the 821st record. Run 1, Event 821, LumiSection 1 at 31-Dec-2000 23:17:44.240 EST
+Begin processing the 822nd record. Run 1, Event 822, LumiSection 1 at 31-Dec-2000 23:17:44.290 EST
+Begin processing the 823rd record. Run 1, Event 823, LumiSection 1 at 31-Dec-2000 23:17:44.480 EST
+Begin processing the 824th record. Run 1, Event 824, LumiSection 1 at 31-Dec-2000 23:17:44.530 EST
+Begin processing the 825th record. Run 1, Event 825, LumiSection 1 at 31-Dec-2000 23:17:44.580 EST
+Begin processing the 826th record. Run 1, Event 826, LumiSection 1 at 31-Dec-2000 23:17:44.750 EST
+Begin processing the 827th record. Run 1, Event 827, LumiSection 1 at 31-Dec-2000 23:17:44.820 EST
+Begin processing the 828th record. Run 1, Event 828, LumiSection 1 at 31-Dec-2000 23:17:44.870 EST
+Begin processing the 829th record. Run 1, Event 829, LumiSection 1 at 31-Dec-2000 23:17:45.040 EST
+Begin processing the 830th record. Run 1, Event 830, LumiSection 1 at 31-Dec-2000 23:17:45.090 EST
+Begin processing the 831st record. Run 1, Event 831, LumiSection 1 at 31-Dec-2000 23:17:45.140 EST
+Begin processing the 832nd record. Run 1, Event 832, LumiSection 1 at 31-Dec-2000 23:17:45.330 EST
+Begin processing the 833rd record. Run 1, Event 833, LumiSection 1 at 31-Dec-2000 23:17:45.380 EST
+Begin processing the 834th record. Run 1, Event 834, LumiSection 1 at 31-Dec-2000 23:17:45.430 EST
+Begin processing the 835th record. Run 1, Event 835, LumiSection 1 at 31-Dec-2000 23:17:45.600 EST
+Begin processing the 836th record. Run 1, Event 836, LumiSection 1 at 31-Dec-2000 23:17:45.670 EST
+Begin processing the 837th record. Run 1, Event 837, LumiSection 1 at 31-Dec-2000 23:17:45.720 EST
+Begin processing the 838th record. Run 1, Event 838, LumiSection 1 at 31-Dec-2000 23:17:45.890 EST
+Begin processing the 839th record. Run 1, Event 839, LumiSection 1 at 31-Dec-2000 23:17:45.940 EST
+Begin processing the 840th record. Run 1, Event 840, LumiSection 1 at 31-Dec-2000 23:17:46.010 EST
+Begin processing the 841st record. Run 1, Event 841, LumiSection 1 at 31-Dec-2000 23:17:46.180 EST
+Begin processing the 842nd record. Run 1, Event 842, LumiSection 1 at 31-Dec-2000 23:17:46.230 EST
+Begin processing the 843rd record. Run 1, Event 843, LumiSection 1 at 31-Dec-2000 23:17:46.280 EST
+Begin processing the 844th record. Run 1, Event 844, LumiSection 1 at 31-Dec-2000 23:17:46.450 EST
+Begin processing the 845th record. Run 1, Event 845, LumiSection 1 at 31-Dec-2000 23:17:46.520 EST
+Begin processing the 846th record. Run 1, Event 846, LumiSection 1 at 31-Dec-2000 23:17:46.570 EST
+Begin processing the 847th record. Run 1, Event 847, LumiSection 1 at 31-Dec-2000 23:17:46.740 EST
+Begin processing the 848th record. Run 1, Event 848, LumiSection 1 at 31-Dec-2000 23:17:46.790 EST
+Begin processing the 849th record. Run 1, Event 849, LumiSection 1 at 31-Dec-2000 23:17:46.860 EST
+Begin processing the 850th record. Run 1, Event 850, LumiSection 1 at 31-Dec-2000 23:17:47.030 EST
+Begin processing the 851st record. Run 1, Event 851, LumiSection 1 at 31-Dec-2000 23:17:47.080 EST
+Begin processing the 852nd record. Run 1, Event 852, LumiSection 1 at 31-Dec-2000 23:17:47.130 EST
+Begin processing the 853rd record. Run 1, Event 853, LumiSection 1 at 31-Dec-2000 23:17:47.300 EST
+Begin processing the 854th record. Run 1, Event 854, LumiSection 1 at 31-Dec-2000 23:17:47.370 EST
+Begin processing the 855th record. Run 1, Event 855, LumiSection 1 at 31-Dec-2000 23:17:47.540 EST
+Begin processing the 856th record. Run 1, Event 856, LumiSection 1 at 31-Dec-2000 23:17:47.710 EST
+Begin processing the 857th record. Run 1, Event 857, LumiSection 1 at 31-Dec-2000 23:17:47.760 EST
+Begin processing the 858th record. Run 1, Event 858, LumiSection 1 at 31-Dec-2000 23:17:47.830 EST
+Begin processing the 859th record. Run 1, Event 859, LumiSection 1 at 31-Dec-2000 23:17:48.000 EST
+Begin processing the 860th record. Run 1, Event 860, LumiSection 1 at 31-Dec-2000 23:17:48.050 EST
+Begin processing the 861st record. Run 1, Event 861, LumiSection 1 at 31-Dec-2000 23:17:48.100 EST
+Begin processing the 862nd record. Run 1, Event 862, LumiSection 1 at 31-Dec-2000 23:17:48.290 EST
+Begin processing the 863rd record. Run 1, Event 863, LumiSection 1 at 31-Dec-2000 23:17:48.340 EST
+Begin processing the 864th record. Run 1, Event 864, LumiSection 1 at 31-Dec-2000 23:17:48.390 EST
+Begin processing the 865th record. Run 1, Event 865, LumiSection 1 at 31-Dec-2000 23:17:48.560 EST
+Begin processing the 866th record. Run 1, Event 866, LumiSection 1 at 31-Dec-2000 23:17:48.610 EST
+Begin processing the 867th record. Run 1, Event 867, LumiSection 1 at 31-Dec-2000 23:17:48.680 EST
+Begin processing the 868th record. Run 1, Event 868, LumiSection 1 at 31-Dec-2000 23:17:48.850 EST
+Begin processing the 869th record. Run 1, Event 869, LumiSection 1 at 31-Dec-2000 23:17:48.900 EST
+Begin processing the 870th record. Run 1, Event 870, LumiSection 1 at 31-Dec-2000 23:17:48.950 EST
+Begin processing the 871st record. Run 1, Event 871, LumiSection 1 at 31-Dec-2000 23:17:49.140 EST
+Begin processing the 872nd record. Run 1, Event 872, LumiSection 1 at 31-Dec-2000 23:17:49.190 EST
+Begin processing the 873rd record. Run 1, Event 873, LumiSection 1 at 31-Dec-2000 23:17:49.240 EST
+Begin processing the 874th record. Run 1, Event 874, LumiSection 1 at 31-Dec-2000 23:17:49.410 EST
+Begin processing the 875th record. Run 1, Event 875, LumiSection 1 at 31-Dec-2000 23:17:49.480 EST
+Begin processing the 876th record. Run 1, Event 876, LumiSection 1 at 31-Dec-2000 23:17:49.530 EST
+Begin processing the 877th record. Run 1, Event 877, LumiSection 1 at 31-Dec-2000 23:17:49.700 EST
+Begin processing the 878th record. Run 1, Event 878, LumiSection 1 at 31-Dec-2000 23:17:49.750 EST
+Begin processing the 879th record. Run 1, Event 879, LumiSection 1 at 31-Dec-2000 23:17:49.800 EST
+Begin processing the 880th record. Run 1, Event 880, LumiSection 1 at 31-Dec-2000 23:17:49.990 EST
+Begin processing the 881st record. Run 1, Event 881, LumiSection 1 at 31-Dec-2000 23:17:50.040 EST
+Begin processing the 882nd record. Run 1, Event 882, LumiSection 1 at 31-Dec-2000 23:17:50.090 EST
+Begin processing the 883rd record. Run 1, Event 883, LumiSection 1 at 31-Dec-2000 23:17:50.260 EST
+Begin processing the 884th record. Run 1, Event 884, LumiSection 1 at 31-Dec-2000 23:17:50.330 EST
+Begin processing the 885th record. Run 1, Event 885, LumiSection 1 at 31-Dec-2000 23:17:50.380 EST
+Begin processing the 886th record. Run 1, Event 886, LumiSection 1 at 31-Dec-2000 23:17:50.550 EST
+Begin processing the 887th record. Run 1, Event 887, LumiSection 1 at 31-Dec-2000 23:17:50.600 EST
+Begin processing the 888th record. Run 1, Event 888, LumiSection 1 at 31-Dec-2000 23:17:50.650 EST
+Begin processing the 889th record. Run 1, Event 889, LumiSection 1 at 31-Dec-2000 23:17:50.840 EST
+Begin processing the 890th record. Run 1, Event 890, LumiSection 1 at 31-Dec-2000 23:17:50.890 EST
+Begin processing the 891st record. Run 1, Event 891, LumiSection 1 at 31-Dec-2000 23:17:50.940 EST
+Begin processing the 892nd record. Run 1, Event 892, LumiSection 1 at 31-Dec-2000 23:17:51.110 EST
+Begin processing the 893rd record. Run 1, Event 893, LumiSection 1 at 31-Dec-2000 23:17:51.180 EST
+Begin processing the 894th record. Run 1, Event 894, LumiSection 1 at 31-Dec-2000 23:17:51.230 EST
+Begin processing the 895th record. Run 1, Event 895, LumiSection 1 at 31-Dec-2000 23:17:51.400 EST
+Begin processing the 896th record. Run 1, Event 896, LumiSection 1 at 31-Dec-2000 23:17:51.450 EST
+Begin processing the 897th record. Run 1, Event 897, LumiSection 1 at 31-Dec-2000 23:17:51.520 EST
+Begin processing the 898th record. Run 1, Event 898, LumiSection 1 at 31-Dec-2000 23:17:51.690 EST
+Begin processing the 899th record. Run 1, Event 899, LumiSection 1 at 31-Dec-2000 23:17:51.740 EST
+Begin processing the 900th record. Run 1, Event 900, LumiSection 1 at 31-Dec-2000 23:17:51.790 EST
+Begin processing the 901st record. Run 1, Event 901, LumiSection 1 at 31-Dec-2000 23:17:51.960 EST
+Begin processing the 902nd record. Run 1, Event 902, LumiSection 1 at 31-Dec-2000 23:17:52.030 EST
+Begin processing the 903rd record. Run 1, Event 903, LumiSection 1 at 31-Dec-2000 23:17:52.080 EST
+Begin processing the 904th record. Run 1, Event 904, LumiSection 1 at 31-Dec-2000 23:17:52.250 EST
+Begin processing the 905th record. Run 1, Event 905, LumiSection 1 at 31-Dec-2000 23:17:52.300 EST
+Begin processing the 906th record. Run 1, Event 906, LumiSection 1 at 31-Dec-2000 23:17:52.370 EST
+Begin processing the 907th record. Run 1, Event 907, LumiSection 1 at 31-Dec-2000 23:17:52.540 EST
+Begin processing the 908th record. Run 1, Event 908, LumiSection 1 at 31-Dec-2000 23:17:52.590 EST
+Begin processing the 909th record. Run 1, Event 909, LumiSection 1 at 31-Dec-2000 23:17:52.640 EST
+Begin processing the 910th record. Run 1, Event 910, LumiSection 1 at 31-Dec-2000 23:17:52.810 EST
+Begin processing the 911th record. Run 1, Event 911, LumiSection 1 at 31-Dec-2000 23:17:52.880 EST
+Begin processing the 912th record. Run 1, Event 912, LumiSection 1 at 31-Dec-2000 23:17:52.930 EST
+Begin processing the 913th record. Run 1, Event 913, LumiSection 1 at 31-Dec-2000 23:17:53.100 EST
+Begin processing the 914th record. Run 1, Event 914, LumiSection 1 at 31-Dec-2000 23:17:53.150 EST
+Begin processing the 915th record. Run 1, Event 915, LumiSection 1 at 31-Dec-2000 23:17:53.220 EST
+Begin processing the 916th record. Run 1, Event 916, LumiSection 1 at 31-Dec-2000 23:17:53.390 EST
+Begin processing the 917th record. Run 1, Event 917, LumiSection 1 at 31-Dec-2000 23:17:53.440 EST
+Begin processing the 918th record. Run 1, Event 918, LumiSection 1 at 31-Dec-2000 23:17:53.490 EST
+Begin processing the 919th record. Run 1, Event 919, LumiSection 1 at 31-Dec-2000 23:17:53.680 EST
+Begin processing the 920th record. Run 1, Event 920, LumiSection 1 at 31-Dec-2000 23:17:53.730 EST
+Begin processing the 921st record. Run 1, Event 921, LumiSection 1 at 31-Dec-2000 23:17:53.780 EST
+Begin processing the 922nd record. Run 1, Event 922, LumiSection 1 at 31-Dec-2000 23:17:53.950 EST
+Begin processing the 923rd record. Run 1, Event 923, LumiSection 1 at 31-Dec-2000 23:17:54.000 EST
+Begin processing the 924th record. Run 1, Event 924, LumiSection 1 at 31-Dec-2000 23:17:54.070 EST
+Begin processing the 925th record. Run 1, Event 925, LumiSection 1 at 31-Dec-2000 23:17:54.240 EST
+Begin processing the 926th record. Run 1, Event 926, LumiSection 1 at 31-Dec-2000 23:17:54.290 EST
+Begin processing the 927th record. Run 1, Event 927, LumiSection 1 at 31-Dec-2000 23:17:54.340 EST
+Begin processing the 928th record. Run 1, Event 928, LumiSection 1 at 31-Dec-2000 23:17:54.530 EST
+Begin processing the 929th record. Run 1, Event 929, LumiSection 1 at 31-Dec-2000 23:17:54.580 EST
+Begin processing the 930th record. Run 1, Event 930, LumiSection 1 at 31-Dec-2000 23:17:54.630 EST
+Begin processing the 931st record. Run 1, Event 931, LumiSection 1 at 31-Dec-2000 23:17:54.800 EST
+Begin processing the 932nd record. Run 1, Event 932, LumiSection 1 at 31-Dec-2000 23:17:54.870 EST
+Begin processing the 933rd record. Run 1, Event 933, LumiSection 1 at 31-Dec-2000 23:17:54.920 EST
+Begin processing the 934th record. Run 1, Event 934, LumiSection 1 at 31-Dec-2000 23:17:55.090 EST
+Begin processing the 935th record. Run 1, Event 935, LumiSection 1 at 31-Dec-2000 23:17:55.140 EST
+Begin processing the 936th record. Run 1, Event 936, LumiSection 1 at 31-Dec-2000 23:17:55.190 EST
+Begin processing the 937th record. Run 1, Event 937, LumiSection 1 at 31-Dec-2000 23:17:55.380 EST
+Begin processing the 938th record. Run 1, Event 938, LumiSection 1 at 31-Dec-2000 23:17:55.430 EST
+Begin processing the 939th record. Run 1, Event 939, LumiSection 1 at 31-Dec-2000 23:17:55.480 EST
+Begin processing the 940th record. Run 1, Event 940, LumiSection 1 at 31-Dec-2000 23:17:55.650 EST
+Begin processing the 941st record. Run 1, Event 941, LumiSection 1 at 31-Dec-2000 23:17:55.720 EST
+Begin processing the 942nd record. Run 1, Event 942, LumiSection 1 at 31-Dec-2000 23:17:55.770 EST
+Begin processing the 943rd record. Run 1, Event 943, LumiSection 1 at 31-Dec-2000 23:17:55.940 EST
+Begin processing the 944th record. Run 1, Event 944, LumiSection 1 at 31-Dec-2000 23:17:55.990 EST
+Begin processing the 945th record. Run 1, Event 945, LumiSection 1 at 31-Dec-2000 23:17:56.040 EST
+Begin processing the 946th record. Run 1, Event 946, LumiSection 1 at 31-Dec-2000 23:17:56.230 EST
+Begin processing the 947th record. Run 1, Event 947, LumiSection 1 at 31-Dec-2000 23:17:56.280 EST
+Begin processing the 948th record. Run 1, Event 948, LumiSection 1 at 31-Dec-2000 23:17:56.330 EST
+Begin processing the 949th record. Run 1, Event 949, LumiSection 1 at 31-Dec-2000 23:17:56.500 EST
+Begin processing the 950th record. Run 1, Event 950, LumiSection 1 at 31-Dec-2000 23:17:56.570 EST
+Begin processing the 951st record. Run 1, Event 951, LumiSection 1 at 31-Dec-2000 23:17:56.620 EST
+Begin processing the 952nd record. Run 1, Event 952, LumiSection 1 at 31-Dec-2000 23:17:56.790 EST
+Begin processing the 953rd record. Run 1, Event 953, LumiSection 1 at 31-Dec-2000 23:17:56.840 EST
+Begin processing the 954th record. Run 1, Event 954, LumiSection 1 at 31-Dec-2000 23:17:56.910 EST
+Begin processing the 955th record. Run 1, Event 955, LumiSection 1 at 31-Dec-2000 23:17:57.080 EST
+Begin processing the 956th record. Run 1, Event 956, LumiSection 1 at 31-Dec-2000 23:17:57.130 EST
+Begin processing the 957th record. Run 1, Event 957, LumiSection 1 at 31-Dec-2000 23:17:57.180 EST
+Begin processing the 958th record. Run 1, Event 958, LumiSection 1 at 31-Dec-2000 23:17:57.350 EST
+Begin processing the 959th record. Run 1, Event 959, LumiSection 1 at 31-Dec-2000 23:17:57.420 EST
+Begin processing the 960th record. Run 1, Event 960, LumiSection 1 at 31-Dec-2000 23:17:57.470 EST
+Begin processing the 961st record. Run 1, Event 961, LumiSection 1 at 31-Dec-2000 23:17:57.640 EST
+Begin processing the 962nd record. Run 1, Event 962, LumiSection 1 at 31-Dec-2000 23:17:57.690 EST
+Begin processing the 963rd record. Run 1, Event 963, LumiSection 1 at 31-Dec-2000 23:17:57.760 EST
+Begin processing the 964th record. Run 1, Event 964, LumiSection 1 at 31-Dec-2000 23:17:57.930 EST
+Begin processing the 965th record. Run 1, Event 965, LumiSection 1 at 31-Dec-2000 23:17:57.980 EST
+Begin processing the 966th record. Run 1, Event 966, LumiSection 1 at 31-Dec-2000 23:17:58.030 EST
+Begin processing the 967th record. Run 1, Event 967, LumiSection 1 at 31-Dec-2000 23:17:58.220 EST
+Begin processing the 968th record. Run 1, Event 968, LumiSection 1 at 31-Dec-2000 23:17:58.270 EST
+Begin processing the 969th record. Run 1, Event 969, LumiSection 1 at 31-Dec-2000 23:17:58.320 EST
+Begin processing the 970th record. Run 1, Event 970, LumiSection 1 at 31-Dec-2000 23:17:58.490 EST
+Begin processing the 971st record. Run 1, Event 971, LumiSection 1 at 31-Dec-2000 23:17:58.540 EST
+Begin processing the 972nd record. Run 1, Event 972, LumiSection 1 at 31-Dec-2000 23:17:58.610 EST
+Begin processing the 973rd record. Run 1, Event 973, LumiSection 1 at 31-Dec-2000 23:17:58.780 EST
+Begin processing the 974th record. Run 1, Event 974, LumiSection 1 at 31-Dec-2000 23:17:58.830 EST
+Begin processing the 975th record. Run 1, Event 975, LumiSection 1 at 31-Dec-2000 23:17:58.880 EST
+Begin processing the 976th record. Run 1, Event 976, LumiSection 1 at 31-Dec-2000 23:17:59.070 EST
+Begin processing the 977th record. Run 1, Event 977, LumiSection 1 at 31-Dec-2000 23:17:59.240 EST
+Begin processing the 978th record. Run 1, Event 978, LumiSection 1 at 31-Dec-2000 23:17:59.290 EST
+Begin processing the 979th record. Run 1, Event 979, LumiSection 1 at 31-Dec-2000 23:17:59.460 EST
+Begin processing the 980th record. Run 1, Event 980, LumiSection 1 at 31-Dec-2000 23:17:59.510 EST
+Begin processing the 981st record. Run 1, Event 981, LumiSection 1 at 31-Dec-2000 23:17:59.580 EST
+Begin processing the 982nd record. Run 1, Event 982, LumiSection 1 at 31-Dec-2000 23:17:59.750 EST
+Begin processing the 983rd record. Run 1, Event 983, LumiSection 1 at 31-Dec-2000 23:17:59.800 EST
+Begin processing the 984th record. Run 1, Event 984, LumiSection 1 at 31-Dec-2000 23:17:59.850 EST
+Begin processing the 985th record. Run 1, Event 985, LumiSection 1 at 31-Dec-2000 23:18:00.040 EST
+Begin processing the 986th record. Run 1, Event 986, LumiSection 1 at 31-Dec-2000 23:18:00.090 EST
+Begin processing the 987th record. Run 1, Event 987, LumiSection 1 at 31-Dec-2000 23:18:00.140 EST
+Begin processing the 988th record. Run 1, Event 988, LumiSection 1 at 31-Dec-2000 23:18:00.310 EST
+Begin processing the 989th record. Run 1, Event 989, LumiSection 1 at 31-Dec-2000 23:18:00.380 EST
+Begin processing the 990th record. Run 1, Event 990, LumiSection 1 at 31-Dec-2000 23:18:00.430 EST
+Begin processing the 991st record. Run 1, Event 991, LumiSection 1 at 31-Dec-2000 23:18:00.600 EST
+Begin processing the 992nd record. Run 1, Event 992, LumiSection 1 at 31-Dec-2000 23:18:00.650 EST
+Begin processing the 993rd record. Run 1, Event 993, LumiSection 1 at 31-Dec-2000 23:18:00.700 EST
+Begin processing the 994th record. Run 1, Event 994, LumiSection 1 at 31-Dec-2000 23:18:00.890 EST
+Begin processing the 995th record. Run 1, Event 995, LumiSection 1 at 31-Dec-2000 23:18:00.940 EST
+Begin processing the 996th record. Run 1, Event 996, LumiSection 1 at 31-Dec-2000 23:18:00.990 EST
+Begin processing the 997th record. Run 1, Event 997, LumiSection 1 at 31-Dec-2000 23:18:01.160 EST
+Begin processing the 998th record. Run 1, Event 998, LumiSection 1 at 31-Dec-2000 23:18:01.230 EST
+Begin processing the 999th record. Run 1, Event 999, LumiSection 1 at 31-Dec-2000 23:18:01.280 EST
+Begin processing the 1000th record. Run 1, Event 1000, LumiSection 1 at 31-Dec-2000 23:18:01.450 EST
+Begin processing the 1001st record. Run 1, Event 1001, LumiSection 1 at 31-Dec-2000 23:18:01.500 EST
+Begin processing the 1002nd record. Run 1, Event 1002, LumiSection 1 at 31-Dec-2000 23:18:01.570 EST
+Begin processing the 1003rd record. Run 1, Event 1003, LumiSection 1 at 31-Dec-2000 23:18:01.740 EST
+Begin processing the 1004th record. Run 1, Event 1004, LumiSection 1 at 31-Dec-2000 23:18:01.790 EST
+Begin processing the 1005th record. Run 1, Event 1005, LumiSection 1 at 31-Dec-2000 23:18:01.840 EST
+Begin processing the 1006th record. Run 1, Event 1006, LumiSection 1 at 31-Dec-2000 23:18:02.010 EST
+Begin processing the 1007th record. Run 1, Event 1007, LumiSection 1 at 31-Dec-2000 23:18:02.080 EST
+Begin processing the 1008th record. Run 1, Event 1008, LumiSection 1 at 31-Dec-2000 23:18:02.130 EST
+Begin processing the 1009th record. Run 1, Event 1009, LumiSection 1 at 31-Dec-2000 23:18:02.300 EST
+Begin processing the 1010th record. Run 1, Event 1010, LumiSection 1 at 31-Dec-2000 23:18:02.350 EST
+Begin processing the 1011th record. Run 1, Event 1011, LumiSection 1 at 31-Dec-2000 23:18:02.420 EST
+Begin processing the 1012th record. Run 1, Event 1012, LumiSection 1 at 31-Dec-2000 23:18:02.590 EST
+Begin processing the 1013th record. Run 1, Event 1013, LumiSection 1 at 31-Dec-2000 23:18:02.640 EST
+Begin processing the 1014th record. Run 1, Event 1014, LumiSection 1 at 31-Dec-2000 23:18:02.690 EST
+Begin processing the 1015th record. Run 1, Event 1015, LumiSection 1 at 31-Dec-2000 23:18:02.860 EST
+Begin processing the 1016th record. Run 1, Event 1016, LumiSection 1 at 31-Dec-2000 23:18:02.930 EST
+Begin processing the 1017th record. Run 1, Event 1017, LumiSection 1 at 31-Dec-2000 23:18:02.980 EST
+Begin processing the 1018th record. Run 1, Event 1018, LumiSection 1 at 31-Dec-2000 23:18:03.150 EST
+Begin processing the 1019th record. Run 1, Event 1019, LumiSection 1 at 31-Dec-2000 23:18:03.200 EST
+Begin processing the 1020th record. Run 1, Event 1020, LumiSection 1 at 31-Dec-2000 23:18:03.270 EST
+Begin processing the 1021st record. Run 1, Event 1021, LumiSection 1 at 31-Dec-2000 23:18:03.440 EST
+Begin processing the 1022nd record. Run 1, Event 1022, LumiSection 1 at 31-Dec-2000 23:18:03.490 EST
+Begin processing the 1023rd record. Run 1, Event 1023, LumiSection 1 at 31-Dec-2000 23:18:03.540 EST
+Begin processing the 1024th record. Run 1, Event 1024, LumiSection 1 at 31-Dec-2000 23:18:03.730 EST
+Begin processing the 1025th record. Run 1, Event 1025, LumiSection 1 at 31-Dec-2000 23:18:03.780 EST
+Begin processing the 1026th record. Run 1, Event 1026, LumiSection 1 at 31-Dec-2000 23:18:03.830 EST
+Begin processing the 1027th record. Run 1, Event 1027, LumiSection 1 at 31-Dec-2000 23:18:04.000 EST
+Begin processing the 1028th record. Run 1, Event 1028, LumiSection 1 at 31-Dec-2000 23:18:04.050 EST
+Begin processing the 1029th record. Run 1, Event 1029, LumiSection 1 at 31-Dec-2000 23:18:04.120 EST
+Begin processing the 1030th record. Run 1, Event 1030, LumiSection 1 at 31-Dec-2000 23:18:04.290 EST
+Begin processing the 1031st record. Run 1, Event 1031, LumiSection 1 at 31-Dec-2000 23:18:04.340 EST
+Begin processing the 1032nd record. Run 1, Event 1032, LumiSection 1 at 31-Dec-2000 23:18:04.390 EST
+Begin processing the 1033rd record. Run 1, Event 1033, LumiSection 1 at 31-Dec-2000 23:18:04.580 EST
+Begin processing the 1034th record. Run 1, Event 1034, LumiSection 1 at 31-Dec-2000 23:18:04.630 EST
+Begin processing the 1035th record. Run 1, Event 1035, LumiSection 1 at 31-Dec-2000 23:18:04.680 EST
+Begin processing the 1036th record. Run 1, Event 1036, LumiSection 1 at 31-Dec-2000 23:18:04.850 EST
+Begin processing the 1037th record. Run 1, Event 1037, LumiSection 1 at 31-Dec-2000 23:18:04.920 EST
+Begin processing the 1038th record. Run 1, Event 1038, LumiSection 1 at 31-Dec-2000 23:18:04.970 EST
+Begin processing the 1039th record. Run 1, Event 1039, LumiSection 1 at 31-Dec-2000 23:18:05.140 EST
+Begin processing the 1040th record. Run 1, Event 1040, LumiSection 1 at 31-Dec-2000 23:18:05.190 EST
+Begin processing the 1041st record. Run 1, Event 1041, LumiSection 1 at 31-Dec-2000 23:18:05.240 EST
+Begin processing the 1042nd record. Run 1, Event 1042, LumiSection 1 at 31-Dec-2000 23:18:05.430 EST
+Begin processing the 1043rd record. Run 1, Event 1043, LumiSection 1 at 31-Dec-2000 23:18:05.480 EST
+Begin processing the 1044th record. Run 1, Event 1044, LumiSection 1 at 31-Dec-2000 23:18:05.530 EST
+Begin processing the 1045th record. Run 1, Event 1045, LumiSection 1 at 31-Dec-2000 23:18:05.700 EST
+Begin processing the 1046th record. Run 1, Event 1046, LumiSection 1 at 31-Dec-2000 23:18:05.770 EST
+Begin processing the 1047th record. Run 1, Event 1047, LumiSection 1 at 31-Dec-2000 23:18:05.820 EST
+Begin processing the 1048th record. Run 1, Event 1048, LumiSection 1 at 31-Dec-2000 23:18:05.990 EST
+Begin processing the 1049th record. Run 1, Event 1049, LumiSection 1 at 31-Dec-2000 23:18:06.040 EST
+Begin processing the 1050th record. Run 1, Event 1050, LumiSection 1 at 31-Dec-2000 23:18:06.090 EST
+Begin processing the 1051st record. Run 1, Event 1051, LumiSection 1 at 31-Dec-2000 23:18:06.280 EST
+Begin processing the 1052nd record. Run 1, Event 1052, LumiSection 1 at 31-Dec-2000 23:18:06.330 EST
+Begin processing the 1053rd record. Run 1, Event 1053, LumiSection 1 at 31-Dec-2000 23:18:06.380 EST
+Begin processing the 1054th record. Run 1, Event 1054, LumiSection 1 at 31-Dec-2000 23:18:06.550 EST
+Begin processing the 1055th record. Run 1, Event 1055, LumiSection 1 at 31-Dec-2000 23:18:06.620 EST
+Begin processing the 1056th record. Run 1, Event 1056, LumiSection 1 at 31-Dec-2000 23:18:06.670 EST
+Begin processing the 1057th record. Run 1, Event 1057, LumiSection 1 at 31-Dec-2000 23:18:06.840 EST
+Begin processing the 1058th record. Run 1, Event 1058, LumiSection 1 at 31-Dec-2000 23:18:06.890 EST
+Begin processing the 1059th record. Run 1, Event 1059, LumiSection 1 at 31-Dec-2000 23:18:06.960 EST
+Begin processing the 1060th record. Run 1, Event 1060, LumiSection 1 at 31-Dec-2000 23:18:07.130 EST
+Begin processing the 1061st record. Run 1, Event 1061, LumiSection 1 at 31-Dec-2000 23:18:07.180 EST
+Begin processing the 1062nd record. Run 1, Event 1062, LumiSection 1 at 31-Dec-2000 23:18:07.230 EST
+Begin processing the 1063rd record. Run 1, Event 1063, LumiSection 1 at 31-Dec-2000 23:18:07.400 EST
+Begin processing the 1064th record. Run 1, Event 1064, LumiSection 1 at 31-Dec-2000 23:18:07.470 EST
+Begin processing the 1065th record. Run 1, Event 1065, LumiSection 1 at 31-Dec-2000 23:18:07.520 EST
+Begin processing the 1066th record. Run 1, Event 1066, LumiSection 1 at 31-Dec-2000 23:18:07.690 EST
+Begin processing the 1067th record. Run 1, Event 1067, LumiSection 1 at 31-Dec-2000 23:18:07.740 EST
+Begin processing the 1068th record. Run 1, Event 1068, LumiSection 1 at 31-Dec-2000 23:18:07.810 EST
+Begin processing the 1069th record. Run 1, Event 1069, LumiSection 1 at 31-Dec-2000 23:18:07.980 EST
+Begin processing the 1070th record. Run 1, Event 1070, LumiSection 1 at 31-Dec-2000 23:18:08.030 EST
+Begin processing the 1071st record. Run 1, Event 1071, LumiSection 1 at 31-Dec-2000 23:18:08.080 EST
+Begin processing the 1072nd record. Run 1, Event 1072, LumiSection 1 at 31-Dec-2000 23:18:08.270 EST
+Begin processing the 1073rd record. Run 1, Event 1073, LumiSection 1 at 31-Dec-2000 23:18:08.320 EST
+Begin processing the 1074th record. Run 1, Event 1074, LumiSection 1 at 31-Dec-2000 23:18:08.370 EST
+Begin processing the 1075th record. Run 1, Event 1075, LumiSection 1 at 31-Dec-2000 23:18:08.540 EST
+Begin processing the 1076th record. Run 1, Event 1076, LumiSection 1 at 31-Dec-2000 23:18:08.590 EST
+Begin processing the 1077th record. Run 1, Event 1077, LumiSection 1 at 31-Dec-2000 23:18:08.660 EST
+Begin processing the 1078th record. Run 1, Event 1078, LumiSection 1 at 31-Dec-2000 23:18:08.830 EST
+Begin processing the 1079th record. Run 1, Event 1079, LumiSection 1 at 31-Dec-2000 23:18:08.880 EST
+Begin processing the 1080th record. Run 1, Event 1080, LumiSection 1 at 31-Dec-2000 23:18:08.930 EST
+Begin processing the 1081st record. Run 1, Event 1081, LumiSection 1 at 31-Dec-2000 23:18:09.120 EST
+Begin processing the 1082nd record. Run 1, Event 1082, LumiSection 1 at 31-Dec-2000 23:18:09.170 EST
+Begin processing the 1083rd record. Run 1, Event 1083, LumiSection 1 at 31-Dec-2000 23:18:09.220 EST
+Begin processing the 1084th record. Run 1, Event 1084, LumiSection 1 at 31-Dec-2000 23:18:09.390 EST
+Begin processing the 1085th record. Run 1, Event 1085, LumiSection 1 at 31-Dec-2000 23:18:09.440 EST
+Begin processing the 1086th record. Run 1, Event 1086, LumiSection 1 at 31-Dec-2000 23:18:09.510 EST
+Begin processing the 1087th record. Run 1, Event 1087, LumiSection 1 at 31-Dec-2000 23:18:09.680 EST
+Begin processing the 1088th record. Run 1, Event 1088, LumiSection 1 at 31-Dec-2000 23:18:09.730 EST
+Begin processing the 1089th record. Run 1, Event 1089, LumiSection 1 at 31-Dec-2000 23:18:09.780 EST
+Begin processing the 1090th record. Run 1, Event 1090, LumiSection 1 at 31-Dec-2000 23:18:09.970 EST
+Begin processing the 1091st record. Run 1, Event 1091, LumiSection 1 at 31-Dec-2000 23:18:10.020 EST
+Begin processing the 1092nd record. Run 1, Event 1092, LumiSection 1 at 31-Dec-2000 23:18:10.070 EST
+Begin processing the 1093rd record. Run 1, Event 1093, LumiSection 1 at 31-Dec-2000 23:18:10.240 EST
+Begin processing the 1094th record. Run 1, Event 1094, LumiSection 1 at 31-Dec-2000 23:18:10.310 EST
+Begin processing the 1095th record. Run 1, Event 1095, LumiSection 1 at 31-Dec-2000 23:18:10.360 EST
+Begin processing the 1096th record. Run 1, Event 1096, LumiSection 1 at 31-Dec-2000 23:18:10.530 EST
+Begin processing the 1097th record. Run 1, Event 1097, LumiSection 1 at 31-Dec-2000 23:18:10.580 EST
+Begin processing the 1098th record. Run 1, Event 1098, LumiSection 1 at 31-Dec-2000 23:18:10.630 EST
+Begin processing the 1099th record. Run 1, Event 1099, LumiSection 1 at 31-Dec-2000 23:18:10.940 EST
+Begin processing the 1100th record. Run 1, Event 1100, LumiSection 1 at 31-Dec-2000 23:18:10.990 EST
+Begin processing the 1101st record. Run 1, Event 1101, LumiSection 1 at 31-Dec-2000 23:18:11.040 EST
+Begin processing the 1102nd record. Run 1, Event 1102, LumiSection 1 at 31-Dec-2000 23:18:11.210 EST
+Begin processing the 1103rd record. Run 1, Event 1103, LumiSection 1 at 31-Dec-2000 23:18:11.280 EST
+Begin processing the 1104th record. Run 1, Event 1104, LumiSection 1 at 31-Dec-2000 23:18:11.330 EST
+Begin processing the 1105th record. Run 1, Event 1105, LumiSection 1 at 31-Dec-2000 23:18:11.500 EST
+Begin processing the 1106th record. Run 1, Event 1106, LumiSection 1 at 31-Dec-2000 23:18:11.550 EST
+Begin processing the 1107th record. Run 1, Event 1107, LumiSection 1 at 31-Dec-2000 23:18:11.620 EST
+Begin processing the 1108th record. Run 1, Event 1108, LumiSection 1 at 31-Dec-2000 23:18:11.790 EST
+Begin processing the 1109th record. Run 1, Event 1109, LumiSection 1 at 31-Dec-2000 23:18:11.840 EST
+Begin processing the 1110th record. Run 1, Event 1110, LumiSection 1 at 31-Dec-2000 23:18:11.890 EST
+Begin processing the 1111th record. Run 1, Event 1111, LumiSection 1 at 31-Dec-2000 23:18:12.060 EST
+Begin processing the 1112th record. Run 1, Event 1112, LumiSection 1 at 31-Dec-2000 23:18:12.130 EST
+Begin processing the 1113th record. Run 1, Event 1113, LumiSection 1 at 31-Dec-2000 23:18:12.180 EST
+Begin processing the 1114th record. Run 1, Event 1114, LumiSection 1 at 31-Dec-2000 23:18:12.350 EST
+Begin processing the 1115th record. Run 1, Event 1115, LumiSection 1 at 31-Dec-2000 23:18:12.400 EST
+Begin processing the 1116th record. Run 1, Event 1116, LumiSection 1 at 31-Dec-2000 23:18:12.470 EST
+Begin processing the 1117th record. Run 1, Event 1117, LumiSection 1 at 31-Dec-2000 23:18:12.640 EST
+Begin processing the 1118th record. Run 1, Event 1118, LumiSection 1 at 31-Dec-2000 23:18:12.690 EST
+Begin processing the 1119th record. Run 1, Event 1119, LumiSection 1 at 31-Dec-2000 23:18:12.740 EST
+Begin processing the 1120th record. Run 1, Event 1120, LumiSection 1 at 31-Dec-2000 23:18:12.910 EST
+Begin processing the 1121st record. Run 1, Event 1121, LumiSection 1 at 31-Dec-2000 23:18:12.980 EST
+Begin processing the 1122nd record. Run 1, Event 1122, LumiSection 1 at 31-Dec-2000 23:18:13.030 EST
+Begin processing the 1123rd record. Run 1, Event 1123, LumiSection 1 at 31-Dec-2000 23:18:13.200 EST
+Begin processing the 1124th record. Run 1, Event 1124, LumiSection 1 at 31-Dec-2000 23:18:13.250 EST
+Begin processing the 1125th record. Run 1, Event 1125, LumiSection 1 at 31-Dec-2000 23:18:13.320 EST
+Begin processing the 1126th record. Run 1, Event 1126, LumiSection 1 at 31-Dec-2000 23:18:13.490 EST
+Begin processing the 1127th record. Run 1, Event 1127, LumiSection 1 at 31-Dec-2000 23:18:13.540 EST
+Begin processing the 1128th record. Run 1, Event 1128, LumiSection 1 at 31-Dec-2000 23:18:13.590 EST
+Begin processing the 1129th record. Run 1, Event 1129, LumiSection 1 at 31-Dec-2000 23:18:13.780 EST
+Begin processing the 1130th record. Run 1, Event 1130, LumiSection 1 at 31-Dec-2000 23:18:13.830 EST
+Begin processing the 1131st record. Run 1, Event 1131, LumiSection 1 at 31-Dec-2000 23:18:13.880 EST
+Begin processing the 1132nd record. Run 1, Event 1132, LumiSection 1 at 31-Dec-2000 23:18:14.050 EST
+Begin processing the 1133rd record. Run 1, Event 1133, LumiSection 1 at 31-Dec-2000 23:18:14.100 EST
+Begin processing the 1134th record. Run 1, Event 1134, LumiSection 1 at 31-Dec-2000 23:18:14.170 EST
+Begin processing the 1135th record. Run 1, Event 1135, LumiSection 1 at 31-Dec-2000 23:18:14.340 EST
+Begin processing the 1136th record. Run 1, Event 1136, LumiSection 1 at 31-Dec-2000 23:18:14.390 EST
+Begin processing the 1137th record. Run 1, Event 1137, LumiSection 1 at 31-Dec-2000 23:18:14.440 EST
+Begin processing the 1138th record. Run 1, Event 1138, LumiSection 1 at 31-Dec-2000 23:18:14.750 EST
+Begin processing the 1139th record. Run 1, Event 1139, LumiSection 1 at 31-Dec-2000 23:18:14.800 EST
+Begin processing the 1140th record. Run 1, Event 1140, LumiSection 1 at 31-Dec-2000 23:18:14.850 EST
+Begin processing the 1141st record. Run 1, Event 1141, LumiSection 1 at 31-Dec-2000 23:18:15.020 EST
+Begin processing the 1142nd record. Run 1, Event 1142, LumiSection 1 at 31-Dec-2000 23:18:15.090 EST
+Begin processing the 1143rd record. Run 1, Event 1143, LumiSection 1 at 31-Dec-2000 23:18:15.140 EST
+Begin processing the 1144th record. Run 1, Event 1144, LumiSection 1 at 31-Dec-2000 23:18:15.310 EST
+Begin processing the 1145th record. Run 1, Event 1145, LumiSection 1 at 31-Dec-2000 23:18:15.360 EST
+Begin processing the 1146th record. Run 1, Event 1146, LumiSection 1 at 31-Dec-2000 23:18:15.410 EST
+Begin processing the 1147th record. Run 1, Event 1147, LumiSection 1 at 31-Dec-2000 23:18:15.600 EST
+Begin processing the 1148th record. Run 1, Event 1148, LumiSection 1 at 31-Dec-2000 23:18:15.650 EST
+Begin processing the 1149th record. Run 1, Event 1149, LumiSection 1 at 31-Dec-2000 23:18:15.700 EST
+Begin processing the 1150th record. Run 1, Event 1150, LumiSection 1 at 31-Dec-2000 23:18:15.870 EST
+Begin processing the 1151st record. Run 1, Event 1151, LumiSection 1 at 31-Dec-2000 23:18:15.940 EST
+Begin processing the 1152nd record. Run 1, Event 1152, LumiSection 1 at 31-Dec-2000 23:18:15.990 EST
+Begin processing the 1153rd record. Run 1, Event 1153, LumiSection 1 at 31-Dec-2000 23:18:16.160 EST
+Begin processing the 1154th record. Run 1, Event 1154, LumiSection 1 at 31-Dec-2000 23:18:16.210 EST
+Begin processing the 1155th record. Run 1, Event 1155, LumiSection 1 at 31-Dec-2000 23:18:16.260 EST
+Begin processing the 1156th record. Run 1, Event 1156, LumiSection 1 at 31-Dec-2000 23:18:16.450 EST
+Begin processing the 1157th record. Run 1, Event 1157, LumiSection 1 at 31-Dec-2000 23:18:16.500 EST
+Begin processing the 1158th record. Run 1, Event 1158, LumiSection 1 at 31-Dec-2000 23:18:16.550 EST
+Begin processing the 1159th record. Run 1, Event 1159, LumiSection 1 at 31-Dec-2000 23:18:16.720 EST
+Begin processing the 1160th record. Run 1, Event 1160, LumiSection 1 at 31-Dec-2000 23:18:16.790 EST
+Begin processing the 1161st record. Run 1, Event 1161, LumiSection 1 at 31-Dec-2000 23:18:16.840 EST
+Begin processing the 1162nd record. Run 1, Event 1162, LumiSection 1 at 31-Dec-2000 23:18:17.010 EST
+Begin processing the 1163rd record. Run 1, Event 1163, LumiSection 1 at 31-Dec-2000 23:18:17.060 EST
+Begin processing the 1164th record. Run 1, Event 1164, LumiSection 1 at 31-Dec-2000 23:18:17.130 EST
+Begin processing the 1165th record. Run 1, Event 1165, LumiSection 1 at 31-Dec-2000 23:18:17.420 EST
+Begin processing the 1166th record. Run 1, Event 1166, LumiSection 1 at 31-Dec-2000 23:18:17.470 EST
+Begin processing the 1167th record. Run 1, Event 1167, LumiSection 1 at 31-Dec-2000 23:18:17.520 EST
+Begin processing the 1168th record. Run 1, Event 1168, LumiSection 1 at 31-Dec-2000 23:18:17.690 EST
+Begin processing the 1169th record. Run 1, Event 1169, LumiSection 1 at 31-Dec-2000 23:18:17.760 EST
+Begin processing the 1170th record. Run 1, Event 1170, LumiSection 1 at 31-Dec-2000 23:18:17.810 EST
+Begin processing the 1171st record. Run 1, Event 1171, LumiSection 1 at 31-Dec-2000 23:18:17.980 EST
+Begin processing the 1172nd record. Run 1, Event 1172, LumiSection 1 at 31-Dec-2000 23:18:18.030 EST
+Begin processing the 1173rd record. Run 1, Event 1173, LumiSection 1 at 31-Dec-2000 23:18:18.100 EST
+Begin processing the 1174th record. Run 1, Event 1174, LumiSection 1 at 31-Dec-2000 23:18:18.270 EST
+Begin processing the 1175th record. Run 1, Event 1175, LumiSection 1 at 31-Dec-2000 23:18:18.320 EST
+Begin processing the 1176th record. Run 1, Event 1176, LumiSection 1 at 31-Dec-2000 23:18:18.370 EST
+Begin processing the 1177th record. Run 1, Event 1177, LumiSection 1 at 31-Dec-2000 23:18:18.560 EST
+Begin processing the 1178th record. Run 1, Event 1178, LumiSection 1 at 31-Dec-2000 23:18:18.610 EST
+Begin processing the 1179th record. Run 1, Event 1179, LumiSection 1 at 31-Dec-2000 23:18:18.660 EST
+Begin processing the 1180th record. Run 1, Event 1180, LumiSection 1 at 31-Dec-2000 23:18:18.830 EST
+Begin processing the 1181st record. Run 1, Event 1181, LumiSection 1 at 31-Dec-2000 23:18:18.880 EST
+Begin processing the 1182nd record. Run 1, Event 1182, LumiSection 1 at 31-Dec-2000 23:18:18.950 EST
+Begin processing the 1183rd record. Run 1, Event 1183, LumiSection 1 at 31-Dec-2000 23:18:19.120 EST
+Begin processing the 1184th record. Run 1, Event 1184, LumiSection 1 at 31-Dec-2000 23:18:19.170 EST
+Begin processing the 1185th record. Run 1, Event 1185, LumiSection 1 at 31-Dec-2000 23:18:19.220 EST
+Begin processing the 1186th record. Run 1, Event 1186, LumiSection 1 at 31-Dec-2000 23:18:19.410 EST
+Begin processing the 1187th record. Run 1, Event 1187, LumiSection 1 at 31-Dec-2000 23:18:19.460 EST
+Begin processing the 1188th record. Run 1, Event 1188, LumiSection 1 at 31-Dec-2000 23:18:19.510 EST
+Begin processing the 1189th record. Run 1, Event 1189, LumiSection 1 at 31-Dec-2000 23:18:19.680 EST
+Begin processing the 1190th record. Run 1, Event 1190, LumiSection 1 at 31-Dec-2000 23:18:19.730 EST
+Begin processing the 1191st record. Run 1, Event 1191, LumiSection 1 at 31-Dec-2000 23:18:19.800 EST
+Begin processing the 1192nd record. Run 1, Event 1192, LumiSection 1 at 31-Dec-2000 23:18:19.970 EST
+Begin processing the 1193rd record. Run 1, Event 1193, LumiSection 1 at 31-Dec-2000 23:18:20.020 EST
+Begin processing the 1194th record. Run 1, Event 1194, LumiSection 1 at 31-Dec-2000 23:18:20.070 EST
+Begin processing the 1195th record. Run 1, Event 1195, LumiSection 1 at 31-Dec-2000 23:18:20.260 EST
+Begin processing the 1196th record. Run 1, Event 1196, LumiSection 1 at 31-Dec-2000 23:18:20.310 EST
+Begin processing the 1197th record. Run 1, Event 1197, LumiSection 1 at 31-Dec-2000 23:18:20.360 EST
+Begin processing the 1198th record. Run 1, Event 1198, LumiSection 1 at 31-Dec-2000 23:18:20.530 EST
+Begin processing the 1199th record. Run 1, Event 1199, LumiSection 1 at 31-Dec-2000 23:18:20.600 EST
+Begin processing the 1200th record. Run 1, Event 1200, LumiSection 1 at 31-Dec-2000 23:18:20.650 EST
+Begin processing the 1201st record. Run 1, Event 1201, LumiSection 1 at 31-Dec-2000 23:18:20.820 EST
+Begin processing the 1202nd record. Run 1, Event 1202, LumiSection 1 at 31-Dec-2000 23:18:20.870 EST
+Begin processing the 1203rd record. Run 1, Event 1203, LumiSection 1 at 31-Dec-2000 23:18:20.920 EST
+Begin processing the 1204th record. Run 1, Event 1204, LumiSection 1 at 31-Dec-2000 23:18:21.110 EST
+Begin processing the 1205th record. Run 1, Event 1205, LumiSection 1 at 31-Dec-2000 23:18:21.160 EST
+Begin processing the 1206th record. Run 1, Event 1206, LumiSection 1 at 31-Dec-2000 23:18:21.210 EST
+Begin processing the 1207th record. Run 1, Event 1207, LumiSection 1 at 31-Dec-2000 23:18:21.380 EST
+Begin processing the 1208th record. Run 1, Event 1208, LumiSection 1 at 31-Dec-2000 23:18:21.450 EST
+Begin processing the 1209th record. Run 1, Event 1209, LumiSection 1 at 31-Dec-2000 23:18:21.500 EST
+Begin processing the 1210th record. Run 1, Event 1210, LumiSection 1 at 31-Dec-2000 23:18:21.670 EST
+Begin processing the 1211th record. Run 1, Event 1211, LumiSection 1 at 31-Dec-2000 23:18:21.720 EST
+Begin processing the 1212th record. Run 1, Event 1212, LumiSection 1 at 31-Dec-2000 23:18:21.790 EST
+Begin processing the 1213th record. Run 1, Event 1213, LumiSection 1 at 31-Dec-2000 23:18:21.960 EST
+Begin processing the 1214th record. Run 1, Event 1214, LumiSection 1 at 31-Dec-2000 23:18:22.010 EST
+Begin processing the 1215th record. Run 1, Event 1215, LumiSection 1 at 31-Dec-2000 23:18:22.060 EST
+Begin processing the 1216th record. Run 1, Event 1216, LumiSection 1 at 31-Dec-2000 23:18:22.230 EST
+Begin processing the 1217th record. Run 1, Event 1217, LumiSection 1 at 31-Dec-2000 23:18:22.300 EST
+Begin processing the 1218th record. Run 1, Event 1218, LumiSection 1 at 31-Dec-2000 23:18:22.350 EST
+Begin processing the 1219th record. Run 1, Event 1219, LumiSection 1 at 31-Dec-2000 23:18:22.520 EST
+Begin processing the 1220th record. Run 1, Event 1220, LumiSection 1 at 31-Dec-2000 23:18:22.570 EST
+Begin processing the 1221st record. Run 1, Event 1221, LumiSection 1 at 31-Dec-2000 23:18:22.760 EST
+Begin processing the 1222nd record. Run 1, Event 1222, LumiSection 1 at 31-Dec-2000 23:18:22.930 EST
+Begin processing the 1223rd record. Run 1, Event 1223, LumiSection 1 at 31-Dec-2000 23:18:22.980 EST
+Begin processing the 1224th record. Run 1, Event 1224, LumiSection 1 at 31-Dec-2000 23:18:23.030 EST
+Begin processing the 1225th record. Run 1, Event 1225, LumiSection 1 at 31-Dec-2000 23:18:23.200 EST
+Begin processing the 1226th record. Run 1, Event 1226, LumiSection 1 at 31-Dec-2000 23:18:23.270 EST
+Begin processing the 1227th record. Run 1, Event 1227, LumiSection 1 at 31-Dec-2000 23:18:23.320 EST
+Begin processing the 1228th record. Run 1, Event 1228, LumiSection 1 at 31-Dec-2000 23:18:23.490 EST
+Begin processing the 1229th record. Run 1, Event 1229, LumiSection 1 at 31-Dec-2000 23:18:23.540 EST
+Begin processing the 1230th record. Run 1, Event 1230, LumiSection 1 at 31-Dec-2000 23:18:23.610 EST
+Begin processing the 1231st record. Run 1, Event 1231, LumiSection 1 at 31-Dec-2000 23:18:23.780 EST
+Begin processing the 1232nd record. Run 1, Event 1232, LumiSection 1 at 31-Dec-2000 23:18:23.830 EST
+Begin processing the 1233rd record. Run 1, Event 1233, LumiSection 1 at 31-Dec-2000 23:18:23.880 EST
+Begin processing the 1234th record. Run 1, Event 1234, LumiSection 1 at 31-Dec-2000 23:18:24.070 EST
+Begin processing the 1235th record. Run 1, Event 1235, LumiSection 1 at 31-Dec-2000 23:18:24.120 EST
+Begin processing the 1236th record. Run 1, Event 1236, LumiSection 1 at 31-Dec-2000 23:18:24.170 EST
+Begin processing the 1237th record. Run 1, Event 1237, LumiSection 1 at 31-Dec-2000 23:18:24.340 EST
+Begin processing the 1238th record. Run 1, Event 1238, LumiSection 1 at 31-Dec-2000 23:18:24.390 EST
+Begin processing the 1239th record. Run 1, Event 1239, LumiSection 1 at 31-Dec-2000 23:18:24.460 EST
+Begin processing the 1240th record. Run 1, Event 1240, LumiSection 1 at 31-Dec-2000 23:18:24.630 EST
+Begin processing the 1241st record. Run 1, Event 1241, LumiSection 1 at 31-Dec-2000 23:18:24.680 EST
+Begin processing the 1242nd record. Run 1, Event 1242, LumiSection 1 at 31-Dec-2000 23:18:24.730 EST
+Begin processing the 1243rd record. Run 1, Event 1243, LumiSection 1 at 31-Dec-2000 23:18:24.920 EST
+Begin processing the 1244th record. Run 1, Event 1244, LumiSection 1 at 31-Dec-2000 23:18:24.970 EST
+Begin processing the 1245th record. Run 1, Event 1245, LumiSection 1 at 31-Dec-2000 23:18:25.020 EST
+Begin processing the 1246th record. Run 1, Event 1246, LumiSection 1 at 31-Dec-2000 23:18:25.190 EST
+Begin processing the 1247th record. Run 1, Event 1247, LumiSection 1 at 31-Dec-2000 23:18:25.260 EST
+Begin processing the 1248th record. Run 1, Event 1248, LumiSection 1 at 31-Dec-2000 23:18:25.310 EST
+Begin processing the 1249th record. Run 1, Event 1249, LumiSection 1 at 31-Dec-2000 23:18:25.480 EST
+Begin processing the 1250th record. Run 1, Event 1250, LumiSection 1 at 31-Dec-2000 23:18:25.530 EST
+Begin processing the 1251st record. Run 1, Event 1251, LumiSection 1 at 31-Dec-2000 23:18:25.580 EST
+Begin processing the 1252nd record. Run 1, Event 1252, LumiSection 1 at 31-Dec-2000 23:18:25.770 EST
+Begin processing the 1253rd record. Run 1, Event 1253, LumiSection 1 at 31-Dec-2000 23:18:25.820 EST
+Begin processing the 1254th record. Run 1, Event 1254, LumiSection 1 at 31-Dec-2000 23:18:25.870 EST
+Begin processing the 1255th record. Run 1, Event 1255, LumiSection 1 at 31-Dec-2000 23:18:26.040 EST
+Begin processing the 1256th record. Run 1, Event 1256, LumiSection 1 at 31-Dec-2000 23:18:26.110 EST
+Begin processing the 1257th record. Run 1, Event 1257, LumiSection 1 at 31-Dec-2000 23:18:26.160 EST
+Begin processing the 1258th record. Run 1, Event 1258, LumiSection 1 at 31-Dec-2000 23:18:26.330 EST
+Begin processing the 1259th record. Run 1, Event 1259, LumiSection 1 at 31-Dec-2000 23:18:26.380 EST
+Begin processing the 1260th record. Run 1, Event 1260, LumiSection 1 at 31-Dec-2000 23:18:26.430 EST
+Begin processing the 1261st record. Run 1, Event 1261, LumiSection 1 at 31-Dec-2000 23:18:26.620 EST
+Begin processing the 1262nd record. Run 1, Event 1262, LumiSection 1 at 31-Dec-2000 23:18:26.670 EST
+Begin processing the 1263rd record. Run 1, Event 1263, LumiSection 1 at 31-Dec-2000 23:18:26.720 EST
+Begin processing the 1264th record. Run 1, Event 1264, LumiSection 1 at 31-Dec-2000 23:18:26.890 EST
+Begin processing the 1265th record. Run 1, Event 1265, LumiSection 1 at 31-Dec-2000 23:18:26.960 EST
+Begin processing the 1266th record. Run 1, Event 1266, LumiSection 1 at 31-Dec-2000 23:18:27.010 EST
+Begin processing the 1267th record. Run 1, Event 1267, LumiSection 1 at 31-Dec-2000 23:18:27.180 EST
+Begin processing the 1268th record. Run 1, Event 1268, LumiSection 1 at 31-Dec-2000 23:18:27.230 EST
+Begin processing the 1269th record. Run 1, Event 1269, LumiSection 1 at 31-Dec-2000 23:18:27.300 EST
+Begin processing the 1270th record. Run 1, Event 1270, LumiSection 1 at 31-Dec-2000 23:18:27.470 EST
+Begin processing the 1271st record. Run 1, Event 1271, LumiSection 1 at 31-Dec-2000 23:18:27.520 EST
+Begin processing the 1272nd record. Run 1, Event 1272, LumiSection 1 at 31-Dec-2000 23:18:27.570 EST
+Begin processing the 1273rd record. Run 1, Event 1273, LumiSection 1 at 31-Dec-2000 23:18:27.740 EST
+Begin processing the 1274th record. Run 1, Event 1274, LumiSection 1 at 31-Dec-2000 23:18:27.810 EST
+Begin processing the 1275th record. Run 1, Event 1275, LumiSection 1 at 31-Dec-2000 23:18:27.860 EST
+Begin processing the 1276th record. Run 1, Event 1276, LumiSection 1 at 31-Dec-2000 23:18:28.030 EST
+Begin processing the 1277th record. Run 1, Event 1277, LumiSection 1 at 31-Dec-2000 23:18:28.080 EST
+Begin processing the 1278th record. Run 1, Event 1278, LumiSection 1 at 31-Dec-2000 23:18:28.150 EST
+Begin processing the 1279th record. Run 1, Event 1279, LumiSection 1 at 31-Dec-2000 23:18:28.320 EST
+Begin processing the 1280th record. Run 1, Event 1280, LumiSection 1 at 31-Dec-2000 23:18:28.370 EST
+Begin processing the 1281st record. Run 1, Event 1281, LumiSection 1 at 31-Dec-2000 23:18:28.420 EST
+Begin processing the 1282nd record. Run 1, Event 1282, LumiSection 1 at 31-Dec-2000 23:18:28.590 EST
+Begin processing the 1283rd record. Run 1, Event 1283, LumiSection 1 at 31-Dec-2000 23:18:28.660 EST
+Begin processing the 1284th record. Run 1, Event 1284, LumiSection 1 at 31-Dec-2000 23:18:28.710 EST
+Begin processing the 1285th record. Run 1, Event 1285, LumiSection 1 at 31-Dec-2000 23:18:28.880 EST
+Begin processing the 1286th record. Run 1, Event 1286, LumiSection 1 at 31-Dec-2000 23:18:28.930 EST
+Begin processing the 1287th record. Run 1, Event 1287, LumiSection 1 at 31-Dec-2000 23:18:29.000 EST
+Begin processing the 1288th record. Run 1, Event 1288, LumiSection 1 at 31-Dec-2000 23:18:29.170 EST
+Begin processing the 1289th record. Run 1, Event 1289, LumiSection 1 at 31-Dec-2000 23:18:29.220 EST
+Begin processing the 1290th record. Run 1, Event 1290, LumiSection 1 at 31-Dec-2000 23:18:29.270 EST
+Begin processing the 1291st record. Run 1, Event 1291, LumiSection 1 at 31-Dec-2000 23:18:29.460 EST
+Begin processing the 1292nd record. Run 1, Event 1292, LumiSection 1 at 31-Dec-2000 23:18:29.510 EST
+Begin processing the 1293rd record. Run 1, Event 1293, LumiSection 1 at 31-Dec-2000 23:18:29.560 EST
+Begin processing the 1294th record. Run 1, Event 1294, LumiSection 1 at 31-Dec-2000 23:18:29.730 EST
+Begin processing the 1295th record. Run 1, Event 1295, LumiSection 1 at 31-Dec-2000 23:18:29.780 EST
+Begin processing the 1296th record. Run 1, Event 1296, LumiSection 1 at 31-Dec-2000 23:18:29.850 EST
+Begin processing the 1297th record. Run 1, Event 1297, LumiSection 1 at 31-Dec-2000 23:18:30.020 EST
+Begin processing the 1298th record. Run 1, Event 1298, LumiSection 1 at 31-Dec-2000 23:18:30.070 EST
+Begin processing the 1299th record. Run 1, Event 1299, LumiSection 1 at 31-Dec-2000 23:18:30.120 EST
+Begin processing the 1300th record. Run 1, Event 1300, LumiSection 1 at 31-Dec-2000 23:18:30.310 EST
+Begin processing the 1301st record. Run 1, Event 1301, LumiSection 1 at 31-Dec-2000 23:18:30.360 EST
+Begin processing the 1302nd record. Run 1, Event 1302, LumiSection 1 at 31-Dec-2000 23:18:30.410 EST
+Begin processing the 1303rd record. Run 1, Event 1303, LumiSection 1 at 31-Dec-2000 23:18:30.580 EST
+Begin processing the 1304th record. Run 1, Event 1304, LumiSection 1 at 31-Dec-2000 23:18:30.650 EST
+Begin processing the 1305th record. Run 1, Event 1305, LumiSection 1 at 31-Dec-2000 23:18:30.700 EST
+Begin processing the 1306th record. Run 1, Event 1306, LumiSection 1 at 31-Dec-2000 23:18:30.870 EST
+Begin processing the 1307th record. Run 1, Event 1307, LumiSection 1 at 31-Dec-2000 23:18:30.920 EST
+Begin processing the 1308th record. Run 1, Event 1308, LumiSection 1 at 31-Dec-2000 23:18:30.970 EST
+Begin processing the 1309th record. Run 1, Event 1309, LumiSection 1 at 31-Dec-2000 23:18:31.160 EST
+Begin processing the 1310th record. Run 1, Event 1310, LumiSection 1 at 31-Dec-2000 23:18:31.210 EST
+Begin processing the 1311th record. Run 1, Event 1311, LumiSection 1 at 31-Dec-2000 23:18:31.260 EST
+Begin processing the 1312th record. Run 1, Event 1312, LumiSection 1 at 31-Dec-2000 23:18:31.430 EST
+Begin processing the 1313th record. Run 1, Event 1313, LumiSection 1 at 31-Dec-2000 23:18:31.500 EST
+Begin processing the 1314th record. Run 1, Event 1314, LumiSection 1 at 31-Dec-2000 23:18:31.550 EST
+Begin processing the 1315th record. Run 1, Event 1315, LumiSection 1 at 31-Dec-2000 23:18:31.720 EST
+Begin processing the 1316th record. Run 1, Event 1316, LumiSection 1 at 31-Dec-2000 23:18:31.770 EST
+Begin processing the 1317th record. Run 1, Event 1317, LumiSection 1 at 31-Dec-2000 23:18:31.820 EST
+Begin processing the 1318th record. Run 1, Event 1318, LumiSection 1 at 31-Dec-2000 23:18:32.010 EST
+Begin processing the 1319th record. Run 1, Event 1319, LumiSection 1 at 31-Dec-2000 23:18:32.060 EST
+Begin processing the 1320th record. Run 1, Event 1320, LumiSection 1 at 31-Dec-2000 23:18:32.110 EST
+Begin processing the 1321st record. Run 1, Event 1321, LumiSection 1 at 31-Dec-2000 23:18:32.280 EST
+Begin processing the 1322nd record. Run 1, Event 1322, LumiSection 1 at 31-Dec-2000 23:18:32.350 EST
+Begin processing the 1323rd record. Run 1, Event 1323, LumiSection 1 at 31-Dec-2000 23:18:32.400 EST
+Begin processing the 1324th record. Run 1, Event 1324, LumiSection 1 at 31-Dec-2000 23:18:32.570 EST
+Begin processing the 1325th record. Run 1, Event 1325, LumiSection 1 at 31-Dec-2000 23:18:32.620 EST
+Begin processing the 1326th record. Run 1, Event 1326, LumiSection 1 at 31-Dec-2000 23:18:32.690 EST
+Begin processing the 1327th record. Run 1, Event 1327, LumiSection 1 at 31-Dec-2000 23:18:32.860 EST
+Begin processing the 1328th record. Run 1, Event 1328, LumiSection 1 at 31-Dec-2000 23:18:32.910 EST
+Begin processing the 1329th record. Run 1, Event 1329, LumiSection 1 at 31-Dec-2000 23:18:32.960 EST
+Begin processing the 1330th record. Run 1, Event 1330, LumiSection 1 at 31-Dec-2000 23:18:33.130 EST
+Begin processing the 1331st record. Run 1, Event 1331, LumiSection 1 at 31-Dec-2000 23:18:33.200 EST
+Begin processing the 1332nd record. Run 1, Event 1332, LumiSection 1 at 31-Dec-2000 23:18:33.250 EST
+Begin processing the 1333rd record. Run 1, Event 1333, LumiSection 1 at 31-Dec-2000 23:18:33.420 EST
+Begin processing the 1334th record. Run 1, Event 1334, LumiSection 1 at 31-Dec-2000 23:18:33.470 EST
+Begin processing the 1335th record. Run 1, Event 1335, LumiSection 1 at 31-Dec-2000 23:18:33.540 EST
+Begin processing the 1336th record. Run 1, Event 1336, LumiSection 1 at 31-Dec-2000 23:18:33.710 EST
+Begin processing the 1337th record. Run 1, Event 1337, LumiSection 1 at 31-Dec-2000 23:18:33.760 EST
+Begin processing the 1338th record. Run 1, Event 1338, LumiSection 1 at 31-Dec-2000 23:18:33.810 EST
+Begin processing the 1339th record. Run 1, Event 1339, LumiSection 1 at 31-Dec-2000 23:18:34.000 EST
+Begin processing the 1340th record. Run 1, Event 1340, LumiSection 1 at 31-Dec-2000 23:18:34.050 EST
+Begin processing the 1341st record. Run 1, Event 1341, LumiSection 1 at 31-Dec-2000 23:18:34.100 EST
+Begin processing the 1342nd record. Run 1, Event 1342, LumiSection 1 at 31-Dec-2000 23:18:34.270 EST
+Begin processing the 1343rd record. Run 1, Event 1343, LumiSection 1 at 31-Dec-2000 23:18:34.440 EST
+Begin processing the 1344th record. Run 1, Event 1344, LumiSection 1 at 31-Dec-2000 23:18:34.510 EST
+Begin processing the 1345th record. Run 1, Event 1345, LumiSection 1 at 31-Dec-2000 23:18:34.680 EST
+Begin processing the 1346th record. Run 1, Event 1346, LumiSection 1 at 31-Dec-2000 23:18:34.730 EST
+Begin processing the 1347th record. Run 1, Event 1347, LumiSection 1 at 31-Dec-2000 23:18:34.780 EST
+Begin processing the 1348th record. Run 1, Event 1348, LumiSection 1 at 31-Dec-2000 23:18:34.970 EST
+Begin processing the 1349th record. Run 1, Event 1349, LumiSection 1 at 31-Dec-2000 23:18:35.020 EST
+Begin processing the 1350th record. Run 1, Event 1350, LumiSection 1 at 31-Dec-2000 23:18:35.070 EST
+Begin processing the 1351st record. Run 1, Event 1351, LumiSection 1 at 31-Dec-2000 23:18:35.240 EST
+Begin processing the 1352nd record. Run 1, Event 1352, LumiSection 1 at 31-Dec-2000 23:18:35.290 EST
+Begin processing the 1353rd record. Run 1, Event 1353, LumiSection 1 at 31-Dec-2000 23:18:35.360 EST
+Begin processing the 1354th record. Run 1, Event 1354, LumiSection 1 at 31-Dec-2000 23:18:35.530 EST
+Begin processing the 1355th record. Run 1, Event 1355, LumiSection 1 at 31-Dec-2000 23:18:35.580 EST
+Begin processing the 1356th record. Run 1, Event 1356, LumiSection 1 at 31-Dec-2000 23:18:35.630 EST
+Begin processing the 1357th record. Run 1, Event 1357, LumiSection 1 at 31-Dec-2000 23:18:35.820 EST
+Begin processing the 1358th record. Run 1, Event 1358, LumiSection 1 at 31-Dec-2000 23:18:35.870 EST
+Begin processing the 1359th record. Run 1, Event 1359, LumiSection 1 at 31-Dec-2000 23:18:35.920 EST
+Begin processing the 1360th record. Run 1, Event 1360, LumiSection 1 at 31-Dec-2000 23:18:36.090 EST
+Begin processing the 1361st record. Run 1, Event 1361, LumiSection 1 at 31-Dec-2000 23:18:36.160 EST
+Begin processing the 1362nd record. Run 1, Event 1362, LumiSection 1 at 31-Dec-2000 23:18:36.210 EST
+Begin processing the 1363rd record. Run 1, Event 1363, LumiSection 1 at 31-Dec-2000 23:18:36.380 EST
+Begin processing the 1364th record. Run 1, Event 1364, LumiSection 1 at 31-Dec-2000 23:18:36.430 EST
+Begin processing the 1365th record. Run 1, Event 1365, LumiSection 1 at 31-Dec-2000 23:18:36.480 EST
+Begin processing the 1366th record. Run 1, Event 1366, LumiSection 1 at 31-Dec-2000 23:18:36.670 EST
+Begin processing the 1367th record. Run 1, Event 1367, LumiSection 1 at 31-Dec-2000 23:18:36.720 EST
+Begin processing the 1368th record. Run 1, Event 1368, LumiSection 1 at 31-Dec-2000 23:18:36.770 EST
+Begin processing the 1369th record. Run 1, Event 1369, LumiSection 1 at 31-Dec-2000 23:18:36.940 EST
+Begin processing the 1370th record. Run 1, Event 1370, LumiSection 1 at 31-Dec-2000 23:18:37.010 EST
+Begin processing the 1371st record. Run 1, Event 1371, LumiSection 1 at 31-Dec-2000 23:18:37.060 EST
+Begin processing the 1372nd record. Run 1, Event 1372, LumiSection 1 at 31-Dec-2000 23:18:37.230 EST
+Begin processing the 1373rd record. Run 1, Event 1373, LumiSection 1 at 31-Dec-2000 23:18:37.280 EST
+Begin processing the 1374th record. Run 1, Event 1374, LumiSection 1 at 31-Dec-2000 23:18:37.350 EST
+Begin processing the 1375th record. Run 1, Event 1375, LumiSection 1 at 31-Dec-2000 23:18:37.520 EST
+Begin processing the 1376th record. Run 1, Event 1376, LumiSection 1 at 31-Dec-2000 23:18:37.570 EST
+Begin processing the 1377th record. Run 1, Event 1377, LumiSection 1 at 31-Dec-2000 23:18:37.620 EST
+Begin processing the 1378th record. Run 1, Event 1378, LumiSection 1 at 31-Dec-2000 23:18:37.790 EST
+Begin processing the 1379th record. Run 1, Event 1379, LumiSection 1 at 31-Dec-2000 23:18:37.860 EST
+Begin processing the 1380th record. Run 1, Event 1380, LumiSection 1 at 31-Dec-2000 23:18:37.910 EST
+Begin processing the 1381st record. Run 1, Event 1381, LumiSection 1 at 31-Dec-2000 23:18:38.080 EST
+Begin processing the 1382nd record. Run 1, Event 1382, LumiSection 1 at 31-Dec-2000 23:18:38.130 EST
+Begin processing the 1383rd record. Run 1, Event 1383, LumiSection 1 at 31-Dec-2000 23:18:38.200 EST
+Begin processing the 1384th record. Run 1, Event 1384, LumiSection 1 at 31-Dec-2000 23:18:38.370 EST
+Begin processing the 1385th record. Run 1, Event 1385, LumiSection 1 at 31-Dec-2000 23:18:38.420 EST
+Begin processing the 1386th record. Run 1, Event 1386, LumiSection 1 at 31-Dec-2000 23:18:38.470 EST
+Begin processing the 1387th record. Run 1, Event 1387, LumiSection 1 at 31-Dec-2000 23:18:38.640 EST
+Begin processing the 1388th record. Run 1, Event 1388, LumiSection 1 at 31-Dec-2000 23:18:38.710 EST
+Begin processing the 1389th record. Run 1, Event 1389, LumiSection 1 at 31-Dec-2000 23:18:38.760 EST
+Begin processing the 1390th record. Run 1, Event 1390, LumiSection 1 at 31-Dec-2000 23:18:38.930 EST
+Begin processing the 1391st record. Run 1, Event 1391, LumiSection 1 at 31-Dec-2000 23:18:38.980 EST
+Begin processing the 1392nd record. Run 1, Event 1392, LumiSection 1 at 31-Dec-2000 23:18:39.050 EST
+Begin processing the 1393rd record. Run 1, Event 1393, LumiSection 1 at 31-Dec-2000 23:18:39.220 EST
+Begin processing the 1394th record. Run 1, Event 1394, LumiSection 1 at 31-Dec-2000 23:18:39.270 EST
+Begin processing the 1395th record. Run 1, Event 1395, LumiSection 1 at 31-Dec-2000 23:18:39.320 EST
+Begin processing the 1396th record. Run 1, Event 1396, LumiSection 1 at 31-Dec-2000 23:18:39.510 EST
+Begin processing the 1397th record. Run 1, Event 1397, LumiSection 1 at 31-Dec-2000 23:18:39.560 EST
+Begin processing the 1398th record. Run 1, Event 1398, LumiSection 1 at 31-Dec-2000 23:18:39.610 EST
+Begin processing the 1399th record. Run 1, Event 1399, LumiSection 1 at 31-Dec-2000 23:18:39.780 EST
+Begin processing the 1400th record. Run 1, Event 1400, LumiSection 1 at 31-Dec-2000 23:18:39.830 EST
+Begin processing the 1401st record. Run 1, Event 1401, LumiSection 1 at 31-Dec-2000 23:18:39.900 EST
+Begin processing the 1402nd record. Run 1, Event 1402, LumiSection 1 at 31-Dec-2000 23:18:40.070 EST
+Begin processing the 1403rd record. Run 1, Event 1403, LumiSection 1 at 31-Dec-2000 23:18:40.120 EST
+Begin processing the 1404th record. Run 1, Event 1404, LumiSection 1 at 31-Dec-2000 23:18:40.170 EST
+Begin processing the 1405th record. Run 1, Event 1405, LumiSection 1 at 31-Dec-2000 23:18:40.360 EST
+Begin processing the 1406th record. Run 1, Event 1406, LumiSection 1 at 31-Dec-2000 23:18:40.410 EST
+Begin processing the 1407th record. Run 1, Event 1407, LumiSection 1 at 31-Dec-2000 23:18:40.460 EST
+Begin processing the 1408th record. Run 1, Event 1408, LumiSection 1 at 31-Dec-2000 23:18:40.630 EST
+Begin processing the 1409th record. Run 1, Event 1409, LumiSection 1 at 31-Dec-2000 23:18:40.700 EST
+Begin processing the 1410th record. Run 1, Event 1410, LumiSection 1 at 31-Dec-2000 23:18:40.750 EST
+Begin processing the 1411th record. Run 1, Event 1411, LumiSection 1 at 31-Dec-2000 23:18:40.920 EST
+Begin processing the 1412th record. Run 1, Event 1412, LumiSection 1 at 31-Dec-2000 23:18:40.970 EST
+Begin processing the 1413th record. Run 1, Event 1413, LumiSection 1 at 31-Dec-2000 23:18:41.020 EST
+Begin processing the 1414th record. Run 1, Event 1414, LumiSection 1 at 31-Dec-2000 23:18:41.210 EST
+Begin processing the 1415th record. Run 1, Event 1415, LumiSection 1 at 31-Dec-2000 23:18:41.260 EST
+Begin processing the 1416th record. Run 1, Event 1416, LumiSection 1 at 31-Dec-2000 23:18:41.310 EST
+Begin processing the 1417th record. Run 1, Event 1417, LumiSection 1 at 31-Dec-2000 23:18:41.480 EST
+Begin processing the 1418th record. Run 1, Event 1418, LumiSection 1 at 31-Dec-2000 23:18:41.550 EST
+Begin processing the 1419th record. Run 1, Event 1419, LumiSection 1 at 31-Dec-2000 23:18:41.600 EST
+Begin processing the 1420th record. Run 1, Event 1420, LumiSection 1 at 31-Dec-2000 23:18:41.770 EST
+Begin processing the 1421st record. Run 1, Event 1421, LumiSection 1 at 31-Dec-2000 23:18:41.820 EST
+Begin processing the 1422nd record. Run 1, Event 1422, LumiSection 1 at 31-Dec-2000 23:18:41.870 EST
+Begin processing the 1423rd record. Run 1, Event 1423, LumiSection 1 at 31-Dec-2000 23:18:42.060 EST
+Begin processing the 1424th record. Run 1, Event 1424, LumiSection 1 at 31-Dec-2000 23:18:42.110 EST
+Begin processing the 1425th record. Run 1, Event 1425, LumiSection 1 at 31-Dec-2000 23:18:42.160 EST
+Begin processing the 1426th record. Run 1, Event 1426, LumiSection 1 at 31-Dec-2000 23:18:42.330 EST
+Begin processing the 1427th record. Run 1, Event 1427, LumiSection 1 at 31-Dec-2000 23:18:42.400 EST
+Begin processing the 1428th record. Run 1, Event 1428, LumiSection 1 at 31-Dec-2000 23:18:42.450 EST
+Begin processing the 1429th record. Run 1, Event 1429, LumiSection 1 at 31-Dec-2000 23:18:42.620 EST
+Begin processing the 1430th record. Run 1, Event 1430, LumiSection 1 at 31-Dec-2000 23:18:42.670 EST
+Begin processing the 1431st record. Run 1, Event 1431, LumiSection 1 at 31-Dec-2000 23:18:42.740 EST
+Begin processing the 1432nd record. Run 1, Event 1432, LumiSection 1 at 31-Dec-2000 23:18:42.910 EST
+Begin processing the 1433rd record. Run 1, Event 1433, LumiSection 1 at 31-Dec-2000 23:18:42.960 EST
+Begin processing the 1434th record. Run 1, Event 1434, LumiSection 1 at 31-Dec-2000 23:18:43.010 EST
+Begin processing the 1435th record. Run 1, Event 1435, LumiSection 1 at 31-Dec-2000 23:18:43.180 EST
+Begin processing the 1436th record. Run 1, Event 1436, LumiSection 1 at 31-Dec-2000 23:18:43.250 EST
+Begin processing the 1437th record. Run 1, Event 1437, LumiSection 1 at 31-Dec-2000 23:18:43.300 EST
+Begin processing the 1438th record. Run 1, Event 1438, LumiSection 1 at 31-Dec-2000 23:18:43.470 EST
+Begin processing the 1439th record. Run 1, Event 1439, LumiSection 1 at 31-Dec-2000 23:18:43.520 EST
+Begin processing the 1440th record. Run 1, Event 1440, LumiSection 1 at 31-Dec-2000 23:18:43.590 EST
+Begin processing the 1441st record. Run 1, Event 1441, LumiSection 1 at 31-Dec-2000 23:18:43.760 EST
+Begin processing the 1442nd record. Run 1, Event 1442, LumiSection 1 at 31-Dec-2000 23:18:43.810 EST
+Begin processing the 1443rd record. Run 1, Event 1443, LumiSection 1 at 31-Dec-2000 23:18:43.860 EST
+Begin processing the 1444th record. Run 1, Event 1444, LumiSection 1 at 31-Dec-2000 23:18:44.050 EST
+Begin processing the 1445th record. Run 1, Event 1445, LumiSection 1 at 31-Dec-2000 23:18:44.100 EST
+Begin processing the 1446th record. Run 1, Event 1446, LumiSection 1 at 31-Dec-2000 23:18:44.150 EST
+Begin processing the 1447th record. Run 1, Event 1447, LumiSection 1 at 31-Dec-2000 23:18:44.320 EST
+Begin processing the 1448th record. Run 1, Event 1448, LumiSection 1 at 31-Dec-2000 23:18:44.370 EST
+Begin processing the 1449th record. Run 1, Event 1449, LumiSection 1 at 31-Dec-2000 23:18:44.440 EST
+Begin processing the 1450th record. Run 1, Event 1450, LumiSection 1 at 31-Dec-2000 23:18:44.610 EST
+Begin processing the 1451st record. Run 1, Event 1451, LumiSection 1 at 31-Dec-2000 23:18:44.660 EST
+Begin processing the 1452nd record. Run 1, Event 1452, LumiSection 1 at 31-Dec-2000 23:18:44.710 EST
+Begin processing the 1453rd record. Run 1, Event 1453, LumiSection 1 at 31-Dec-2000 23:18:44.900 EST
+Begin processing the 1454th record. Run 1, Event 1454, LumiSection 1 at 31-Dec-2000 23:18:44.950 EST
+Begin processing the 1455th record. Run 1, Event 1455, LumiSection 1 at 31-Dec-2000 23:18:45.000 EST
+Begin processing the 1456th record. Run 1, Event 1456, LumiSection 1 at 31-Dec-2000 23:18:45.170 EST
+Begin processing the 1457th record. Run 1, Event 1457, LumiSection 1 at 31-Dec-2000 23:18:45.220 EST
+Begin processing the 1458th record. Run 1, Event 1458, LumiSection 1 at 31-Dec-2000 23:18:45.290 EST
+Begin processing the 1459th record. Run 1, Event 1459, LumiSection 1 at 31-Dec-2000 23:18:45.460 EST
+Begin processing the 1460th record. Run 1, Event 1460, LumiSection 1 at 31-Dec-2000 23:18:45.510 EST
+Begin processing the 1461st record. Run 1, Event 1461, LumiSection 1 at 31-Dec-2000 23:18:45.560 EST
+Begin processing the 1462nd record. Run 1, Event 1462, LumiSection 1 at 31-Dec-2000 23:18:45.750 EST
+Begin processing the 1463rd record. Run 1, Event 1463, LumiSection 1 at 31-Dec-2000 23:18:45.800 EST
+Begin processing the 1464th record. Run 1, Event 1464, LumiSection 1 at 31-Dec-2000 23:18:45.850 EST
+Begin processing the 1465th record. Run 1, Event 1465, LumiSection 1 at 31-Dec-2000 23:18:46.140 EST
+Begin processing the 1466th record. Run 1, Event 1466, LumiSection 1 at 31-Dec-2000 23:18:46.210 EST
+Begin processing the 1467th record. Run 1, Event 1467, LumiSection 1 at 31-Dec-2000 23:18:46.260 EST
+Begin processing the 1468th record. Run 1, Event 1468, LumiSection 1 at 31-Dec-2000 23:18:46.430 EST
+Begin processing the 1469th record. Run 1, Event 1469, LumiSection 1 at 31-Dec-2000 23:18:46.480 EST
+Begin processing the 1470th record. Run 1, Event 1470, LumiSection 1 at 31-Dec-2000 23:18:46.530 EST
+Begin processing the 1471st record. Run 1, Event 1471, LumiSection 1 at 31-Dec-2000 23:18:46.720 EST
+Begin processing the 1472nd record. Run 1, Event 1472, LumiSection 1 at 31-Dec-2000 23:18:46.770 EST
+Begin processing the 1473rd record. Run 1, Event 1473, LumiSection 1 at 31-Dec-2000 23:18:46.820 EST
+Begin processing the 1474th record. Run 1, Event 1474, LumiSection 1 at 31-Dec-2000 23:18:46.990 EST
+Begin processing the 1475th record. Run 1, Event 1475, LumiSection 1 at 31-Dec-2000 23:18:47.060 EST
+Begin processing the 1476th record. Run 1, Event 1476, LumiSection 1 at 31-Dec-2000 23:18:47.110 EST
+Begin processing the 1477th record. Run 1, Event 1477, LumiSection 1 at 31-Dec-2000 23:18:47.280 EST
+Begin processing the 1478th record. Run 1, Event 1478, LumiSection 1 at 31-Dec-2000 23:18:47.330 EST
+Begin processing the 1479th record. Run 1, Event 1479, LumiSection 1 at 31-Dec-2000 23:18:47.400 EST
+Begin processing the 1480th record. Run 1, Event 1480, LumiSection 1 at 31-Dec-2000 23:18:47.570 EST
+Begin processing the 1481st record. Run 1, Event 1481, LumiSection 1 at 31-Dec-2000 23:18:47.620 EST
+Begin processing the 1482nd record. Run 1, Event 1482, LumiSection 1 at 31-Dec-2000 23:18:47.670 EST
+Begin processing the 1483rd record. Run 1, Event 1483, LumiSection 1 at 31-Dec-2000 23:18:47.840 EST
+Begin processing the 1484th record. Run 1, Event 1484, LumiSection 1 at 31-Dec-2000 23:18:47.910 EST
+Begin processing the 1485th record. Run 1, Event 1485, LumiSection 1 at 31-Dec-2000 23:18:47.960 EST
+Begin processing the 1486th record. Run 1, Event 1486, LumiSection 1 at 31-Dec-2000 23:18:48.130 EST
+Begin processing the 1487th record. Run 1, Event 1487, LumiSection 1 at 31-Dec-2000 23:18:48.180 EST
+Begin processing the 1488th record. Run 1, Event 1488, LumiSection 1 at 31-Dec-2000 23:18:48.250 EST
+Begin processing the 1489th record. Run 1, Event 1489, LumiSection 1 at 31-Dec-2000 23:18:48.420 EST
+Begin processing the 1490th record. Run 1, Event 1490, LumiSection 1 at 31-Dec-2000 23:18:48.470 EST
+Begin processing the 1491st record. Run 1, Event 1491, LumiSection 1 at 31-Dec-2000 23:18:48.520 EST
+Begin processing the 1492nd record. Run 1, Event 1492, LumiSection 1 at 31-Dec-2000 23:18:48.690 EST
+Begin processing the 1493rd record. Run 1, Event 1493, LumiSection 1 at 31-Dec-2000 23:18:48.760 EST
+Begin processing the 1494th record. Run 1, Event 1494, LumiSection 1 at 31-Dec-2000 23:18:48.810 EST
+Begin processing the 1495th record. Run 1, Event 1495, LumiSection 1 at 31-Dec-2000 23:18:48.980 EST
+Begin processing the 1496th record. Run 1, Event 1496, LumiSection 1 at 31-Dec-2000 23:18:49.030 EST
+Begin processing the 1497th record. Run 1, Event 1497, LumiSection 1 at 31-Dec-2000 23:18:49.100 EST
+Begin processing the 1498th record. Run 1, Event 1498, LumiSection 1 at 31-Dec-2000 23:18:49.270 EST
+Begin processing the 1499th record. Run 1, Event 1499, LumiSection 1 at 31-Dec-2000 23:18:49.320 EST
+Begin processing the 1500th record. Run 1, Event 1500, LumiSection 1 at 31-Dec-2000 23:18:49.370 EST
+Begin processing the 1501st record. Run 1, Event 1501, LumiSection 1 at 31-Dec-2000 23:18:49.560 EST
+Begin processing the 1502nd record. Run 1, Event 1502, LumiSection 1 at 31-Dec-2000 23:18:49.610 EST
+Begin processing the 1503rd record. Run 1, Event 1503, LumiSection 1 at 31-Dec-2000 23:18:49.660 EST
+Begin processing the 1504th record. Run 1, Event 1504, LumiSection 1 at 31-Dec-2000 23:18:49.830 EST
+Begin processing the 1505th record. Run 1, Event 1505, LumiSection 1 at 31-Dec-2000 23:18:49.880 EST
+Begin processing the 1506th record. Run 1, Event 1506, LumiSection 1 at 31-Dec-2000 23:18:49.950 EST
+Begin processing the 1507th record. Run 1, Event 1507, LumiSection 1 at 31-Dec-2000 23:18:50.120 EST
+Begin processing the 1508th record. Run 1, Event 1508, LumiSection 1 at 31-Dec-2000 23:18:50.170 EST
+Begin processing the 1509th record. Run 1, Event 1509, LumiSection 1 at 31-Dec-2000 23:18:50.220 EST
+Begin processing the 1510th record. Run 1, Event 1510, LumiSection 1 at 31-Dec-2000 23:18:50.410 EST
+Begin processing the 1511th record. Run 1, Event 1511, LumiSection 1 at 31-Dec-2000 23:18:50.460 EST
+Begin processing the 1512th record. Run 1, Event 1512, LumiSection 1 at 31-Dec-2000 23:18:50.510 EST
+Begin processing the 1513th record. Run 1, Event 1513, LumiSection 1 at 31-Dec-2000 23:18:50.680 EST
+Begin processing the 1514th record. Run 1, Event 1514, LumiSection 1 at 31-Dec-2000 23:18:50.750 EST
+Begin processing the 1515th record. Run 1, Event 1515, LumiSection 1 at 31-Dec-2000 23:18:50.800 EST
+Begin processing the 1516th record. Run 1, Event 1516, LumiSection 1 at 31-Dec-2000 23:18:50.970 EST
+Begin processing the 1517th record. Run 1, Event 1517, LumiSection 1 at 31-Dec-2000 23:18:51.140 EST
+Begin processing the 1518th record. Run 1, Event 1518, LumiSection 1 at 31-Dec-2000 23:18:51.190 EST
+Begin processing the 1519th record. Run 1, Event 1519, LumiSection 1 at 31-Dec-2000 23:18:51.380 EST
+Begin processing the 1520th record. Run 1, Event 1520, LumiSection 1 at 31-Dec-2000 23:18:51.430 EST
+Begin processing the 1521st record. Run 1, Event 1521, LumiSection 1 at 31-Dec-2000 23:18:51.480 EST
+Begin processing the 1522nd record. Run 1, Event 1522, LumiSection 1 at 31-Dec-2000 23:18:51.650 EST
+Begin processing the 1523rd record. Run 1, Event 1523, LumiSection 1 at 31-Dec-2000 23:18:51.720 EST
+Begin processing the 1524th record. Run 1, Event 1524, LumiSection 1 at 31-Dec-2000 23:18:51.770 EST
+Begin processing the 1525th record. Run 1, Event 1525, LumiSection 1 at 31-Dec-2000 23:18:51.940 EST
+Begin processing the 1526th record. Run 1, Event 1526, LumiSection 1 at 31-Dec-2000 23:18:51.990 EST
+Begin processing the 1527th record. Run 1, Event 1527, LumiSection 1 at 31-Dec-2000 23:18:52.040 EST
+Begin processing the 1528th record. Run 1, Event 1528, LumiSection 1 at 31-Dec-2000 23:18:52.230 EST
+Begin processing the 1529th record. Run 1, Event 1529, LumiSection 1 at 31-Dec-2000 23:18:52.280 EST
+Begin processing the 1530th record. Run 1, Event 1530, LumiSection 1 at 31-Dec-2000 23:18:52.330 EST
+Begin processing the 1531st record. Run 1, Event 1531, LumiSection 1 at 31-Dec-2000 23:18:52.500 EST
+Begin processing the 1532nd record. Run 1, Event 1532, LumiSection 1 at 31-Dec-2000 23:18:52.570 EST
+Begin processing the 1533rd record. Run 1, Event 1533, LumiSection 1 at 31-Dec-2000 23:18:52.620 EST
+Begin processing the 1534th record. Run 1, Event 1534, LumiSection 1 at 31-Dec-2000 23:18:52.790 EST
+Begin processing the 1535th record. Run 1, Event 1535, LumiSection 1 at 31-Dec-2000 23:18:52.840 EST
+Begin processing the 1536th record. Run 1, Event 1536, LumiSection 1 at 31-Dec-2000 23:18:52.910 EST
+Begin processing the 1537th record. Run 1, Event 1537, LumiSection 1 at 31-Dec-2000 23:18:53.080 EST
+Begin processing the 1538th record. Run 1, Event 1538, LumiSection 1 at 31-Dec-2000 23:18:53.130 EST
+Begin processing the 1539th record. Run 1, Event 1539, LumiSection 1 at 31-Dec-2000 23:18:53.180 EST
+Begin processing the 1540th record. Run 1, Event 1540, LumiSection 1 at 31-Dec-2000 23:18:53.350 EST
+Begin processing the 1541st record. Run 1, Event 1541, LumiSection 1 at 31-Dec-2000 23:18:53.420 EST
+Begin processing the 1542nd record. Run 1, Event 1542, LumiSection 1 at 31-Dec-2000 23:18:53.470 EST
+Begin processing the 1543rd record. Run 1, Event 1543, LumiSection 1 at 31-Dec-2000 23:18:53.640 EST
+Begin processing the 1544th record. Run 1, Event 1544, LumiSection 1 at 31-Dec-2000 23:18:53.690 EST
+Begin processing the 1545th record. Run 1, Event 1545, LumiSection 1 at 31-Dec-2000 23:18:53.760 EST
+Begin processing the 1546th record. Run 1, Event 1546, LumiSection 1 at 31-Dec-2000 23:18:53.930 EST
+Begin processing the 1547th record. Run 1, Event 1547, LumiSection 1 at 31-Dec-2000 23:18:53.980 EST
+Begin processing the 1548th record. Run 1, Event 1548, LumiSection 1 at 31-Dec-2000 23:18:54.030 EST
+Begin processing the 1549th record. Run 1, Event 1549, LumiSection 1 at 31-Dec-2000 23:18:54.220 EST
+Begin processing the 1550th record. Run 1, Event 1550, LumiSection 1 at 31-Dec-2000 23:18:54.270 EST
+Begin processing the 1551st record. Run 1, Event 1551, LumiSection 1 at 31-Dec-2000 23:18:54.320 EST
+Begin processing the 1552nd record. Run 1, Event 1552, LumiSection 1 at 31-Dec-2000 23:18:54.490 EST
+Begin processing the 1553rd record. Run 1, Event 1553, LumiSection 1 at 31-Dec-2000 23:18:54.540 EST
+Begin processing the 1554th record. Run 1, Event 1554, LumiSection 1 at 31-Dec-2000 23:18:54.610 EST
+Begin processing the 1555th record. Run 1, Event 1555, LumiSection 1 at 31-Dec-2000 23:18:54.780 EST
+Begin processing the 1556th record. Run 1, Event 1556, LumiSection 1 at 31-Dec-2000 23:18:54.830 EST
+Begin processing the 1557th record. Run 1, Event 1557, LumiSection 1 at 31-Dec-2000 23:18:54.880 EST
+Begin processing the 1558th record. Run 1, Event 1558, LumiSection 1 at 31-Dec-2000 23:18:55.070 EST
+Begin processing the 1559th record. Run 1, Event 1559, LumiSection 1 at 31-Dec-2000 23:18:55.120 EST
+Begin processing the 1560th record. Run 1, Event 1560, LumiSection 1 at 31-Dec-2000 23:18:55.170 EST
+Begin processing the 1561st record. Run 1, Event 1561, LumiSection 1 at 31-Dec-2000 23:18:55.340 EST
+Begin processing the 1562nd record. Run 1, Event 1562, LumiSection 1 at 31-Dec-2000 23:18:55.390 EST
+Begin processing the 1563rd record. Run 1, Event 1563, LumiSection 1 at 31-Dec-2000 23:18:55.460 EST
+Begin processing the 1564th record. Run 1, Event 1564, LumiSection 1 at 31-Dec-2000 23:18:55.630 EST
+Begin processing the 1565th record. Run 1, Event 1565, LumiSection 1 at 31-Dec-2000 23:18:55.680 EST
+Begin processing the 1566th record. Run 1, Event 1566, LumiSection 1 at 31-Dec-2000 23:18:55.730 EST
+Begin processing the 1567th record. Run 1, Event 1567, LumiSection 1 at 31-Dec-2000 23:18:55.920 EST
+Begin processing the 1568th record. Run 1, Event 1568, LumiSection 1 at 31-Dec-2000 23:18:55.970 EST
+Begin processing the 1569th record. Run 1, Event 1569, LumiSection 1 at 31-Dec-2000 23:18:56.020 EST
+Begin processing the 1570th record. Run 1, Event 1570, LumiSection 1 at 31-Dec-2000 23:18:56.190 EST
+Begin processing the 1571st record. Run 1, Event 1571, LumiSection 1 at 31-Dec-2000 23:18:56.260 EST
+Begin processing the 1572nd record. Run 1, Event 1572, LumiSection 1 at 31-Dec-2000 23:18:56.310 EST
+Begin processing the 1573rd record. Run 1, Event 1573, LumiSection 1 at 31-Dec-2000 23:18:56.480 EST
+Begin processing the 1574th record. Run 1, Event 1574, LumiSection 1 at 31-Dec-2000 23:18:56.530 EST
+Begin processing the 1575th record. Run 1, Event 1575, LumiSection 1 at 31-Dec-2000 23:18:56.580 EST
+Begin processing the 1576th record. Run 1, Event 1576, LumiSection 1 at 31-Dec-2000 23:18:56.770 EST
+Begin processing the 1577th record. Run 1, Event 1577, LumiSection 1 at 31-Dec-2000 23:18:56.820 EST
+Begin processing the 1578th record. Run 1, Event 1578, LumiSection 1 at 31-Dec-2000 23:18:56.870 EST
+Begin processing the 1579th record. Run 1, Event 1579, LumiSection 1 at 31-Dec-2000 23:18:57.040 EST
+Begin processing the 1580th record. Run 1, Event 1580, LumiSection 1 at 31-Dec-2000 23:18:57.110 EST
+Begin processing the 1581st record. Run 1, Event 1581, LumiSection 1 at 31-Dec-2000 23:18:57.160 EST
+Begin processing the 1582nd record. Run 1, Event 1582, LumiSection 1 at 31-Dec-2000 23:18:57.330 EST
+Begin processing the 1583rd record. Run 1, Event 1583, LumiSection 1 at 31-Dec-2000 23:18:57.380 EST
+Begin processing the 1584th record. Run 1, Event 1584, LumiSection 1 at 31-Dec-2000 23:18:57.450 EST
+Begin processing the 1585th record. Run 1, Event 1585, LumiSection 1 at 31-Dec-2000 23:18:57.620 EST
+Begin processing the 1586th record. Run 1, Event 1586, LumiSection 1 at 31-Dec-2000 23:18:57.670 EST
+Begin processing the 1587th record. Run 1, Event 1587, LumiSection 1 at 31-Dec-2000 23:18:57.840 EST
+Begin processing the 1588th record. Run 1, Event 1588, LumiSection 1 at 31-Dec-2000 23:18:58.010 EST
+Begin processing the 1589th record. Run 1, Event 1589, LumiSection 1 at 31-Dec-2000 23:18:58.080 EST
+Begin processing the 1590th record. Run 1, Event 1590, LumiSection 1 at 31-Dec-2000 23:18:58.130 EST
+Begin processing the 1591st record. Run 1, Event 1591, LumiSection 1 at 31-Dec-2000 23:18:58.300 EST
+Begin processing the 1592nd record. Run 1, Event 1592, LumiSection 1 at 31-Dec-2000 23:18:58.350 EST
+Begin processing the 1593rd record. Run 1, Event 1593, LumiSection 1 at 31-Dec-2000 23:18:58.420 EST
+Begin processing the 1594th record. Run 1, Event 1594, LumiSection 1 at 31-Dec-2000 23:18:58.590 EST
+Begin processing the 1595th record. Run 1, Event 1595, LumiSection 1 at 31-Dec-2000 23:18:58.640 EST
+Begin processing the 1596th record. Run 1, Event 1596, LumiSection 1 at 31-Dec-2000 23:18:58.690 EST
+Begin processing the 1597th record. Run 1, Event 1597, LumiSection 1 at 31-Dec-2000 23:18:58.860 EST
+Begin processing the 1598th record. Run 1, Event 1598, LumiSection 1 at 31-Dec-2000 23:18:58.930 EST
+Begin processing the 1599th record. Run 1, Event 1599, LumiSection 1 at 31-Dec-2000 23:18:58.980 EST
+Begin processing the 1600th record. Run 1, Event 1600, LumiSection 1 at 31-Dec-2000 23:18:59.150 EST
+Begin processing the 1601st record. Run 1, Event 1601, LumiSection 1 at 31-Dec-2000 23:18:59.200 EST
+Begin processing the 1602nd record. Run 1, Event 1602, LumiSection 1 at 31-Dec-2000 23:18:59.270 EST
+Begin processing the 1603rd record. Run 1, Event 1603, LumiSection 1 at 31-Dec-2000 23:18:59.440 EST
+Begin processing the 1604th record. Run 1, Event 1604, LumiSection 1 at 31-Dec-2000 23:18:59.490 EST
+Begin processing the 1605th record. Run 1, Event 1605, LumiSection 1 at 31-Dec-2000 23:18:59.540 EST
+Begin processing the 1606th record. Run 1, Event 1606, LumiSection 1 at 31-Dec-2000 23:18:59.730 EST
+Begin processing the 1607th record. Run 1, Event 1607, LumiSection 1 at 31-Dec-2000 23:18:59.780 EST
+Begin processing the 1608th record. Run 1, Event 1608, LumiSection 1 at 31-Dec-2000 23:18:59.830 EST
+Begin processing the 1609th record. Run 1, Event 1609, LumiSection 1 at 31-Dec-2000 23:19:00.000 EST
+Begin processing the 1610th record. Run 1, Event 1610, LumiSection 1 at 31-Dec-2000 23:19:00.050 EST
+Begin processing the 1611th record. Run 1, Event 1611, LumiSection 1 at 31-Dec-2000 23:19:00.120 EST
+Begin processing the 1612th record. Run 1, Event 1612, LumiSection 1 at 31-Dec-2000 23:19:00.290 EST
+Begin processing the 1613th record. Run 1, Event 1613, LumiSection 1 at 31-Dec-2000 23:19:00.340 EST
+Begin processing the 1614th record. Run 1, Event 1614, LumiSection 1 at 31-Dec-2000 23:19:00.390 EST
+Begin processing the 1615th record. Run 1, Event 1615, LumiSection 1 at 31-Dec-2000 23:19:00.580 EST
+Begin processing the 1616th record. Run 1, Event 1616, LumiSection 1 at 31-Dec-2000 23:19:00.630 EST
+Begin processing the 1617th record. Run 1, Event 1617, LumiSection 1 at 31-Dec-2000 23:19:00.680 EST
+Begin processing the 1618th record. Run 1, Event 1618, LumiSection 1 at 31-Dec-2000 23:19:00.850 EST
+Begin processing the 1619th record. Run 1, Event 1619, LumiSection 1 at 31-Dec-2000 23:19:00.920 EST
+Begin processing the 1620th record. Run 1, Event 1620, LumiSection 1 at 31-Dec-2000 23:19:00.970 EST
+Begin processing the 1621st record. Run 1, Event 1621, LumiSection 1 at 31-Dec-2000 23:19:01.140 EST
+Begin processing the 1622nd record. Run 1, Event 1622, LumiSection 1 at 31-Dec-2000 23:19:01.190 EST
+Begin processing the 1623rd record. Run 1, Event 1623, LumiSection 1 at 31-Dec-2000 23:19:01.240 EST
+Begin processing the 1624th record. Run 1, Event 1624, LumiSection 1 at 31-Dec-2000 23:19:01.430 EST
+Begin processing the 1625th record. Run 1, Event 1625, LumiSection 1 at 31-Dec-2000 23:19:01.480 EST
+Begin processing the 1626th record. Run 1, Event 1626, LumiSection 1 at 31-Dec-2000 23:19:01.530 EST
+Begin processing the 1627th record. Run 1, Event 1627, LumiSection 1 at 31-Dec-2000 23:19:01.700 EST
+Begin processing the 1628th record. Run 1, Event 1628, LumiSection 1 at 31-Dec-2000 23:19:01.770 EST
+Begin processing the 1629th record. Run 1, Event 1629, LumiSection 1 at 31-Dec-2000 23:19:01.820 EST
+Begin processing the 1630th record. Run 1, Event 1630, LumiSection 1 at 31-Dec-2000 23:19:01.990 EST
+Begin processing the 1631st record. Run 1, Event 1631, LumiSection 1 at 31-Dec-2000 23:19:02.160 EST
+Begin processing the 1632nd record. Run 1, Event 1632, LumiSection 1 at 31-Dec-2000 23:19:02.210 EST
+Begin processing the 1633rd record. Run 1, Event 1633, LumiSection 1 at 31-Dec-2000 23:19:02.400 EST
+Begin processing the 1634th record. Run 1, Event 1634, LumiSection 1 at 31-Dec-2000 23:19:02.450 EST
+Begin processing the 1635th record. Run 1, Event 1635, LumiSection 1 at 31-Dec-2000 23:19:02.500 EST
+Begin processing the 1636th record. Run 1, Event 1636, LumiSection 1 at 31-Dec-2000 23:19:02.670 EST
+Begin processing the 1637th record. Run 1, Event 1637, LumiSection 1 at 31-Dec-2000 23:19:02.740 EST
+Begin processing the 1638th record. Run 1, Event 1638, LumiSection 1 at 31-Dec-2000 23:19:02.790 EST
+Begin processing the 1639th record. Run 1, Event 1639, LumiSection 1 at 31-Dec-2000 23:19:02.960 EST
+Begin processing the 1640th record. Run 1, Event 1640, LumiSection 1 at 31-Dec-2000 23:19:03.010 EST
+Begin processing the 1641st record. Run 1, Event 1641, LumiSection 1 at 31-Dec-2000 23:19:03.080 EST
+Begin processing the 1642nd record. Run 1, Event 1642, LumiSection 1 at 31-Dec-2000 23:19:03.250 EST
+Begin processing the 1643rd record. Run 1, Event 1643, LumiSection 1 at 31-Dec-2000 23:19:03.300 EST
+Begin processing the 1644th record. Run 1, Event 1644, LumiSection 1 at 31-Dec-2000 23:19:03.350 EST
+Begin processing the 1645th record. Run 1, Event 1645, LumiSection 1 at 31-Dec-2000 23:19:03.520 EST
+Begin processing the 1646th record. Run 1, Event 1646, LumiSection 1 at 31-Dec-2000 23:19:03.590 EST
+Begin processing the 1647th record. Run 1, Event 1647, LumiSection 1 at 31-Dec-2000 23:19:03.640 EST
+Begin processing the 1648th record. Run 1, Event 1648, LumiSection 1 at 31-Dec-2000 23:19:03.810 EST
+Begin processing the 1649th record. Run 1, Event 1649, LumiSection 1 at 31-Dec-2000 23:19:03.860 EST
+31-Dec-2000 23:19:04 EST  Closed LHE file cmsgrid_final.lhe
+TimeReport> Time report complete in 15428.5 seconds
+ Time Summary: 
+ - Min event:   0.00999999
+ - Max event:   0.27
+ - Avg event:   9.35628
+ - Total job:   15428.5
+ CPU Summary: 
+ - Min event:   0
+ - Max event:   0.003
+ - Avg event:   0.00146612
+ - Total job:   17.3384
+ - Total event: 2.41764
+
+
+=============================================
+
+MessageLogger Summary
+
+ type     category        sev    module        subroutine        count    total
+ ---- -------------------- -- ---------------- ----------------  -----    -----
+    1 TimeReport           -e AfterModEndJob                         1        1
+    2 fileAction           -s ExternalLHEProdu                       2        2
+    3 fileAction           -s ExternalLHEProdu                       1        1
+
+ type    category    Examples: run/evt        run/evt          run/evt
+ ---- -------------------- ---------------- ---------------- ----------------
+    1 TimeReport           PostEndRun                        
+    2 fileAction           Run: 1           Run: 1           
+    3 fileAction           End Run: 1                        
+
+Severity    # Occurrences   Total Occurrences
+--------    -------------   -----------------
+Error                   1                   1
+System                  3                   3
